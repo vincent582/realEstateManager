@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager;
+package com.openclassrooms.realestatemanager.UI;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.openclassrooms.realestatemanager.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @BindView(R.id.activity_main_navigation_view)
     NavigationView mNavigationView;
 
+    ListPropertiesFragment mListPropertiesFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +43,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         mNavigationView.setNavigationItemSelectedListener(this);
+
+        configureAndShowListFragment();
+    }
+
+    private void configureAndShowListFragment() {
+        mListPropertiesFragment = (ListPropertiesFragment) getSupportFragmentManager().findFragmentById(R.id.activity_main_host_frame_layout);
+
+        if (mListPropertiesFragment == null){
+            mListPropertiesFragment = new ListPropertiesFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.activity_main_host_frame_layout, mListPropertiesFragment)
+                    .commit();
+        }
     }
 
     @Override
@@ -47,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         switch (id){
-            case R.id.activity_main_drawer_list :
+            case R.id.activity_main_drawer_list:
                 break;
             case R.id.activity_main_drawer_settings:
                 break;
