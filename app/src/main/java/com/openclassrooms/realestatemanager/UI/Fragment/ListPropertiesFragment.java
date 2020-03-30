@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.UI;
+package com.openclassrooms.realestatemanager.UI.Fragment;
 
 
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.UI.ViewHolder.PropertiesRecyclerViewAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

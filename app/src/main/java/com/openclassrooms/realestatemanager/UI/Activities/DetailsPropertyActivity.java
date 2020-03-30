@@ -1,14 +1,11 @@
-package com.openclassrooms.realestatemanager.UI;
+package com.openclassrooms.realestatemanager.UI.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.widget.FrameLayout;
 
 import com.openclassrooms.realestatemanager.R;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.openclassrooms.realestatemanager.UI.Fragment.DetailsPropertyFragment;
 
 public class DetailsPropertyActivity extends AppCompatActivity {
 

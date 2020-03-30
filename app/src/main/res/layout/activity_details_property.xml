@@ -5,6 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.DetailsPropertyActivity"
+    tools:context=".UI.Activities.DetailsPropertyActivity"
     android:id="@+id/details_activity_frame_layout">
 </FrameLayout>

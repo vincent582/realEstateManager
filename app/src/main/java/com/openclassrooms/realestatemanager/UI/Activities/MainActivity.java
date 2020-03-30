@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.UI;
+package com.openclassrooms.realestatemanager.UI.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -13,6 +13,8 @@ import android.widget.FrameLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.UI.Fragment.DetailsPropertyFragment;
+import com.openclassrooms.realestatemanager.UI.Fragment.ListPropertiesFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         configureAndShowDetailsFragment();
     }
 
+    /**
+     * Showing the list of properties with ListPropertiesFragment.
+     */
     private void configureAndShowListFragment() {
         mListPropertiesFragment = (ListPropertiesFragment) getSupportFragmentManager().findFragmentById(R.id.activity_main_host_frame_layout);
 
@@ -60,6 +65,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Display the DetailsPropertyFragment on tab device.
+     */
     private void configureAndShowDetailsFragment() {
         mDetailsPropertyFragment = (DetailsPropertyFragment) getSupportFragmentManager().findFragmentById(R.id.details_activity_frame_layout);
 
