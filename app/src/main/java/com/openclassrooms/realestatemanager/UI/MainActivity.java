@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NavigationView mNavigationView;
 
     ListPropertiesFragment mListPropertiesFragment;
+    DetailsPropertyFragment mDetailsPropertyFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigationView.setNavigationItemSelectedListener(this);
 
         configureAndShowListFragment();
+        configureAndShowDetailsFragment();
     }
 
     private void configureAndShowListFragment() {
@@ -54,6 +56,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mListPropertiesFragment = new ListPropertiesFragment();
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.activity_main_host_frame_layout, mListPropertiesFragment)
+                    .commit();
+        }
+    }
+
+    private void configureAndShowDetailsFragment() {
+        mDetailsPropertyFragment = (DetailsPropertyFragment) getSupportFragmentManager().findFragmentById(R.id.details_activity_frame_layout);
+
+        if (mDetailsPropertyFragment == null && findViewById(R.id.details_activity_frame_layout) != null){
+            mDetailsPropertyFragment = new DetailsPropertyFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.details_activity_frame_layout,mDetailsPropertyFragment)
                     .commit();
         }
     }
