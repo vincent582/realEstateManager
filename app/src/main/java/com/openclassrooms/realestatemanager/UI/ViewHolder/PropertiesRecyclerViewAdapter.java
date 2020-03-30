@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.UI.ViewHolder;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,13 @@ import com.openclassrooms.realestatemanager.R;
 
 public class PropertiesRecyclerViewAdapter extends RecyclerView.Adapter<PropertiesViewHolder> {
 
-    public PropertiesRecyclerViewAdapter() {}
+    private boolean mTwoPanes;
+    private Context mContext;
+
+    public PropertiesRecyclerViewAdapter(Context context, boolean twoPanes) {
+        mTwoPanes = twoPanes;
+        mContext = context;
+    }
 
     @NonNull
     @Override
@@ -22,7 +29,7 @@ public class PropertiesRecyclerViewAdapter extends RecyclerView.Adapter<Properti
 
     @Override
     public void onBindViewHolder(@NonNull PropertiesViewHolder holder, int position) {
-
+        holder.updateView(mContext,mTwoPanes,position);
     }
 
     @Override

@@ -6,8 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     ListPropertiesFragment mListPropertiesFragment;
     DetailsPropertyFragment mDetailsPropertyFragment;
+    private boolean twoPanes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mNavigationView.setNavigationItemSelectedListener(this);
 
+        if (findViewById(R.id.details_activity_frame_layout) != null) twoPanes = true;
+
         configureAndShowListFragment();
         configureAndShowDetailsFragment();
     }
@@ -56,12 +62,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private void configureAndShowListFragment() {
         mListPropertiesFragment = (ListPropertiesFragment) getSupportFragmentManager().findFragmentById(R.id.activity_main_host_frame_layout);
-
         if (mListPropertiesFragment == null){
-            mListPropertiesFragment = new ListPropertiesFragment();
+            mListPropertiesFragment = new ListPropertiesFragment(this,twoPanes);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.activity_main_host_frame_layout, mListPropertiesFragment)
                     .commit();
+        }else{
+            mListPropertiesFragment.updateTwoPanesAndContext(twoPanes,this);
         }
     }
 
@@ -70,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private void configureAndShowDetailsFragment() {
         mDetailsPropertyFragment = (DetailsPropertyFragment) getSupportFragmentManager().findFragmentById(R.id.details_activity_frame_layout);
-
         if (mDetailsPropertyFragment == null && findViewById(R.id.details_activity_frame_layout) != null){
             mDetailsPropertyFragment = new DetailsPropertyFragment();
             getSupportFragmentManager().beginTransaction()
@@ -82,18 +88,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-
         switch (id){
             case R.id.activity_main_drawer_list:
+                    if (mListPropertiesFragment == null) mListPropertiesFragment = new ListPropertiesFragment(this,twoPanes);
+                    this.startTransactionFragment(mListPropertiesFragment);
                 break;
             case R.id.activity_main_drawer_settings:
                 break;
             default:
                 break;
         }
-
         this.mDrawerLayout.closeDrawer(GravityCompat.START);
-
         return true;
     }
 
@@ -103,6 +108,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }else{
             super.onBackPressed();
+        }
+    }
+
+    public void startTransactionFragment(Fragment fragment){
+        if(!fragment.isVisible()){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.activity_main_host_frame_layout,fragment)
+                    .commit();
         }
     }
 }
