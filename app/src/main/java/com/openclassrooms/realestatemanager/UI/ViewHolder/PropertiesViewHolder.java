@@ -20,6 +20,8 @@ import com.openclassrooms.realestatemanager.UI.Fragment.DetailsPropertyFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity.PROPERTY_ID;
+
 public class PropertiesViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.item_property_type_text_view)
@@ -49,6 +51,7 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder {
                             .commit();
                 }else{
                     Intent intent = new Intent(v.getContext(), DetailsPropertyActivity.class);
+                    intent.putExtra(PROPERTY_ID,property.getId());
                     v.getContext().startActivity(intent);
                 }
             }

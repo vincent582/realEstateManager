@@ -7,6 +7,7 @@ import java.util.List;
 
 public class Property {
 
+    private int id;
     private String type;
     private int price;
     private int surface;
@@ -20,7 +21,8 @@ public class Property {
     private Date dateOfSale;
     private User agentInCharge;
 
-    public Property(String type, int price, int surface, int nbrOfRooms, String description, List<String> listFacilities, String status, Date addedDate, Date dateOfSale, User agentInCharge) {
+    public Property(int id, String type, int price, int surface, int nbrOfRooms, String description, List<String> listFacilities, String status, Date addedDate, Date dateOfSale, User agentInCharge) {
+        this.id = id;
         this.type = type;
         this.price = price;
         this.surface = surface;
@@ -32,6 +34,8 @@ public class Property {
         this.dateOfSale = dateOfSale;
         this.agentInCharge = agentInCharge;
     }
+
+    public int getId() { return id; }
 
     public String getType() {
         return type;
@@ -128,4 +132,5 @@ public class Property {
     public void setAgentInCharge(User agentInCharge) {
         this.agentInCharge = agentInCharge;
     }
+
 }

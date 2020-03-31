@@ -284,13 +284,12 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView4"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                tools:src="@tools:sample/backgrounds/scenic"
-                tools:srcCompat="@tools:sample/backgrounds/scenic[1]" />
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+            </FrameLayout>
+
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

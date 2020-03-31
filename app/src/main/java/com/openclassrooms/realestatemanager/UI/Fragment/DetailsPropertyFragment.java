@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.openclassrooms.realestatemanager.Model.Property;
@@ -20,6 +21,9 @@ import butterknife.ButterKnife;
  * A simple {@link Fragment} subclass.
  */
 public class DetailsPropertyFragment extends Fragment {
+
+    @BindView(R.id.details_layout_fragment)
+    ScrollView mDetailsLayout;
 
     @BindView(R.id.textView)
     TextView mTextView;
@@ -44,6 +48,8 @@ public class DetailsPropertyFragment extends Fragment {
 
         if (mProperty != null){
             mTextView.setText(mProperty.getType());
+        }else{
+            mDetailsLayout.setVisibility(View.GONE);
         }
 
         return view;

@@ -66,8 +66,6 @@ public class ListPropertiesFragment extends Fragment {
     }
 
     public void updateTwoPanesAndContext(boolean twoPanes, Context context, List<Property> properties) {
-        this.twoPanes = twoPanes;
-        this.mContext = context;
-        this.mListProperties = properties;
+        mAdapter.updateUi(context,twoPanes,properties);
     }
 }

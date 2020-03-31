@@ -45,4 +45,11 @@ public class PropertiesRecyclerViewAdapter extends RecyclerView.Adapter<Properti
             return mListProperties.size();
         }
     }
+
+    public void updateUi(Context context, boolean twoPanes, List<Property> properties) {
+        mContext = context;
+        mTwoPanes = twoPanes;
+        mListProperties = properties;
+        notifyDataSetChanged();
+    }
 }
