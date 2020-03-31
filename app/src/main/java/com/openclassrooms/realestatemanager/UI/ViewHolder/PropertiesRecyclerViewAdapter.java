@@ -8,16 +8,21 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
+
+import java.util.List;
 
 public class PropertiesRecyclerViewAdapter extends RecyclerView.Adapter<PropertiesViewHolder> {
 
+    private List<Property> mListProperties;
     private boolean mTwoPanes;
     private Context mContext;
 
-    public PropertiesRecyclerViewAdapter(Context context, boolean twoPanes) {
+    public PropertiesRecyclerViewAdapter(Context context, boolean twoPanes, List<Property> listProperties) {
         mTwoPanes = twoPanes;
         mContext = context;
+        mListProperties = listProperties;
     }
 
     @NonNull
@@ -29,11 +34,15 @@ public class PropertiesRecyclerViewAdapter extends RecyclerView.Adapter<Properti
 
     @Override
     public void onBindViewHolder(@NonNull PropertiesViewHolder holder, int position) {
-        holder.updateView(mContext,mTwoPanes,position);
+        holder.updateView(mContext,mTwoPanes,mListProperties.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        if (mListProperties == null){
+            return 0;
+        }else{
+            return mListProperties.size();
+        }
     }
 }

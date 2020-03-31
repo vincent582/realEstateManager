@@ -13,9 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Activities.MainActivity;
 import com.openclassrooms.realestatemanager.UI.ViewHolder.PropertiesRecyclerViewAdapter;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,15 +34,17 @@ public class ListPropertiesFragment extends Fragment {
     private boolean twoPanes;
     private Context mContext;
     private PropertiesRecyclerViewAdapter mAdapter;
+    private List<Property> mListProperties;
 
 
     public ListPropertiesFragment() {
         // Required empty public constructor
     }
 
-    public ListPropertiesFragment(Context context, boolean twoPanes) {
+    public ListPropertiesFragment(Context context, boolean twoPanes, List<Property> properties) {
         this.twoPanes = twoPanes;
         this.mContext = context;
+        this.mListProperties = properties;
     }
 
 
@@ -54,14 +59,15 @@ public class ListPropertiesFragment extends Fragment {
     }
 
     private void configureRecyclerView() {
-        mAdapter = new PropertiesRecyclerViewAdapter(mContext,twoPanes);
+        mAdapter = new PropertiesRecyclerViewAdapter(mContext,twoPanes,mListProperties);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
 
-    public void updateTwoPanesAndContext(boolean twoPanes, Context context) {
+    public void updateTwoPanesAndContext(boolean twoPanes, Context context, List<Property> properties) {
         this.twoPanes = twoPanes;
         this.mContext = context;
+        this.mListProperties = properties;
     }
 }

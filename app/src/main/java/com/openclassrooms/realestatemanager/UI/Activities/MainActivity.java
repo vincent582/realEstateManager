@@ -7,10 +7,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -18,6 +17,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.DetailsPropertyFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.ListPropertiesFragment;
+import com.openclassrooms.realestatemanager.UI.ViewModel.PropertyViewModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,15 +33,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @BindView(R.id.activity_main_navigation_view)
     NavigationView mNavigationView;
 
-    ListPropertiesFragment mListPropertiesFragment;
-    DetailsPropertyFragment mDetailsPropertyFragment;
+    private ListPropertiesFragment mListPropertiesFragment;
+    private DetailsPropertyFragment mDetailsPropertyFragment;
     private boolean twoPanes;
+    private PropertyViewModel mPropertyViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        mPropertyViewModel = new ViewModelProvider(this).get(PropertyViewModel.class);
 
         setSupportActionBar(mToolbar);
 
@@ -63,12 +67,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void configureAndShowListFragment() {
         mListPropertiesFragment = (ListPropertiesFragment) getSupportFragmentManager().findFragmentById(R.id.activity_main_host_frame_layout);
         if (mListPropertiesFragment == null){
-            mListPropertiesFragment = new ListPropertiesFragment(this,twoPanes);
+            mListPropertiesFragment = new ListPropertiesFragment(this,twoPanes,mPropertyViewModel.getProperties());
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.activity_main_host_frame_layout, mListPropertiesFragment)
                     .commit();
         }else{
-            mListPropertiesFragment.updateTwoPanesAndContext(twoPanes,this);
+            mListPropertiesFragment.updateTwoPanesAndContext(twoPanes,this,mPropertyViewModel.getProperties());
         }
     }
 
@@ -90,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         switch (id){
             case R.id.activity_main_drawer_list:
-                    if (mListPropertiesFragment == null) mListPropertiesFragment = new ListPropertiesFragment(this,twoPanes);
+                    if (mListPropertiesFragment == null) mListPropertiesFragment = new ListPropertiesFragment(this,twoPanes,mPropertyViewModel.getProperties());
                     this.startTransactionFragment(mListPropertiesFragment);
                 break;
             case R.id.activity_main_drawer_settings:

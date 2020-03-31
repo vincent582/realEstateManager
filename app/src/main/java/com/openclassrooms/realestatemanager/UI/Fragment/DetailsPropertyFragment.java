@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 
 import butterknife.BindView;
@@ -23,14 +24,14 @@ public class DetailsPropertyFragment extends Fragment {
     @BindView(R.id.textView)
     TextView mTextView;
 
-    private int mPosition;
+    private Property mProperty;
 
     public DetailsPropertyFragment() {
         // Required empty public constructor
     }
 
-    public DetailsPropertyFragment(int position) {
-        mPosition = position;
+    public DetailsPropertyFragment(Property property) {
+        mProperty = property;
     }
 
 
@@ -41,7 +42,9 @@ public class DetailsPropertyFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_details_property, container, false);
         ButterKnife.bind(this,view);
 
-        mTextView.setText("Numero "+mPosition);
+        if (mProperty != null){
+            mTextView.setText(mProperty.getType());
+        }
 
         return view;
     }
