@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
  */
 public class DetailsPropertyFragment extends Fragment {
 
-    @BindView(R.id.text_details_fragment)
+    @BindView(R.id.textView)
     TextView mTextView;
 
     private int mPosition;

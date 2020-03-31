@@ -2,4 +2,10 @@
 <resources>
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="nav_view_menu_icon_size">40dp</dimen>
+
+    <dimen name="item_property_text_padding_left">20dp</dimen>
+    <dimen name="item_property_image_size">80dp</dimen>
+    <dimen name="item_property_type_text_size">14sp</dimen>
+    <dimen name="item_property_district_text_size">12sp</dimen>
+    <dimen name="item_property_price_text_size">18sp</dimen>
 </resources>

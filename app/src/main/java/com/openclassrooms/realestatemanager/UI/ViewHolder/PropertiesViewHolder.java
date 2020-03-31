@@ -37,7 +37,6 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder {
                     fragmentManager.beginTransaction()
                             .replace(R.id.details_activity_frame_layout,new DetailsPropertyFragment(position))
                             .commit();
-                    Log.e("TAG", "twopanes viewHolder: "+twoPanes);
                 }else{
                     Intent intent = new Intent(v.getContext(), DetailsPropertyActivity.class);
                     v.getContext().startActivity(intent);
