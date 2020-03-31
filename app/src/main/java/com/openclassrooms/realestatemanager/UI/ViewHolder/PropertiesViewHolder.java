@@ -28,6 +28,8 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder {
     TextView mPropertyType;
     @BindView(R.id.item_property_price_text_view)
     TextView mPropertyPrice;
+    @BindView(R.id.item_property_district_text_view)
+    TextView mPropertyDistrict;
     @BindView(R.id.item_list_property)
     LinearLayout mItemView;
 
@@ -39,7 +41,8 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder {
     public void updateView(Context context, boolean twoPanes, Property property) {
 
         mPropertyType.setText(property.getType());
-        mPropertyPrice.setText(String.valueOf(property.getPrice()));
+        mPropertyPrice.setText("$"+ property.getPrice());
+        mPropertyDistrict.setText(property.getAddress().getDistrict());
 
         mItemView.setOnClickListener(new View.OnClickListener() {
             @Override

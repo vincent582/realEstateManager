@@ -1,11 +1,17 @@
 package com.openclassrooms.realestatemanager;
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.wifi.WifiManager;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class Utils {
 
@@ -48,5 +54,31 @@ public class Utils {
     public static Boolean isInternetAvailable(Context context){
         WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
         return wifi.isWifiEnabled();
+    }
+
+
+    /**
+     * get the location latitude and longitude from address text
+     * @param context
+     * @param strAddress
+     * @return
+     */
+    public static LatLng getLocationFromAddress(Context context, String strAddress) {
+        Geocoder coder = new Geocoder(context);
+        List<Address> address;
+        LatLng latLng = null;
+        try {
+            // May throw an IOException
+            address = coder.getFromLocationName(strAddress, 5);
+            if (address == null) {
+                return null;
+            }
+            Address location = address.get(0);
+            latLng = new LatLng(location.getLatitude(), location.getLongitude() );
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return latLng;
     }
 }

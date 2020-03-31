@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UI.Activities.DetailsPropertyActivity"
-    android:id="@+id/details_layout_fragment"
-    >
+    android:id="@+id/details_layout_fragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,12 +14,12 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/details_media_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="6dp"
-            android:text="TextView"
-            android:textSize="14sp"
+            android:padding="@dimen/details_view_padding_text_section"
+            android:text="@string/details_layout_media_text_view"
+            android:textSize="@dimen/details_view_text_section_size"
             android:textStyle="bold" />
 
         <HorizontalScrollView
@@ -36,14 +35,14 @@
                     android:id="@+id/imageView2"
                     android:layout_width="@dimen/item_property_image_size"
                     android:layout_height="@dimen/item_property_image_size"
-                    android:layout_margin="4dp"
+                    android:layout_margin="@dimen/item_property_details_margin_image"
                     tools:srcCompat="@tools:sample/backgrounds/scenic[1]" />
 
                 <ImageView
                     android:id="@+id/imageView3"
                     android:layout_width="@dimen/item_property_image_size"
                     android:layout_height="@dimen/item_property_image_size"
-                    android:layout_margin="4dp"
+                    android:layout_margin="@dimen/item_property_details_margin_image"
                     tools:srcCompat="@tools:sample/backgrounds/scenic[2]" />
             </LinearLayout>
         </HorizontalScrollView>
@@ -52,18 +51,18 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="6dp"
-            android:text="Description"
-            android:textSize="14sp"
+            android:padding="@dimen/details_view_padding_text_section"
+            android:text="@string/details_layout_description_text_view"
+            android:textSize="@dimen/details_view_text_section_size"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/details_description_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="6dp"
+            android:padding="@dimen/details_view_padding_text_section"
             android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam interdum augue eu commodo faucibus. Aliquam mattis dolor et quam tincidunt, sed cursus lorem placerat. Phasellus pellentesque felis sed velit sagittis, at convallis leo auctor. Aliquam erat volutpat. Etiam pellentesque est lacus, ac facilisis elit vestibulum nec. Etiam vel convallis eros. Morbi eget porttitor nibh, in tempor justo. Nunc et lacus justo. In nulla nisi, faucibus non diam non, placerat euismod elit. Vivamus pellentesque tortor augue, et pulvinar augue volutpat vel. Vivamus eu orci quis magna semper ullamcorper vitae at sapien. Aliquam sit amet ultrices turpis."
-            android:textSize="12sp" />
+            android:textSize="@dimen/details_description_property_text_size" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -84,7 +83,6 @@
                     android:padding="5dp">
 
                     <ImageView
-                        android:id="@+id/iconroomnuber"
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_weight="3"
@@ -98,14 +96,13 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/textView5"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Surface"
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/textView8"
+                            android:id="@+id/details_surface_value_text_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
@@ -140,6 +137,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/details_nbr_of_rooms_value_text_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
@@ -250,31 +248,35 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/details_address_street_text_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:text="740 Park Avenue" />
 
                         <TextView
-                            android:id="@+id/textView9"
+                            android:id="@+id/details_address_complement_street_text_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:text="Apt 6/7A" />
 
                         <TextView
+                            android:id="@+id/details_address_district_text_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:text="New York" />
 
                         <TextView
+                            android:id="@+id/details_address_state_and_postcode_text_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:text="NY 10021" />
 
                         <TextView
+                            android:id="@+id/details_address_country_text_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
@@ -287,7 +289,20 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:clickable="false">
+
+                <com.google.android.gms.maps.MapView xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:map="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/mapView"
+                    android:name="com.google.android.gms.maps.MapFragment"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center_horizontal"
+                    map:cameraZoom="17"
+                    map:liteMode="true"
+                    map:mapType="normal" />
+
             </FrameLayout>
 
         </LinearLayout>

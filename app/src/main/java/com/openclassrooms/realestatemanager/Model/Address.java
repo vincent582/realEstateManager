@@ -74,4 +74,8 @@ public class Address {
     public void setCountry(String country) {
         this.country = country;
     }
+
+    public String getFormatedAddress(){
+        return number+" "+street+" "+complement_street+" "+district+" "+state+" "+postCode+" "+country;
+    }
 }
