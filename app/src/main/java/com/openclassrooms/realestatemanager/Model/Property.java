@@ -1,7 +1,5 @@
 package com.openclassrooms.realestatemanager.Model;
 
-import android.location.Address;
-
 import java.util.Date;
 import java.util.List;
 
@@ -21,13 +19,14 @@ public class Property {
     private Date dateOfSale;
     private User agentInCharge;
 
-    public Property(int id, String type, int price, int surface, int nbrOfRooms, String description, List<String> listFacilities, String status, Date addedDate, Date dateOfSale, User agentInCharge) {
+    public Property(int id, String type, int price, int surface, int nbrOfRooms, String description,Address address, List<String> listFacilities, String status, Date addedDate, Date dateOfSale, User agentInCharge) {
         this.id = id;
         this.type = type;
         this.price = price;
         this.surface = surface;
         this.nbrOfRooms = nbrOfRooms;
         this.description = description;
+        this.mAddress = address;
         this.listFacilities = listFacilities;
         this.status = status;
         this.addedDate = addedDate;
