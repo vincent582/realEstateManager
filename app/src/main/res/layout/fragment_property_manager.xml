@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:id="@+id/property_manager_fragment_scrollView">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UI.Fragment.PropertyManager.PropertyManagerFragment">
+
+
+    <TextView
+        android:id="@+id/manager_layout_type_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/property_type_tv"
+        app:layout_constraintEnd_toStartOf="@+id/manager_layout_price_tv"
+        app:layout_constraintHorizontal_bias="0.773"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/manager_layout_price_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/property_price_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/manager_layout_type_tv"
+        app:layout_constraintTop_toTopOf="@+id/manager_layout_type_tv" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/manager_layout_type_tv"
+        app:layout_constraintStart_toStartOf="@+id/manager_layout_type_tv"
+        app:layout_constraintTop_toBottomOf="@+id/manager_layout_type_tv" />
+
+    <EditText
+        android:id="@+id/manager_layout_price_editText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/manager_layout_price_tv"
+        app:layout_constraintStart_toStartOf="@+id/manager_layout_price_tv"
+        app:layout_constraintTop_toBottomOf="@+id/manager_layout_price_tv" />
+
+    <TextView
+        android:id="@+id/manager_layout_description_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/property_description_tv"
+        app:layout_constraintEnd_toEndOf="@+id/spinner"
+        app:layout_constraintStart_toStartOf="@+id/spinner"
+        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+
+    <EditText
+        android:id="@+id/manager_layout_description_editText"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="24dp"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/manager_layout_description_tv"></EditText>
+
+    <TextView
+        android:id="@+id/manager_layout_surface_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/property_surface_tv"
+        app:layout_constraintEnd_toEndOf="@+id/manager_layout_description_tv"
+        app:layout_constraintStart_toStartOf="@+id/manager_layout_description_tv"
+        app:layout_constraintTop_toBottomOf="@+id/manager_layout_description_editText" />
+
+    <EditText
+        android:id="@+id/manager_layout_surface_editText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:inputType="number"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/manager_layout_surface_tv"
+        app:layout_constraintStart_toStartOf="@+id/manager_layout_surface_tv"
+        app:layout_constraintTop_toBottomOf="@+id/manager_layout_surface_tv" />
+
+    <TextView
+        android:id="@+id/manager_layout_number_of_room_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/property_number_of_room_tv"
+        app:layout_constraintEnd_toEndOf="@+id/manager_layout_price_editText"
+        app:layout_constraintStart_toStartOf="@+id/manager_layout_price_editText"
+        app:layout_constraintTop_toTopOf="@+id/manager_layout_surface_tv" />
+
+    <EditText
+        android:id="@+id/manager_layout_nbr_of_room_editText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:inputType="number"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/manager_layout_number_of_room_tv"
+        app:layout_constraintStart_toStartOf="@+id/manager_layout_number_of_room_tv"
+        app:layout_constraintTop_toBottomOf="@+id/manager_layout_number_of_room_tv" />
+
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="196dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Is Sold"
+        app:layout_constraintEnd_toEndOf="@+id/textView13"
+        app:layout_constraintStart_toStartOf="@+id/textView13"
+        app:layout_constraintTop_toBottomOf="@+id/textView13"></CheckBox>
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/checkBox5"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/checkBox5"
+        app:layout_constraintTop_toTopOf="@+id/textView8" />
+
+    <EditText
+        android:id="@+id/editText11"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/editText3"
+        app:layout_constraintStart_toStartOf="@+id/editText3"
+        app:layout_constraintTop_toTopOf="@+id/textView9" />
+
+    <EditText
+        android:id="@+id/editText12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/editText11"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/editText11"
+        app:layout_constraintTop_toTopOf="@+id/textView10" />
+
+    <EditText
+        android:id="@+id/editText13"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/editText12"
+        app:layout_constraintStart_toStartOf="@+id/editText12"
+        app:layout_constraintTop_toTopOf="@+id/textView11" />
+
+    <EditText
+        android:id="@+id/editText15"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/editText12"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editText12"
+        app:layout_constraintTop_toTopOf="@+id/textView13" />
+
+    <EditText
+        android:id="@+id/editText14"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/editText13"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editText13"
+        app:layout_constraintTop_toTopOf="@+id/textView12" />
+
+    <TextView
+        android:id="@+id/manager_layout_address_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Address"
+        app:layout_constraintEnd_toEndOf="@+id/checkBox4"
+        app:layout_constraintStart_toStartOf="@+id/checkBox4"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox4" />
+
+    <CheckBox
+        android:id="@+id/checkBox5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Supermarket"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/checkBox3"
+        app:layout_constraintStart_toStartOf="@+id/checkBox3"
+        app:layout_constraintTop_toBottomOf="@id/checkBox3"></CheckBox>
+
+    <CheckBox
+        android:id="@+id/checkBox4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Wifi"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/checkBox2"
+        app:layout_constraintStart_toStartOf="@+id/checkBox2"
+        app:layout_constraintTop_toBottomOf="@id/checkBox2"></CheckBox>
+
+    <CheckBox
+        android:id="@+id/checkBox3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Station"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/manager_layout_nbr_of_room_editText"
+        app:layout_constraintStart_toStartOf="@+id/manager_layout_nbr_of_room_editText"
+        app:layout_constraintTop_toTopOf="@+id/checkBox2"></CheckBox>
+
+    <CheckBox
+        android:id="@+id/checkBox2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="School"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/manager_layout_facilities_tv"
+        app:layout_constraintStart_toStartOf="@+id/manager_layout_facilities_tv"
+        app:layout_constraintTop_toBottomOf="@+id/manager_layout_facilities_tv"></CheckBox>
+
+    <TextView
+        android:id="@+id/manager_layout_facilities_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Facilities :"
+        app:layout_constraintEnd_toEndOf="@+id/manager_layout_surface_editText"
+        app:layout_constraintStart_toStartOf="@+id/manager_layout_surface_editText"
+        app:layout_constraintTop_toBottomOf="@id/manager_layout_surface_editText"></TextView>
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Country :"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/textView12"
+            app:layout_constraintStart_toStartOf="@+id/textView12"
+            app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="PostCode :"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/textView11"
+            app:layout_constraintStart_toStartOf="@+id/textView11"
+            app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="State :"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/textView10"
+            app:layout_constraintStart_toStartOf="@+id/textView10"
+            app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="District :"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/textView9"
+            app:layout_constraintStart_toStartOf="@+id/textView9"
+            app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Number :"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_tv"
+            app:layout_constraintStart_toStartOf="@+id/manager_layout_address_tv"
+            app:layout_constraintTop_toBottomOf="@+id/manager_layout_address_tv" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Street :"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/textView8"
+            app:layout_constraintStart_toStartOf="@+id/textView8"
+            app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:background="@color/colorAccent"
+            android:text="Save"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

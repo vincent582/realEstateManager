@@ -14,12 +14,12 @@ public class Property {
     private List<Photo> mPhotoList;
     private Address mAddress;
     private List<String> listFacilities;
-    private String status;
+    private Boolean sold;
     private Date addedDate;
     private Date dateOfSale;
     private User agentInCharge;
 
-    public Property(int id, String type, int price, int surface, int nbrOfRooms, String description,Address address, List<String> listFacilities, String status, Date addedDate, Date dateOfSale, User agentInCharge) {
+    public Property(int id, String type, int price, int surface, int nbrOfRooms, String description,Address address, List<String> listFacilities, Boolean sold, Date addedDate, Date dateOfSale, User agentInCharge) {
         this.id = id;
         this.type = type;
         this.price = price;
@@ -28,7 +28,7 @@ public class Property {
         this.description = description;
         this.mAddress = address;
         this.listFacilities = listFacilities;
-        this.status = status;
+        this.sold = sold;
         this.addedDate = addedDate;
         this.dateOfSale = dateOfSale;
         this.agentInCharge = agentInCharge;
@@ -100,12 +100,12 @@ public class Property {
         this.listFacilities = listFacilities;
     }
 
-    public String getStatus() {
-        return status;
+    public Boolean getSold() {
+        return sold;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatus(Boolean sold) {
+        this.sold = sold;
     }
 
     public Date getAddedDate() {

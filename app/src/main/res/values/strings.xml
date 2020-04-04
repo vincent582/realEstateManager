@@ -6,4 +6,12 @@
     <string name="details_layout_description_text_view">Description</string>
     <string name="List_of_properties">List of properties</string>
     <string name="map">map</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="property_description_tv">Description :</string>
+    <string name="property_type_tv">Type :</string>
+    <string name="property_price_tv">Price :</string>
+    <string name="property_surface_tv">Surface :</string>
+    <string name="property_number_of_room_tv">Number of room</string>
 </resources>

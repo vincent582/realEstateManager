@@ -27,7 +27,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UI.Activities.DetailsPropertyActivity"></activity>
+
+        <activity
+            android:name=".UI.Activities.DetailsPropertyActivity"
+            android:label="Details"
+            android:parentActivityName=".UI.Activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".UI.Activities.MainActivity" />
+        </activity>
+
+        <activity android:name=".UI.Activities.PropertyManagerActivity"
+            android:label="ManageProperty"
+            android:parentActivityName=".UI.Activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".UI.Activities.MainActivity">
+            </meta-data>
+        </activity>
     </application>
 
 </manifest>

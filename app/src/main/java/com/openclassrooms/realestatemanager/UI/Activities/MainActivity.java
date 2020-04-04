@@ -8,7 +8,9 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
@@ -17,11 +19,12 @@ import com.google.android.material.navigation.NavigationView;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.DetailsProperty.DetailsPropertyFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.ListProperties.ListPropertiesFragment;
+import com.openclassrooms.realestatemanager.UI.Fragment.Map.MapFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     @BindView(R.id.activity_main_toolbar)
     Toolbar mToolbar;
@@ -44,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar,R.string.drawer_layout_open,R.string.drawer_layout_close);
         mDrawerLayout.addDrawerListener(toggle);
@@ -93,7 +98,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     if (mListPropertiesFragment == null) mListPropertiesFragment = new ListPropertiesFragment(twoPanes);
                     this.startTransactionFragment(mListPropertiesFragment);
                 break;
-            case R.id.activity_main_drawer_settings:
+            case R.id.activity_main_drawer_map:
+                    MapFragment mapFragment = new MapFragment();
+                    this.startTransactionFragment(mapFragment);
                 break;
             default:
                 break;
@@ -122,6 +129,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_activity_menu_toolbar,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.app_bar_add_item:
+                Intent intent = new Intent(this,PropertyManagerActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
         return true;
     }
 }

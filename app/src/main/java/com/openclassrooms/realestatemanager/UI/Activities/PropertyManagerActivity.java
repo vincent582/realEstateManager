@@ -8,44 +8,38 @@ import android.os.Bundle;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.DetailsProperty.DetailsPropertyFragment;
+import com.openclassrooms.realestatemanager.UI.Fragment.PropertyManager.PropertyManagerFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DetailsPropertyActivity extends AppCompatActivity {
+public class PropertyManagerActivity extends AppCompatActivity {
 
     @BindView(R.id.activity_main_toolbar)
     Toolbar mToolbar;
 
-    public static String PROPERTY_ID_EXTRA = "PROPERTY_ID_EXTRA";
-
-    private DetailsPropertyFragment mDetailsPropertyFragment;
-    private int mPropertyId;
+    private PropertyManagerFragment mPropertyManagerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details_property);
+        setContentView(R.layout.activity_property_manager);
         ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        if (getIntent().hasExtra(PROPERTY_ID_EXTRA)){
-            mPropertyId = getIntent().getIntExtra(PROPERTY_ID_EXTRA,0);
-        }
-
-        configureAndShowDetailsFragment();
+        configureAndShowPropertyManagerFragment();
     }
 
-    private void configureAndShowDetailsFragment() {
-        mDetailsPropertyFragment = (DetailsPropertyFragment) getSupportFragmentManager().findFragmentById(R.id.details_activity_frame_layout);
+    private void configureAndShowPropertyManagerFragment() {
+        mPropertyManagerFragment = (PropertyManagerFragment) getSupportFragmentManager().findFragmentById(R.id.property_manager_activity_frame_layout);
 
-        if (mDetailsPropertyFragment == null){
-            mDetailsPropertyFragment = new DetailsPropertyFragment(mPropertyId);
+        if (mPropertyManagerFragment == null){
+            mPropertyManagerFragment = new PropertyManagerFragment();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.details_activity_frame_layout,mDetailsPropertyFragment)
+                    .add(R.id.property_manager_activity_frame_layout,mPropertyManagerFragment)
                     .commit();
         }
     }
