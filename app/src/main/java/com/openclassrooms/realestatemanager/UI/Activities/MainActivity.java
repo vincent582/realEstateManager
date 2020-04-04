@@ -7,20 +7,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.google.android.material.navigation.NavigationView;
-import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.UI.Fragment.DetailsPropertyFragment;
-import com.openclassrooms.realestatemanager.UI.Fragment.ListPropertiesFragment;
-import com.openclassrooms.realestatemanager.UI.ViewModel.PropertyViewModel;
-
-import java.util.List;
+import com.openclassrooms.realestatemanager.UI.Fragment.DetailsProperty.DetailsPropertyFragment;
+import com.openclassrooms.realestatemanager.UI.Fragment.ListProperties.ListPropertiesFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,8 +34,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ListPropertiesFragment mListPropertiesFragment;
     private DetailsPropertyFragment mDetailsPropertyFragment;
     private boolean twoPanes;
-    private PropertyViewModel mPropertyViewModel;
-    private List<Property> mPropertiesList;
 
 
     @Override
@@ -48,10 +41,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
-        mPropertyViewModel = new ViewModelProvider(this).get(PropertyViewModel.class);
-        mPropertyViewModel.init();
-        mPropertyViewModel.getProperties().observe(this,this::updateListProperties);
 
         setSupportActionBar(mToolbar);
 
@@ -62,10 +51,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigationView.setNavigationItemSelectedListener(this);
 
         if (findViewById(R.id.details_activity_frame_layout) != null) twoPanes = true;
-    }
-
-    private void updateListProperties(List<Property> properties) {
-        mPropertiesList = properties;
 
         configureAndShowListFragment();
         configureAndShowDetailsFragment();
@@ -77,12 +62,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void configureAndShowListFragment() {
         mListPropertiesFragment = (ListPropertiesFragment) getSupportFragmentManager().findFragmentById(R.id.activity_main_host_frame_layout);
         if (mListPropertiesFragment == null){
-            mListPropertiesFragment = new ListPropertiesFragment(this,twoPanes, mPropertiesList);
+            mListPropertiesFragment = new ListPropertiesFragment(twoPanes);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.activity_main_host_frame_layout, mListPropertiesFragment)
                     .commit();
         }else{
-            mListPropertiesFragment.updateTwoPanesAndContext(twoPanes,this, mPropertiesList);
+            mListPropertiesFragment.updateTwoPanesToFragment(twoPanes);
         }
     }
 
@@ -104,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         switch (id){
             case R.id.activity_main_drawer_list:
-                    if (mListPropertiesFragment == null) mListPropertiesFragment = new ListPropertiesFragment(this,twoPanes, mPropertiesList);
+                    if (mListPropertiesFragment == null) mListPropertiesFragment = new ListPropertiesFragment(twoPanes);
                     this.startTransactionFragment(mListPropertiesFragment);
                 break;
             case R.id.activity_main_drawer_settings:

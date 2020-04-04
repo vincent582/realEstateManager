@@ -1,36 +1,27 @@
 package com.openclassrooms.realestatemanager.UI.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Intent;
 import android.os.Bundle;
-
-import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.UI.Fragment.DetailsPropertyFragment;
-import com.openclassrooms.realestatemanager.UI.ViewModel.PropertyViewModel;
+import com.openclassrooms.realestatemanager.UI.Fragment.DetailsProperty.DetailsPropertyFragment;
 
 public class DetailsPropertyActivity extends AppCompatActivity {
 
-    public static String PROPERTY_ID = "PROPERTY_ID";
+
+    public static String PROPERTY_ID_EXTRA = "PROPERTY_ID_EXTRA";
+
     private DetailsPropertyFragment mDetailsPropertyFragment;
-    private int mProperty_id;
-    private PropertyViewModel mPropertyViewModel;
-    private Property mProperty;
+    private int mPropertyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_property);
 
-        if (getIntent().hasExtra(PROPERTY_ID)){
-            mProperty_id = getIntent().getIntExtra(PROPERTY_ID,0);
+        if (getIntent().hasExtra(PROPERTY_ID_EXTRA)){
+            mPropertyId = getIntent().getIntExtra(PROPERTY_ID_EXTRA,0);
         }
-
-        mPropertyViewModel = new ViewModelProvider(this).get(PropertyViewModel.class);
-        mPropertyViewModel.init();
-        mProperty = mPropertyViewModel.getPropertyById(mProperty_id);
 
         configureAndShowDetailsFragment();
     }
@@ -39,12 +30,10 @@ public class DetailsPropertyActivity extends AppCompatActivity {
         mDetailsPropertyFragment = (DetailsPropertyFragment) getSupportFragmentManager().findFragmentById(R.id.details_activity_frame_layout);
 
         if (mDetailsPropertyFragment == null){
-            mDetailsPropertyFragment = new DetailsPropertyFragment(mProperty);
+            mDetailsPropertyFragment = new DetailsPropertyFragment(mPropertyId);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.details_activity_frame_layout,mDetailsPropertyFragment)
                     .commit();
         }
     }
-
-
 }

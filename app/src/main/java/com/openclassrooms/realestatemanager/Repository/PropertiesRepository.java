@@ -25,6 +25,12 @@ public class PropertiesRepository {
     }
 
     public Property getPropertyById(int id){
-        return Dummy.sPropertyList.get(id - 1);
+        Property propertyToReturn = null;
+        for (Property property :Dummy.sPropertyList) {
+            if (property.getId() == id){
+                propertyToReturn = property;
+            }
+        }
+        return propertyToReturn;
     }
 }

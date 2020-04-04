@@ -42,10 +42,17 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    // For control over item selection of both touch and mouse driven selection
+    implementation "androidx.recyclerview:recyclerview-selection:1.1.0-rc01"
+
     //Butterknife
     implementation 'com.jakewharton:butterknife:10.2.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
 
     //GoogleServices
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
+
+    //EASY PERMISSIONS
+    implementation 'pub.devrel:easypermissions:1.1.1'
 }

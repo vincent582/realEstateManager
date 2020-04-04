@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/list_properties_recycler_view"
-    tools:context=".UI.Fragment.ListPropertiesFragment"
+    tools:context=".UI.Fragment.ListProperties.ListPropertiesFragment"
     tools:listitem="@layout/item_list_property">
 
 

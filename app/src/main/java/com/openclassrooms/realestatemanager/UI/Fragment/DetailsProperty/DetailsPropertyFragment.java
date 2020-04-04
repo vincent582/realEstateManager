@@ -1,10 +1,11 @@
-package com.openclassrooms.realestatemanager.UI.Fragment;
+package com.openclassrooms.realestatemanager.UI.Fragment.DetailsProperty;
 
 
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +13,10 @@ import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.openclassrooms.realestatemanager.Model.Property;
@@ -34,7 +33,6 @@ public class DetailsPropertyFragment extends Fragment implements OnMapReadyCallb
 
     @BindView(R.id.details_layout_fragment)
     ScrollView mDetailsLayout;
-
     @BindView(R.id.details_description_text_view)
     TextView mDescription;
     @BindView(R.id.details_surface_value_text_view)
@@ -51,19 +49,19 @@ public class DetailsPropertyFragment extends Fragment implements OnMapReadyCallb
     TextView mAddressStateAndPostCode;
     @BindView(R.id.details_address_country_text_view)
     TextView mAddressCountry;
-
     @BindView(R.id.mapView)
     MapView mMapView;
 
+    private static final String PROPERTY_ID_INSTANCESTATE = "PROPERTY_ID_INSTANCESTATE";
+    private DetailsPropertyViewModel mDetailsPropertyViewModel;
     private Property mProperty;
     private GoogleMap mGoogleMap;
+    private int mPropertyId;
 
-    public DetailsPropertyFragment() {
-        // Required empty public constructor
-    }
+    public DetailsPropertyFragment(){}
 
-    public DetailsPropertyFragment(Property property) {
-        mProperty = property;
+    public DetailsPropertyFragment(int propertyId) {
+        this.mPropertyId = propertyId;
     }
 
     @Override
@@ -72,6 +70,13 @@ public class DetailsPropertyFragment extends Fragment implements OnMapReadyCallb
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_details_property, container, false);
         ButterKnife.bind(this,view);
+
+        mDetailsPropertyViewModel = new ViewModelProvider(getActivity()).get(DetailsPropertyViewModel.class);
+        mDetailsPropertyViewModel.init();
+        if (savedInstanceState != null){
+            mPropertyId = savedInstanceState.getInt(PROPERTY_ID_INSTANCESTATE);
+        }
+        mProperty = mDetailsPropertyViewModel.getProperty(mPropertyId);
 
         mMapView.onCreate(savedInstanceState);
 
@@ -105,5 +110,11 @@ public class DetailsPropertyFragment extends Fragment implements OnMapReadyCallb
         mGoogleMap.addMarker(new MarkerOptions()
                 .position(position)
         );
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(PROPERTY_ID_INSTANCESTATE,mPropertyId);
     }
 }

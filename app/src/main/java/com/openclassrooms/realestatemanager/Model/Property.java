@@ -1,9 +1,12 @@
 package com.openclassrooms.realestatemanager.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 import java.util.List;
 
-public class Property {
+public class Property implements Parcelable {
 
     private int id;
     private String type;
@@ -33,6 +36,49 @@ public class Property {
         this.dateOfSale = dateOfSale;
         this.agentInCharge = agentInCharge;
     }
+
+
+    protected Property(Parcel in) {
+        id = in.readInt();
+        type = in.readString();
+        price = in.readInt();
+        surface = in.readInt();
+        nbrOfRooms = in.readInt();
+        description = in.readString();
+        mAddress = in.readParcelable(Address.class.getClassLoader());
+        listFacilities = in.createStringArrayList();
+        status = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(type);
+        dest.writeInt(price);
+        dest.writeInt(surface);
+        dest.writeInt(nbrOfRooms);
+        dest.writeString(description);
+        dest.writeParcelable(mAddress, flags);
+        dest.writeStringList(listFacilities);
+        dest.writeString(status);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Property> CREATOR = new Creator<Property>() {
+        @Override
+        public Property createFromParcel(Parcel in) {
+            return new Property(in);
+        }
+
+        @Override
+        public Property[] newArray(int size) {
+            return new Property[size];
+        }
+    };
 
     public int getId() { return id; }
 
@@ -131,5 +177,7 @@ public class Property {
     public void setAgentInCharge(User agentInCharge) {
         this.agentInCharge = agentInCharge;
     }
+
+
 
 }

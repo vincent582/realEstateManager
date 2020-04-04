@@ -1,6 +1,5 @@
-package com.openclassrooms.realestatemanager.UI.ViewHolder;
+package com.openclassrooms.realestatemanager.UI.Fragment.ListProperties;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,25 +15,24 @@ import java.util.List;
 public class PropertiesRecyclerViewAdapter extends RecyclerView.Adapter<PropertiesViewHolder> {
 
     private List<Property> mListProperties;
-    private boolean mTwoPanes;
-    private Context mContext;
 
-    public PropertiesRecyclerViewAdapter(Context context, boolean twoPanes, List<Property> listProperties) {
-        mTwoPanes = twoPanes;
-        mContext = context;
+    private PropertiesViewHolder.OnPropertyListener mPropertyListener;
+
+    public PropertiesRecyclerViewAdapter(List<Property> listProperties, PropertiesViewHolder.OnPropertyListener propertyListener) {
         mListProperties = listProperties;
+        mPropertyListener = propertyListener;
     }
 
     @NonNull
     @Override
     public PropertiesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_property,parent,false);
-        return new PropertiesViewHolder(view);
+        return new PropertiesViewHolder(view,mPropertyListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PropertiesViewHolder holder, int position) {
-        holder.updateView(mContext,mTwoPanes,mListProperties.get(position));
+        holder.updateView(mListProperties.get(position));
     }
 
     @Override
@@ -44,12 +42,5 @@ public class PropertiesRecyclerViewAdapter extends RecyclerView.Adapter<Properti
         }else{
             return mListProperties.size();
         }
-    }
-
-    public void updateUi(Context context, boolean twoPanes, List<Property> properties) {
-        mContext = context;
-        mTwoPanes = twoPanes;
-        mListProperties = properties;
-        notifyDataSetChanged();
     }
 }

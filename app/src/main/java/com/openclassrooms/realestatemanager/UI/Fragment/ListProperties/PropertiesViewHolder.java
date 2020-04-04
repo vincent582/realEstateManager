@@ -1,0 +1,53 @@
+package com.openclassrooms.realestatemanager.UI.Fragment.ListProperties;
+
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.openclassrooms.realestatemanager.Model.Property;
+import com.openclassrooms.realestatemanager.R;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class PropertiesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+    @BindView(R.id.item_property_type_text_view)
+    TextView mPropertyType;
+    @BindView(R.id.item_property_price_text_view)
+    TextView mPropertyPrice;
+    @BindView(R.id.item_property_district_text_view)
+    TextView mPropertyDistrict;
+    @BindView(R.id.item_list_property)
+    LinearLayout mItemView;
+
+    private OnPropertyListener mOnPropertyListener;
+    private Property mProperty;
+
+    public interface OnPropertyListener{
+        void onPropertyClick(int propertyId);
+    }
+
+    public PropertiesViewHolder(@NonNull View itemView, OnPropertyListener propertyListener) {
+        super(itemView);
+        this.mOnPropertyListener = propertyListener;
+        ButterKnife.bind(this, itemView);
+    }
+
+    public void updateView(Property property) {
+        this.mProperty = property;
+        mPropertyType.setText(property.getType());
+        mPropertyPrice.setText("$"+ property.getPrice());
+        mPropertyDistrict.setText(property.getAddress().getDistrict());
+
+        mItemView.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        mOnPropertyListener.onPropertyClick(mProperty.getId());
+    }
+}
