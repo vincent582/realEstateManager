@@ -3,7 +3,7 @@ package com.openclassrooms.realestatemanager.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Address implements Parcelable {
+public class Address {
 
     private int number;
     private String street;
@@ -21,28 +21,6 @@ public class Address implements Parcelable {
         this.postCode = postCode;
         this.country = country;
     }
-
-    protected Address(Parcel in) {
-        number = in.readInt();
-        street = in.readString();
-        complement_street = in.readString();
-        district = in.readString();
-        state = in.readString();
-        postCode = in.readInt();
-        country = in.readString();
-    }
-
-    public static final Creator<Address> CREATOR = new Creator<Address>() {
-        @Override
-        public Address createFromParcel(Parcel in) {
-            return new Address(in);
-        }
-
-        @Override
-        public Address[] newArray(int size) {
-            return new Address[size];
-        }
-    };
 
     public int getNumber() {
         return number;
@@ -104,19 +82,5 @@ public class Address implements Parcelable {
         return number+" "+street+" "+complement_street+" "+district+" "+state+" "+postCode+" "+country;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(number);
-        dest.writeString(street);
-        dest.writeString(complement_street);
-        dest.writeString(district);
-        dest.writeString(state);
-        dest.writeInt(postCode);
-        dest.writeString(country);
-    }
 }

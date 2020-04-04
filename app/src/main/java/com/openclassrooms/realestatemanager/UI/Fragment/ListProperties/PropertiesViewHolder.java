@@ -1,10 +1,13 @@
 package com.openclassrooms.realestatemanager.UI.Fragment.ListProperties;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.Model.Property;
@@ -24,6 +27,7 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder implements Vie
     @BindView(R.id.item_list_property)
     LinearLayout mItemView;
 
+    private final Context mContext;
     private OnPropertyListener mOnPropertyListener;
     private Property mProperty;
 
@@ -31,19 +35,32 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder implements Vie
         void onPropertyClick(int propertyId);
     }
 
-    public PropertiesViewHolder(@NonNull View itemView, OnPropertyListener propertyListener) {
+    public PropertiesViewHolder(@NonNull View itemView, Context context, OnPropertyListener propertyListener) {
         super(itemView);
+        this.mContext = context;
         this.mOnPropertyListener = propertyListener;
         ButterKnife.bind(this, itemView);
     }
 
-    public void updateView(Property property) {
+    public void updateView(Property property, int index) {
         this.mProperty = property;
         mPropertyType.setText(property.getType());
         mPropertyPrice.setText("$"+ property.getPrice());
         mPropertyDistrict.setText(property.getAddress().getDistrict());
 
         mItemView.setOnClickListener(this);
+
+        changeBackgroundColor(index);
+    }
+
+    private void changeBackgroundColor(int index) {
+        if(index == mProperty.getId()){
+            mItemView.setBackgroundResource(R.color.colorAccent);
+            mPropertyPrice.setTextColor(ContextCompat.getColor(mContext,R.color.colorWhite));
+        }else{
+            mItemView.setBackgroundResource(R.color.transparent);
+            mPropertyPrice.setTextColor(ContextCompat.getColor(mContext,R.color.colorAccent));
+        }
     }
 
     @Override

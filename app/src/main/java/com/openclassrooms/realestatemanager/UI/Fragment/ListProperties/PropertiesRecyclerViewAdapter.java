@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.UI.Fragment.ListProperties;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,25 +15,27 @@ import java.util.List;
 
 public class PropertiesRecyclerViewAdapter extends RecyclerView.Adapter<PropertiesViewHolder> {
 
+    private final Context mContext;
     private List<Property> mListProperties;
-
     private PropertiesViewHolder.OnPropertyListener mPropertyListener;
+    private int index = 0;
 
-    public PropertiesRecyclerViewAdapter(List<Property> listProperties, PropertiesViewHolder.OnPropertyListener propertyListener) {
-        mListProperties = listProperties;
-        mPropertyListener = propertyListener;
+    public PropertiesRecyclerViewAdapter(List<Property> listProperties, PropertiesViewHolder.OnPropertyListener propertyListener,Context context) {
+        this.mListProperties = listProperties;
+        this.mPropertyListener = propertyListener;
+        this.mContext = context;
     }
 
     @NonNull
     @Override
     public PropertiesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_property,parent,false);
-        return new PropertiesViewHolder(view,mPropertyListener);
+        return new PropertiesViewHolder(view,mContext,mPropertyListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PropertiesViewHolder holder, int position) {
-        holder.updateView(mListProperties.get(position));
+        holder.updateView(mListProperties.get(position),index);
     }
 
     @Override
@@ -41,6 +44,15 @@ public class PropertiesRecyclerViewAdapter extends RecyclerView.Adapter<Properti
             return 0;
         }else{
             return mListProperties.size();
+        }
+    }
+
+    public void updateBackgroundColor(int propertyId){
+        for (Property property: mListProperties) {
+            if (property.getId() == propertyId){
+                index = propertyId;
+                notifyDataSetChanged();
+            }
         }
     }
 }

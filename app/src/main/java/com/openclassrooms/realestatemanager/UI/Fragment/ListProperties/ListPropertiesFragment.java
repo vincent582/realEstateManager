@@ -67,7 +67,7 @@ public class ListPropertiesFragment extends Fragment implements PropertiesViewHo
     }
 
     private void configureRecyclerView() {
-        mAdapter = new PropertiesRecyclerViewAdapter(mListProperties,this);
+        mAdapter = new PropertiesRecyclerViewAdapter(mListProperties,this,getContext());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
@@ -85,6 +85,8 @@ public class ListPropertiesFragment extends Fragment implements PropertiesViewHo
             intent.putExtra(PROPERTY_ID_EXTRA, propertyId);
             startActivity(intent);
         }
+
+        mAdapter.updateBackgroundColor(propertyId);
     }
 
     public void updateTwoPanesToFragment(boolean twoPanes) {
