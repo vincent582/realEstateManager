@@ -4,4 +4,6 @@
     <string name="drawer_layout_close">drawer layout close</string>
     <string name="details_layout_media_text_view">Media</string>
     <string name="details_layout_description_text_view">Description</string>
+    <string name="List_of_properties">List of properties</string>
+    <string name="map">map</string>
 </resources>

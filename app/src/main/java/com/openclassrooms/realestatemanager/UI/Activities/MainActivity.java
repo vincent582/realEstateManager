@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -116,5 +117,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .replace(R.id.activity_main_host_frame_layout,fragment)
                     .commit();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_activity_menu_toolbar,menu);
+        return true;
     }
 }
