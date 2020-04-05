@@ -4,8 +4,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.Model.Property;
+import com.openclassrooms.realestatemanager.Model.User;
 import com.openclassrooms.realestatemanager.Repository.PropertiesRepository;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PropertiesViewModel extends ViewModel {
@@ -28,5 +31,4 @@ public class PropertiesViewModel extends ViewModel {
     public void addPropertyToList(Property property){
         mPropertiesRepository.addProperty(property);
     }
-
 }

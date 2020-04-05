@@ -13,18 +13,28 @@ import com.openclassrooms.realestatemanager.UI.Fragment.PropertyManager.Property
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity.PROPERTY_ID_EXTRA;
+import static com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity.PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER;
+
 public class PropertyManagerActivity extends AppCompatActivity {
 
     @BindView(R.id.activity_main_toolbar)
     Toolbar mToolbar;
 
     private PropertyManagerFragment mPropertyManagerFragment;
+    private int mPropertyId;
+    private Bundle bundle = new Bundle();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_property_manager);
         ButterKnife.bind(this);
+
+        if (getIntent().hasExtra(PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER)){
+            mPropertyId = getIntent().getIntExtra(PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER,0);
+            bundle.putInt(PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER,mPropertyId);
+        }
 
         setSupportActionBar(mToolbar);
         ActionBar ab = getSupportActionBar();
@@ -38,6 +48,7 @@ public class PropertyManagerActivity extends AppCompatActivity {
 
         if (mPropertyManagerFragment == null){
             mPropertyManagerFragment = new PropertyManagerFragment();
+            mPropertyManagerFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.property_manager_activity_frame_layout,mPropertyManagerFragment)
                     .commit();

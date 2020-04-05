@@ -76,10 +76,21 @@ public class DetailsPropertyFragment extends Fragment implements OnMapReadyCallb
         if (savedInstanceState != null){
             mPropertyId = savedInstanceState.getInt(PROPERTY_ID_INSTANCESTATE);
         }
-        mProperty = mDetailsPropertyViewModel.getProperty(mPropertyId);
+        mDetailsPropertyViewModel.getProperty(mPropertyId).observe(getActivity(),this::updateProperty);
 
         mMapView.onCreate(savedInstanceState);
 
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateProperty(mProperty);
+    }
+
+    private void updateProperty(Property property) {
+        this.mProperty = property;
         if (mProperty != null){
             mDescription.setText(mProperty.getDescription());
             mSurface.setText(String.valueOf(mProperty.getSurface()));
@@ -94,8 +105,6 @@ public class DetailsPropertyFragment extends Fragment implements OnMapReadyCallb
         }else{
             mDetailsLayout.setVisibility(View.GONE);
         }
-
-        return view;
     }
 
     @Override

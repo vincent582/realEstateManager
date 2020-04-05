@@ -104,7 +104,7 @@ public class Property {
         return sold;
     }
 
-    public void setStatus(Boolean sold) {
+    public void setSold(Boolean sold) {
         this.sold = sold;
     }
 

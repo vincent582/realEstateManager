@@ -26,11 +26,11 @@ public class PropertiesRepository {
         return listMutableLiveData;
     }
 
-    public Property getPropertyById(int id){
-        Property propertyToReturn = null;
+    public MutableLiveData<Property> getPropertyById(int id){
+        MutableLiveData<Property> propertyToReturn = new MutableLiveData<>();
         for (Property property :mPropertyList) {
             if (property.getId() == id){
-                propertyToReturn = property;
+                propertyToReturn.setValue(property);
             }
         }
         return propertyToReturn;
@@ -38,5 +38,13 @@ public class PropertiesRepository {
 
     public void addProperty(Property property) {
         mPropertyList.add(property);
+    }
+
+    public void updateProperty(Property property) {
+        for (Property p :mPropertyList) {
+            if (p.getId() == property.getId()){
+                mPropertyList.set(mPropertyList.indexOf(p),property);
+            }
+        }
     }
 }

@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -128,7 +129,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_activity_menu_toolbar,menu);
+        //currentUser
+        boolean test = true;
+        if (test) {
+            if (twoPanes) {
+                getMenuInflater().inflate(R.menu.activity_main_menu_two_panes_toolbar, menu);
+            } else {
+                getMenuInflater().inflate(R.menu.main_activity_menu_toolbar, menu);
+            }
+        }
         return true;
     }
 
