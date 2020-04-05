@@ -5,6 +5,7 @@ import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.Model.User;
 import com.openclassrooms.realestatemanager.Model.Address;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +22,10 @@ public class Dummy {
     public static List<String> facilities = Arrays.asList(
             "School","Station","Supermarket");
 
+    public static List<String> propertyType = Arrays.asList(
+            "House","Flat","PentHouse","Manor");
+
+
     public static List<Property> sPropertyList = Arrays.asList(
             new Property(1, "House",12000000,200,7,"Stunning Loft at the Heart of Soho. VIRTUAL TOUR AVAILABLE! Fabulous 4800+ sf live work loft with every original detail you could want. MASSIVE oversized windows; soaring ceilings; wood beams; and hardwood floors. This space is currently configured as a massive open space, with master sleep area at one end and a guest area at the other. Chef's Kitchem plus two full bathrooms round out the space. The space can easily adapt to a number of configurations and uses.",
                     mAddress,facilities,true,new Date(),new Date(),mUser),
@@ -31,4 +36,8 @@ public class Dummy {
             new Property(4, "PentHouse",18006000,600,12,"Stunning Loft at the Heart of Soho. VIRTUAL TOUR AVAILABLE! Fabulous 4800+ sf live work loft with every original detail you could want. MASSIVE oversized windows; soaring ceilings; wood beams; and hardwood floors. This space is currently configured as a massive open space, with master sleep area at one end and a guest area at the other. Chef's Kitchem plus two full bathrooms round out the space. The space can easily adapt to a number of configurations and uses.",
                     mAddress3,facilities,false,new Date(),new Date(),mUser)
     );
+
+    public static ArrayList<Property> generateListProperties(){
+        return new ArrayList<>(sPropertyList);
+    }
 }

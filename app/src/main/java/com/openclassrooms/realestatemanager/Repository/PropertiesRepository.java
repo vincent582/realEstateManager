@@ -11,6 +11,8 @@ public class PropertiesRepository {
 
     private static PropertiesRepository sPropertiesRepository;
 
+    private List<Property> mPropertyList = Dummy.generateListProperties();
+
     public static PropertiesRepository getInstance(){
         if (sPropertiesRepository == null){
             sPropertiesRepository = new PropertiesRepository();
@@ -20,17 +22,21 @@ public class PropertiesRepository {
 
     public MutableLiveData<List<Property>> getProperties(){
         MutableLiveData<List<Property>> listMutableLiveData = new MutableLiveData<>();
-        listMutableLiveData.setValue(Dummy.sPropertyList);
+        listMutableLiveData.setValue(mPropertyList);
         return listMutableLiveData;
     }
 
     public Property getPropertyById(int id){
         Property propertyToReturn = null;
-        for (Property property :Dummy.sPropertyList) {
+        for (Property property :mPropertyList) {
             if (property.getId() == id){
                 propertyToReturn = property;
             }
         }
         return propertyToReturn;
+    }
+
+    public void addProperty(Property property) {
+        mPropertyList.add(property);
     }
 }

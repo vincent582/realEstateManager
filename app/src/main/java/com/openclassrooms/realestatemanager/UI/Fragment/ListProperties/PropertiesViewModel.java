@@ -25,4 +25,8 @@ public class PropertiesViewModel extends ViewModel {
         return mPropertyList;
     }
 
+    public void addPropertyToList(Property property){
+        mPropertiesRepository.addProperty(property);
+    }
+
 }

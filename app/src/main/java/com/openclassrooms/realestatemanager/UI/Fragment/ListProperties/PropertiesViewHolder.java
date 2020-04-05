@@ -28,8 +28,9 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder implements Vie
     LinearLayout mItemView;
 
     private final Context mContext;
-    private OnPropertyListener mOnPropertyListener;
     private Property mProperty;
+
+    private OnPropertyListener mOnPropertyListener;
 
     public interface OnPropertyListener{
         void onPropertyClick(int propertyId);

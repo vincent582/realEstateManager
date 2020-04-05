@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.UI.Fragment.ListProperties;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 

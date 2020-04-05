@@ -37,7 +37,7 @@
         app:layout_constraintTop_toTopOf="@+id/manager_layout_type_tv" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/manager_layout_type_spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="@+id/manager_layout_type_tv"
@@ -60,9 +60,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/property_description_tv"
-        app:layout_constraintEnd_toEndOf="@+id/spinner"
-        app:layout_constraintStart_toStartOf="@+id/spinner"
-        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+        app:layout_constraintEnd_toEndOf="@+id/manager_layout_type_spinner"
+        app:layout_constraintStart_toStartOf="@+id/manager_layout_type_spinner"
+        app:layout_constraintTop_toBottomOf="@+id/manager_layout_type_spinner" />
 
     <EditText
         android:id="@+id/manager_layout_description_editText"
@@ -119,7 +119,7 @@
 
 
     <CheckBox
-        android:id="@+id/checkBox"
+        android:id="@+id/checkBox_is_sold"
         android:layout_width="196dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -129,63 +129,63 @@
         app:layout_constraintTop_toBottomOf="@+id/textView13"></CheckBox>
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/manager_layout_address_nbr_of_street_editText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:inputType="number"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/checkBox5"
+        app:layout_constraintEnd_toEndOf="@+id/checkBox_supermarket"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/checkBox5"
+        app:layout_constraintStart_toStartOf="@+id/checkBox_supermarket"
         app:layout_constraintTop_toTopOf="@+id/textView8" />
 
     <EditText
-        android:id="@+id/editText11"
+        android:id="@+id/manager_layout_address_street_editText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/editText3"
-        app:layout_constraintStart_toStartOf="@+id/editText3"
+        app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_nbr_of_street_editText"
+        app:layout_constraintStart_toStartOf="@+id/manager_layout_address_nbr_of_street_editText"
         app:layout_constraintTop_toTopOf="@+id/textView9" />
 
     <EditText
-        android:id="@+id/editText12"
+        android:id="@+id/manager_layout_address_district_editText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/editText11"
+        app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_street_editText"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/editText11"
+        app:layout_constraintStart_toStartOf="@+id/manager_layout_address_street_editText"
         app:layout_constraintTop_toTopOf="@+id/textView10" />
 
     <EditText
-        android:id="@+id/editText13"
+        android:id="@+id/manager_layout_address_state_editText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/editText12"
-        app:layout_constraintStart_toStartOf="@+id/editText12"
+        app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_district_editText"
+        app:layout_constraintStart_toStartOf="@+id/manager_layout_address_district_editText"
         app:layout_constraintTop_toTopOf="@+id/textView11" />
 
     <EditText
-        android:id="@+id/editText15"
+        android:id="@+id/manager_layout_address_country_editText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/editText12"
+        app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_district_editText"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/editText12"
+        app:layout_constraintStart_toStartOf="@+id/manager_layout_address_district_editText"
         app:layout_constraintTop_toTopOf="@+id/textView13" />
 
     <EditText
-        android:id="@+id/editText14"
+        android:id="@+id/manager_layout_address_post_code_editText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:inputType="number"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/editText13"
+        app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_state_editText"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/editText13"
+        app:layout_constraintStart_toStartOf="@+id/manager_layout_address_state_editText"
         app:layout_constraintTop_toTopOf="@+id/textView12" />
 
     <TextView
@@ -194,44 +194,44 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Address"
-        app:layout_constraintEnd_toEndOf="@+id/checkBox4"
-        app:layout_constraintStart_toStartOf="@+id/checkBox4"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox4" />
+        app:layout_constraintEnd_toEndOf="@+id/checkBox_wifi"
+        app:layout_constraintStart_toStartOf="@+id/checkBox_wifi"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox_wifi" />
 
     <CheckBox
-        android:id="@+id/checkBox5"
+        android:id="@+id/checkBox_supermarket"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Supermarket"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/checkBox3"
-        app:layout_constraintStart_toStartOf="@+id/checkBox3"
-        app:layout_constraintTop_toBottomOf="@id/checkBox3"></CheckBox>
+        app:layout_constraintEnd_toEndOf="@+id/checkBox_station"
+        app:layout_constraintStart_toStartOf="@+id/checkBox_station"
+        app:layout_constraintTop_toBottomOf="@id/checkBox_station"></CheckBox>
 
     <CheckBox
-        android:id="@+id/checkBox4"
+        android:id="@+id/checkBox_wifi"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Wifi"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/checkBox2"
-        app:layout_constraintStart_toStartOf="@+id/checkBox2"
-        app:layout_constraintTop_toBottomOf="@id/checkBox2"></CheckBox>
+        app:layout_constraintEnd_toEndOf="@+id/checkBox_school"
+        app:layout_constraintStart_toStartOf="@+id/checkBox_school"
+        app:layout_constraintTop_toBottomOf="@id/checkBox_school"></CheckBox>
 
     <CheckBox
-        android:id="@+id/checkBox3"
+        android:id="@+id/checkBox_station"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Station"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/manager_layout_nbr_of_room_editText"
         app:layout_constraintStart_toStartOf="@+id/manager_layout_nbr_of_room_editText"
-        app:layout_constraintTop_toTopOf="@+id/checkBox2"></CheckBox>
+        app:layout_constraintTop_toTopOf="@+id/checkBox_school"></CheckBox>
 
     <CheckBox
-        android:id="@+id/checkBox2"
+        android:id="@+id/checkBox_school"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -318,20 +318,20 @@
             app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/manager_layout_btn_add_property"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
             android:background="@color/colorAccent"
-            android:text="Save"
+            android:text="Add property"
+            android:padding="8dp"
             android:textColor="@color/colorWhite"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox" />
-
+            app:layout_constraintTop_toBottomOf="@+id/checkBox_is_sold" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
