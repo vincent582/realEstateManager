@@ -55,4 +55,8 @@ public class PropertiesRecyclerViewAdapter extends RecyclerView.Adapter<Properti
             }
         }
     }
+
+    public void refresh() {
+        notifyDataSetChanged();
+    }
 }

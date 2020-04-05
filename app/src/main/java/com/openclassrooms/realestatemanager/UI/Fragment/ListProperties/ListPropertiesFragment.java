@@ -34,6 +34,12 @@ public class ListPropertiesFragment extends Fragment implements PropertiesViewHo
     @BindView(R.id.list_properties_recycler_view)
     RecyclerView mRecyclerView;
 
+    public interface sendPropertyIdToMainActivityOnClickListener{
+        void callbackPropertyId(int propertyId);
+    }
+
+    private sendPropertyIdToMainActivityOnClickListener mListener;
+
     private PropertiesViewModel mPropertiesViewModel;
 
     private PropertiesRecyclerViewAdapter mAdapter;
@@ -42,8 +48,9 @@ public class ListPropertiesFragment extends Fragment implements PropertiesViewHo
 
     public ListPropertiesFragment(){}
 
-    public ListPropertiesFragment(boolean twoPanes) {
+    public ListPropertiesFragment(boolean twoPanes,sendPropertyIdToMainActivityOnClickListener listener) {
         this.twoPanes = twoPanes;
+        this.mListener = listener;
     }
 
     @Override
@@ -75,6 +82,7 @@ public class ListPropertiesFragment extends Fragment implements PropertiesViewHo
     @Override
     public void onPropertyClick(int propertyId) {
         if (twoPanes){
+            mListener.callbackPropertyId(propertyId);
             FragmentManager fragmentManager =  getParentFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.details_activity_frame_layout,new DetailsPropertyFragment(propertyId))
@@ -86,6 +94,12 @@ public class ListPropertiesFragment extends Fragment implements PropertiesViewHo
         }
 
         mAdapter.updateBackgroundColor(propertyId);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdapter.refresh();
     }
 
     public void updateTwoPanesToFragment(boolean twoPanes) {

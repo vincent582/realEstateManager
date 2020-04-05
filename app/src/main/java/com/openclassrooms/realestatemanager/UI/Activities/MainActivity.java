@@ -25,7 +25,10 @@ import com.openclassrooms.realestatemanager.UI.Fragment.Map.MapFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+import static com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity.PROPERTY_ID_EXTRA;
+import static com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity.PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ListPropertiesFragment.sendPropertyIdToMainActivityOnClickListener {
 
     @BindView(R.id.activity_main_toolbar)
     Toolbar mToolbar;
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ListPropertiesFragment mListPropertiesFragment;
     private DetailsPropertyFragment mDetailsPropertyFragment;
     private boolean twoPanes;
+    private int mPropertyId;
 
 
     @Override
@@ -69,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void configureAndShowListFragment() {
         mListPropertiesFragment = (ListPropertiesFragment) getSupportFragmentManager().findFragmentById(R.id.activity_main_host_frame_layout);
         if (mListPropertiesFragment == null){
-            mListPropertiesFragment = new ListPropertiesFragment(twoPanes);
+            mListPropertiesFragment = new ListPropertiesFragment(twoPanes,this);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.activity_main_host_frame_layout, mListPropertiesFragment)
                     .commit();
@@ -96,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         switch (id){
             case R.id.activity_main_drawer_list:
-                    if (mListPropertiesFragment == null) mListPropertiesFragment = new ListPropertiesFragment(twoPanes);
+                    if (mListPropertiesFragment == null) mListPropertiesFragment = new ListPropertiesFragment(twoPanes,this);
                     this.startTransactionFragment(mListPropertiesFragment);
                 break;
             case R.id.activity_main_drawer_map:
@@ -145,12 +149,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.app_bar_add_item:
-                Intent intent = new Intent(this,PropertyManagerActivity.class);
-                startActivity(intent);
+                    startPropertyManagerActivity();
+                break;
+            case R.id.app_bar_edit_item:
+                    if (Integer.valueOf(mPropertyId).toString() != null){
+                        startPropertyManagerActivity();
+                    }
+                    //TODO else show info have to select item
                 break;
             default:
                 return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+    public void startPropertyManagerActivity(){
+        Intent intent = new Intent(this,PropertyManagerActivity.class);
+        intent.putExtra(PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER,mPropertyId);
+        startActivity(intent);
+    }
+
+    @Override
+    public void callbackPropertyId(int propertyId) {
+        this.mPropertyId = propertyId;
     }
 }
