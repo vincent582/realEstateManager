@@ -9,9 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
@@ -25,7 +23,6 @@ import com.openclassrooms.realestatemanager.UI.Fragment.Map.MapFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity.PROPERTY_ID_EXTRA;
 import static com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity.PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ListPropertiesFragment.sendPropertyIdToMainActivityOnClickListener {
@@ -57,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar,R.string.drawer_layout_open,R.string.drawer_layout_close);
         mDrawerLayout.addDrawerListener(toggle);
+        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.primaryTextColor));
         toggle.syncState();
 
         mNavigationView.setNavigationItemSelectedListener(this);
@@ -78,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .add(R.id.activity_main_host_frame_layout, mListPropertiesFragment)
                     .commit();
         }else{
-            mListPropertiesFragment.updateTwoPanesToFragment(twoPanes);
+            mListPropertiesFragment.updateTwoPanesAndListenerToFragment(twoPanes,this);
         }
     }
 
@@ -149,11 +147,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.app_bar_add_item:
-                    startPropertyManagerActivity();
+                    Intent intent = new Intent(this,PropertyManagerActivity.class);
+                    startActivity(intent);
                 break;
             case R.id.app_bar_edit_item:
                     if (Integer.valueOf(mPropertyId).toString() != null){
-                        startPropertyManagerActivity();
+                        Intent intent1 = new Intent(this,PropertyManagerActivity.class);
+                        intent1.putExtra(PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER,mPropertyId);
+                        startActivity(intent1);
                     }
                     //TODO else show info have to select item
                 break;
@@ -163,11 +164,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    public void startPropertyManagerActivity(){
-        Intent intent = new Intent(this,PropertyManagerActivity.class);
-        intent.putExtra(PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER,mPropertyId);
-        startActivity(intent);
-    }
 
     @Override
     public void callbackPropertyId(int propertyId) {

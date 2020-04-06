@@ -114,11 +114,12 @@ public class DetailsPropertyFragment extends Fragment implements OnMapReadyCallb
 
         mGoogleMap = googleMap;
         mGoogleMap.getUiSettings().setMapToolbarEnabled(false);
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(position));
-
-        mGoogleMap.addMarker(new MarkerOptions()
-                .position(position)
-        );
+        if (position != null){
+            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+            mGoogleMap.addMarker(new MarkerOptions()
+                    .position(position)
+            );
+        }
     }
 
     @Override

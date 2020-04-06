@@ -48,7 +48,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="$17,890,000"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/secondaryDarkColor"
             android:textSize="@dimen/item_property_price_text_size"
             android:textStyle="bold"></TextView>
 

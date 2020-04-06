@@ -73,8 +73,10 @@ public class Utils {
             if (address == null) {
                 return null;
             }
-            Address location = address.get(0);
-            latLng = new LatLng(location.getLatitude(), location.getLongitude() );
+            if (!address.isEmpty()){
+                Address location = address.get(0);
+                latLng = new LatLng(location.getLatitude(), location.getLongitude() );
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }

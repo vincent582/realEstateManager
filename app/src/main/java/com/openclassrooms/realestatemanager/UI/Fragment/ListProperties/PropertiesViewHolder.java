@@ -56,11 +56,15 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder implements Vie
 
     private void changeBackgroundColor(int index) {
         if(index == mProperty.getId()){
-            mItemView.setBackgroundResource(R.color.colorAccent);
-            mPropertyPrice.setTextColor(ContextCompat.getColor(mContext,R.color.colorWhite));
+            mItemView.setBackgroundResource(R.color.primaryLightColor);
+            mPropertyPrice.setTextColor(ContextCompat.getColor(mContext,R.color.secondaryLightColor));
+            mPropertyType.setTextColor(ContextCompat.getColor(mContext,R.color.primaryTextColor));
+            mPropertyDistrict.setTextColor(ContextCompat.getColor(mContext,R.color.primaryTextColor));
         }else{
-            mItemView.setBackgroundResource(R.color.transparent);
-            mPropertyPrice.setTextColor(ContextCompat.getColor(mContext,R.color.colorAccent));
+            mItemView.setBackgroundResource(R.color.primaryTextColor);
+            mPropertyPrice.setTextColor(ContextCompat.getColor(mContext,R.color.secondaryDarkColor));
+            mPropertyType.setTextColor(ContextCompat.getColor(mContext,R.color.primaryDarkColor));
+            mPropertyDistrict.setTextColor(ContextCompat.getColor(mContext,R.color.primaryDarkColor));
         }
     }
 

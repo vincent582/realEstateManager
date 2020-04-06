@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.Dummy.Dummy;
 import com.openclassrooms.realestatemanager.Model.Address;
 import com.openclassrooms.realestatemanager.Model.Property;
@@ -164,7 +165,6 @@ public class PropertyManagerFragment extends Fragment {
                         mProperty.setAddress(address);
 
                         mDetailsPropertyViewModel.updateProperty(mProperty);
-
                     }else {
                         Address address = new Address(mAddressStreetNbr, mAddressStreet, mAddressDistrict,
                                 mAddressState, mAddressPostCode, mAddressCountry);

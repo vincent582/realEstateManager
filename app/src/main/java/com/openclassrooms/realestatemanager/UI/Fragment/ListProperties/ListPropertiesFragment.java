@@ -102,7 +102,8 @@ public class ListPropertiesFragment extends Fragment implements PropertiesViewHo
         mAdapter.refresh();
     }
 
-    public void updateTwoPanesToFragment(boolean twoPanes) {
+    public void updateTwoPanesAndListenerToFragment(boolean twoPanes, sendPropertyIdToMainActivityOnClickListener listener) {
         this.twoPanes = twoPanes;
+        this.mListener = listener;
     }
 }
