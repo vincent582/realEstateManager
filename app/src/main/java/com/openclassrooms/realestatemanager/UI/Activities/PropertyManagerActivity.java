@@ -22,7 +22,7 @@ public class PropertyManagerActivity extends AppCompatActivity {
     Toolbar mToolbar;
 
     private PropertyManagerFragment mPropertyManagerFragment;
-    private int mPropertyId;
+    private Integer mPropertyId;
     private Bundle bundle = new Bundle();
 
     @Override

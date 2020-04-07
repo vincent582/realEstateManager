@@ -1,10 +1,20 @@
 package com.openclassrooms.realestatemanager.Model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
 
+@Entity(foreignKeys = @ForeignKey(entity = Property.class,
+        parentColumns = "id",
+        childColumns = "propertyId"))
 public class Address {
 
+    @PrimaryKey(autoGenerate = true)
+    private long id;
+    @ColumnInfo(name = "propertyId")
+    private long propertyId;
     private int number;
     private String street;
     private String complement_street;
@@ -13,9 +23,11 @@ public class Address {
     private int postCode;
     private String country;
 
-    public Address(int number, String street, String district, String state, int postCode, String country) {
+    public Address(long propertyId, int number, String street, String complement_street, String district, String state, int postCode, String country) {
+        this.propertyId = propertyId;
         this.number = number;
         this.street = street;
+        this.complement_street = complement_street;
         this.district = district;
         this.state = state;
         this.postCode = postCode;
@@ -83,4 +95,19 @@ public class Address {
     }
 
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getPropertyId() {
+        return propertyId;
+    }
+
+    public void setPropertyId(int propertyId) {
+        this.propertyId = propertyId;
+    }
 }

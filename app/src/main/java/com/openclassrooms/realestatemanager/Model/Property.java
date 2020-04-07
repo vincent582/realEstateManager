@@ -1,40 +1,50 @@
 package com.openclassrooms.realestatemanager.Model;
 
+import androidx.room.Embedded;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Entity
 public class Property {
 
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private String type;
     private int price;
     private int surface;
     private int nbrOfRooms;
     private String description;
-    private List<Photo> mPhotoList;
-    private Address mAddress;
-    private List<String> listFacilities;
     private Boolean sold;
+    @Embedded
     private Date addedDate;
+    @Embedded
     private Date dateOfSale;
+    @Embedded
     private User agentInCharge;
 
-    public Property(int id, String type, int price, int surface, int nbrOfRooms, String description,Address address, List<String> listFacilities, Boolean sold, Date addedDate, Date dateOfSale, User agentInCharge) {
-        this.id = id;
+    public Property(String type, int price, int surface, int nbrOfRooms, String description, Boolean sold, Date addedDate, Date dateOfSale, User agentInCharge) {
         this.type = type;
         this.price = price;
         this.surface = surface;
         this.nbrOfRooms = nbrOfRooms;
         this.description = description;
-        this.mAddress = address;
-        this.listFacilities = listFacilities;
         this.sold = sold;
         this.addedDate = addedDate;
         this.dateOfSale = dateOfSale;
         this.agentInCharge = agentInCharge;
     }
 
-    public int getId() { return id; }
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getType() {
         return type;
@@ -76,30 +86,6 @@ public class Property {
         this.description = description;
     }
 
-    public List<Photo> getPhotoList() {
-        return mPhotoList;
-    }
-
-    public void setPhotoList(List<Photo> photoList) {
-        mPhotoList = photoList;
-    }
-
-    public Address getAddress() {
-        return mAddress;
-    }
-
-    public void setAddress(Address address) {
-        mAddress = address;
-    }
-
-    public List<String> getListFacilities() {
-        return listFacilities;
-    }
-
-    public void setListFacilities(List<String> listFacilities) {
-        this.listFacilities = listFacilities;
-    }
-
     public Boolean getSold() {
         return sold;
     }
@@ -131,7 +117,4 @@ public class Property {
     public void setAgentInCharge(User agentInCharge) {
         this.agentInCharge = agentInCharge;
     }
-
-
-
 }

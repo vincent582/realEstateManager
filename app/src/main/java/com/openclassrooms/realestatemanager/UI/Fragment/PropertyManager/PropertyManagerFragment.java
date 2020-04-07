@@ -1,10 +1,8 @@
 package com.openclassrooms.realestatemanager.UI.Fragment.PropertyManager;
 
-
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,28 +12,26 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.Dummy.Dummy;
 import com.openclassrooms.realestatemanager.Model.Address;
 import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.Model.User;
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.UI.Fragment.DetailsProperty.DetailsPropertyViewModel;
-import com.openclassrooms.realestatemanager.UI.Fragment.ListProperties.PropertiesViewModel;
+import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
 
-import java.util.ArrayList;
 import java.util.Date;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity.PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PropertyManagerFragment extends Fragment {
+public class PropertyManagerFragment extends BaseFragment{
 
     @BindView(R.id.manager_layout_type_spinner) Spinner mPropertyTypeSpinner;
     @BindView(R.id.manager_layout_price_editText) EditText mPropertyPrice;
@@ -50,9 +46,6 @@ public class PropertyManagerFragment extends Fragment {
     @BindView(R.id.manager_layout_address_country_editText) EditText mPropertyAddressCountry;
 
     @BindView(R.id.manager_layout_btn_add_property) Button mAddPropertyButton;
-
-    private PropertiesViewModel mPropertiesViewModel;
-    private DetailsPropertyViewModel mDetailsPropertyViewModel;
 
     private String mType;
     private Integer mPrice;
@@ -69,12 +62,10 @@ public class PropertyManagerFragment extends Fragment {
 
     private Integer mPropertyId;
     private Property mProperty;
+    private Address mPropertyAddress;
 
 
-    public PropertyManagerFragment() {
-        // Required empty public constructor
-    }
-
+    public PropertyManagerFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,25 +73,27 @@ public class PropertyManagerFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_property_manager, container, false);
         ButterKnife.bind(this,view);
-
-        mPropertiesViewModel = new ViewModelProvider(getActivity()).get(PropertiesViewModel.class);
-        mPropertiesViewModel.init();
-        mDetailsPropertyViewModel = new ViewModelProvider(getActivity()).get(DetailsPropertyViewModel.class);
-        mDetailsPropertyViewModel.init();
-
-        mPropertyId = getArguments().getInt(PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER);
+        Bundle args = getArguments();
+        if (!args.isEmpty()){
+            mPropertyId = getArguments().getInt(PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER);
+        }
+        configureViewModels(getContext());
         if (mPropertyId != null){
-            mDetailsPropertyViewModel.getProperty(mPropertyId).observe(getActivity(),this::updateProperty);
+            mPropertiesViewModel.getPropertyById(mPropertyId).observe(getActivity(),this::updateProperty);
         }
 
         configurePropertyTypeSpinner();
         setAddPropertyButtonOnclickListener();
-
         return view;
     }
 
     private void updateProperty(Property property) {
         this.mProperty = property;
+        mAddressViewModel.getAddressOfProperty(mProperty.getId()).observe(getActivity(),this::getAddressOfProperty);
+    }
+
+    private void getAddressOfProperty(Address address) {
+        this.mPropertyAddress = address;
         populateEditItemWithPropertyValues(mProperty);
     }
 
@@ -112,12 +105,15 @@ public class PropertyManagerFragment extends Fragment {
         mPropertySurface.setText(String.valueOf(property.getSurface()));
         mPropertyNbrOfRooms.setText(String.valueOf(property.getNbrOfRooms()));
         //TODO add facilities
-        mPropertyAddressStreetNumber.setText(String.valueOf(property.getAddress().getNumber()));
-        mPropertyAddressStreet.setText(property.getAddress().getStreet());
-        mPropertyAddressDistrict.setText(property.getAddress().getDistrict());
-        mPropertyAddressState.setText(property.getAddress().getState());
-        mPropertyAddressPostCode.setText(String.valueOf(property.getAddress().getPostCode()));
-        mPropertyAddressCountry.setText(property.getAddress().getCountry());
+
+        if (mPropertyAddress != null) {
+            mPropertyAddressStreetNumber.setText(String.valueOf(mPropertyAddress.getNumber()));
+            mPropertyAddressStreet.setText(mPropertyAddress.getStreet());
+            mPropertyAddressDistrict.setText(mPropertyAddress.getDistrict());
+            mPropertyAddressState.setText(mPropertyAddress.getState());
+            mPropertyAddressPostCode.setText(String.valueOf(mPropertyAddress.getPostCode()));
+            mPropertyAddressCountry.setText(mPropertyAddress.getCountry());
+        }
         //TODO add isSold boolean
         mAddPropertyButton.setText("Update Property");
     }
@@ -142,41 +138,56 @@ public class PropertyManagerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (checkValuesOfInput()){
-
                     if (mProperty != null){
-                        mProperty.setType(mType);
-                        mProperty.setPrice(mPrice);
-                        mProperty.setSurface(mSurface);
-                        mProperty.setNbrOfRooms(mNbrOfRoom);
-                        mProperty.setDescription(mDescription);
-                        mProperty.setListFacilities(new ArrayList<>());
-                        //TODO getValue of checkbox sold
-                        mProperty.setSold(false);
-                        mProperty.setDateOfSale(new Date());
-
-                        Address address = mProperty.getAddress();
-                        address.setNumber(mAddressStreetNbr);
-                        address.setStreet(mAddressStreet);
-                        address.setDistrict(mAddressDistrict);
-                        address.setState(mAddressState);
-                        address.setPostCode(mAddressPostCode);
-                        address.setCountry(mAddressCountry);
-
-                        mProperty.setAddress(address);
-
-                        mDetailsPropertyViewModel.updateProperty(mProperty);
+                        setValuesOfPropertyAndUpdate();
+                        setValuesOfAddressAndUpdate();
                     }else {
-                        Address address = new Address(mAddressStreetNbr, mAddressStreet, mAddressDistrict,
-                                mAddressState, mAddressPostCode, mAddressCountry);
-                        Property property = new Property(5, mType, mPrice, mSurface, mNbrOfRoom,
-                                mDescription, address, new ArrayList<>(), false, new Date(), new Date(),
-                                new User("toto"));
-                        mPropertiesViewModel.addPropertyToList(property);
+                        createNewPropertyAndAddress();
                     }
                     getActivity().finish();
                 }
             }
         });
+    }
+
+    private void createNewPropertyAndAddress() {
+        Property property = new Property(mType, mPrice, mSurface, mNbrOfRoom,
+                mDescription, false, new Date(), new Date(),
+                new User("toto"));
+        mPropertiesViewModel.createProperty(property).observe(getViewLifecycleOwner(),this::createAddress);
+    }
+
+    private void createAddress(Integer idProperty) {
+        Address address = new Address(idProperty, mAddressStreetNbr, mAddressStreet, null, mAddressDistrict,
+                mAddressState, mAddressPostCode, mAddressCountry);
+        mAddressViewModel.createAddress(address);
+        showConfirmationMessage("added");
+    }
+
+    private void setValuesOfAddressAndUpdate() {
+        mPropertyAddress.setNumber(mAddressStreetNbr);
+        mPropertyAddress.setStreet(mAddressStreet);
+        mPropertyAddress.setDistrict(mAddressDistrict);
+        mPropertyAddress.setState(mAddressState);
+        mPropertyAddress.setPostCode(mAddressPostCode);
+        mPropertyAddress.setCountry(mAddressCountry);
+
+        mAddressViewModel.updateAddress(mPropertyAddress);
+        showConfirmationMessage("updated");
+    }
+
+    private void setValuesOfPropertyAndUpdate() {
+        mProperty.setType(mType);
+        mProperty.setPrice(mPrice);
+        mProperty.setSurface(mSurface);
+        mProperty.setNbrOfRooms(mNbrOfRoom);
+        mProperty.setDescription(mDescription);
+        //mProperty.setListFacilities(new ArrayList<>());
+        //TODO getValue of checkbox sold
+        mProperty.setSold(false);
+        mProperty.setDateOfSale(new Date());
+
+        mPropertiesViewModel.updateProperty(mProperty);
     }
 
     private Boolean checkValuesOfInput() {
@@ -255,4 +266,7 @@ public class PropertyManagerFragment extends Fragment {
         return values;
     }
 
+    private void showConfirmationMessage(String message){
+        Toast.makeText(getContext(),"The property was successfully "+message+"!",Toast.LENGTH_LONG).show();
+    }
 }

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.DetailsProperty.DetailsPropertyFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.ListProperties.ListPropertiesFragment;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ListPropertiesFragment mListPropertiesFragment;
     private DetailsPropertyFragment mDetailsPropertyFragment;
     private boolean twoPanes;
-    private int mPropertyId;
+    private Integer mPropertyId;
 
 
     @Override
@@ -147,16 +148,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.app_bar_add_item:
-                    Intent intent = new Intent(this,PropertyManagerActivity.class);
-                    startActivity(intent);
+                    mPropertyId = null;
+                    startPropertyManagerActivity();
                 break;
             case R.id.app_bar_edit_item:
-                    if (Integer.valueOf(mPropertyId).toString() != null){
-                        Intent intent1 = new Intent(this,PropertyManagerActivity.class);
-                        intent1.putExtra(PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER,mPropertyId);
-                        startActivity(intent1);
+                    if (mPropertyId != null){
+                        startPropertyManagerActivity();
+                    }else{
+                        Snackbar.make(mDetailsPropertyFragment.getView(),"You have to select an item to update it!",Snackbar.LENGTH_SHORT).show();
                     }
-                    //TODO else show info have to select item
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -164,6 +164,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    public void startPropertyManagerActivity(){
+        Intent intent = new Intent(this,PropertyManagerActivity.class);
+        if (mPropertyId != null) {
+            intent.putExtra(PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER, mPropertyId);
+        }
+        startActivity(intent);
+    }
 
     @Override
     public void callbackPropertyId(int propertyId) {

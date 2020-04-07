@@ -1,50 +1,31 @@
 package com.openclassrooms.realestatemanager.Repository;
 
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.LiveData;
 
-import com.openclassrooms.realestatemanager.Dummy.Dummy;
+import com.openclassrooms.realestatemanager.Database.DAO.PropertyDAO;
 import com.openclassrooms.realestatemanager.Model.Property;
 
 import java.util.List;
 
 public class PropertiesRepository {
 
-    private static PropertiesRepository sPropertiesRepository;
+    private PropertyDAO mPropertyDAO;
 
-    private List<Property> mPropertyList = Dummy.generateListProperties();
-
-    public static PropertiesRepository getInstance(){
-        if (sPropertiesRepository == null){
-            sPropertiesRepository = new PropertiesRepository();
-        }
-        return sPropertiesRepository;
+    public PropertiesRepository(PropertyDAO mPropertyDAO) {
+        this.mPropertyDAO = mPropertyDAO;
     }
 
-    public MutableLiveData<List<Property>> getProperties(){
-        MutableLiveData<List<Property>> listMutableLiveData = new MutableLiveData<>();
-        listMutableLiveData.setValue(mPropertyList);
-        return listMutableLiveData;
+    public LiveData<List<Property>> getProperties(){
+        return mPropertyDAO.getAllProperty();
     }
 
-    public MutableLiveData<Property> getPropertyById(int id){
-        MutableLiveData<Property> propertyToReturn = new MutableLiveData<>();
-        for (Property property :mPropertyList) {
-            if (property.getId() == id){
-                propertyToReturn.setValue(property);
-            }
-        }
-        return propertyToReturn;
-    }
+    public LiveData<Property> getPropertyById(int id){ return mPropertyDAO.getPropertyById(id); }
 
-    public void addProperty(Property property) {
-        mPropertyList.add(property);
+    public long createProperty(Property property) {
+        return mPropertyDAO.insertProperty(property);
     }
 
     public void updateProperty(Property property) {
-        for (Property p :mPropertyList) {
-            if (p.getId() == property.getId()){
-                mPropertyList.set(mPropertyList.indexOf(p),property);
-            }
-        }
+        mPropertyDAO.updateProerty(property);
     }
 }

@@ -24,7 +24,7 @@ public class DetailsPropertyActivity extends AppCompatActivity {
     public static String PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER = "PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER";
 
     private DetailsPropertyFragment mDetailsPropertyFragment;
-    private int mPropertyId;
+    private Integer mPropertyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

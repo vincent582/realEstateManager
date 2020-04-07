@@ -47,6 +47,7 @@
     <EditText
         android:id="@+id/manager_layout_price_editText"
         android:layout_width="0dp"
+        android:imeOptions="flagNoExtractUi"
         android:layout_height="wrap_content"
         android:inputType="number"
         android:textSize="12sp"
@@ -67,6 +68,7 @@
     <EditText
         android:id="@+id/manager_layout_description_editText"
         android:layout_width="0dp"
+        android:imeOptions="flagNoExtractUi"
         android:layout_height="50dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="4dp"
@@ -89,6 +91,7 @@
     <EditText
         android:id="@+id/manager_layout_surface_editText"
         android:layout_width="0dp"
+        android:imeOptions="flagNoExtractUi"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:inputType="number"
@@ -109,6 +112,7 @@
     <EditText
         android:id="@+id/manager_layout_nbr_of_room_editText"
         android:layout_width="0dp"
+        android:imeOptions="flagNoExtractUi"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:inputType="number"
@@ -131,6 +135,7 @@
     <EditText
         android:id="@+id/manager_layout_address_nbr_of_street_editText"
         android:layout_width="0dp"
+        android:imeOptions="flagNoExtractUi"
         android:layout_height="wrap_content"
         android:inputType="number"
         android:textSize="12sp"
@@ -142,6 +147,7 @@
     <EditText
         android:id="@+id/manager_layout_address_street_editText"
         android:layout_width="0dp"
+        android:imeOptions="flagNoExtractUi"
         android:layout_height="wrap_content"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_nbr_of_street_editText"
@@ -151,6 +157,7 @@
     <EditText
         android:id="@+id/manager_layout_address_district_editText"
         android:layout_width="0dp"
+        android:imeOptions="flagNoExtractUi"
         android:layout_height="wrap_content"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_street_editText"
@@ -161,6 +168,7 @@
     <EditText
         android:id="@+id/manager_layout_address_state_editText"
         android:layout_width="0dp"
+        android:imeOptions="flagNoExtractUi"
         android:layout_height="wrap_content"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_district_editText"
@@ -170,6 +178,7 @@
     <EditText
         android:id="@+id/manager_layout_address_country_editText"
         android:layout_width="0dp"
+        android:imeOptions="flagNoExtractUi"
         android:layout_height="wrap_content"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_district_editText"
@@ -180,6 +189,7 @@
     <EditText
         android:id="@+id/manager_layout_address_post_code_editText"
         android:layout_width="0dp"
+        android:imeOptions="flagNoExtractUi"
         android:layout_height="wrap_content"
         android:inputType="number"
         android:textSize="12sp"

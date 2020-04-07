@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,12 +15,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.openclassrooms.realestatemanager.Database.RealEstateManagerDataBase;
+import com.openclassrooms.realestatemanager.Injection.Injection;
+import com.openclassrooms.realestatemanager.Injection.ViewModelFactory;
+import com.openclassrooms.realestatemanager.Model.Address;
 import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity;
+import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.DetailsProperty.DetailsPropertyFragment;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,7 +36,7 @@ import static com.openclassrooms.realestatemanager.UI.Activities.DetailsProperty
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ListPropertiesFragment extends Fragment implements PropertiesViewHolder.OnPropertyListener {
+public class ListPropertiesFragment extends BaseFragment implements PropertiesViewHolder.OnPropertyListener {
 
     @BindView(R.id.list_properties_recycler_view)
     RecyclerView mRecyclerView;
@@ -39,8 +46,6 @@ public class ListPropertiesFragment extends Fragment implements PropertiesViewHo
     }
 
     private sendPropertyIdToMainActivityOnClickListener mListener;
-
-    private PropertiesViewModel mPropertiesViewModel;
 
     private PropertiesRecyclerViewAdapter mAdapter;
     private List<Property> mListProperties;
@@ -60,8 +65,7 @@ public class ListPropertiesFragment extends Fragment implements PropertiesViewHo
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         ButterKnife.bind(this,view);
 
-        mPropertiesViewModel = new ViewModelProvider(getActivity()).get(PropertiesViewModel.class);
-        mPropertiesViewModel.init();
+        configureViewModels(getContext());
         mPropertiesViewModel.getProperties().observe(getViewLifecycleOwner(),this::updateListProperties);
 
         return view;
@@ -80,7 +84,7 @@ public class ListPropertiesFragment extends Fragment implements PropertiesViewHo
     }
 
     @Override
-    public void onPropertyClick(int propertyId) {
+    public void onPropertyClick(Integer propertyId) {
         if (twoPanes){
             mListener.callbackPropertyId(propertyId);
             FragmentManager fragmentManager =  getParentFragmentManager();
@@ -92,14 +96,7 @@ public class ListPropertiesFragment extends Fragment implements PropertiesViewHo
             intent.putExtra(PROPERTY_ID_EXTRA, propertyId);
             startActivity(intent);
         }
-
         mAdapter.updateBackgroundColor(propertyId);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mAdapter.refresh();
     }
 
     public void updateTwoPanesAndListenerToFragment(boolean twoPanes, sendPropertyIdToMainActivityOnClickListener listener) {

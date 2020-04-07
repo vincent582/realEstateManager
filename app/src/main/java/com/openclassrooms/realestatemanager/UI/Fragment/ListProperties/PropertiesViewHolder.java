@@ -33,7 +33,7 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder implements Vie
     private OnPropertyListener mOnPropertyListener;
 
     public interface OnPropertyListener{
-        void onPropertyClick(int propertyId);
+        void onPropertyClick(Integer propertyId);
     }
 
     public PropertiesViewHolder(@NonNull View itemView, Context context, OnPropertyListener propertyListener) {
@@ -47,7 +47,7 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder implements Vie
         this.mProperty = property;
         mPropertyType.setText(property.getType());
         mPropertyPrice.setText("$"+ property.getPrice());
-        mPropertyDistrict.setText(property.getAddress().getDistrict());
+        //mPropertyDistrict.setText(property.getAddress().getDistrict());
 
         mItemView.setOnClickListener(this);
 

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.openclassrooms.realestatemanager.Model.Address;
 import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 
@@ -54,9 +55,5 @@ public class PropertiesRecyclerViewAdapter extends RecyclerView.Adapter<Properti
                 notifyDataSetChanged();
             }
         }
-    }
-
-    public void refresh() {
-        notifyDataSetChanged();
     }
 }
