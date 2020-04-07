@@ -1,5 +1,12 @@
 package com.openclassrooms.realestatemanager.UI.Activities;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,26 +14,27 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.FrameLayout;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.openclassrooms.realestatemanager.Injection.Injection;
+import com.openclassrooms.realestatemanager.Injection.ViewModelFactory;
+import com.openclassrooms.realestatemanager.Model.User;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.DetailsProperty.DetailsPropertyFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.ListProperties.ListPropertiesFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.Map.MapFragment;
+import com.openclassrooms.realestatemanager.UI.ViewModels.UserViewModel;
+import com.openclassrooms.realestatemanager.Utils.DialogAuthentication;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_SHORT;
 import static com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity.PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ListPropertiesFragment.sendPropertyIdToMainActivityOnClickListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ListPropertiesFragment.sendPropertyIdToMainActivityOnClickListener , DialogAuthentication.DialogAuthenticationListener {
 
     @BindView(R.id.activity_main_toolbar)
     Toolbar mToolbar;
@@ -42,12 +50,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean twoPanes;
     private Integer mPropertyId;
 
+    private UserViewModel mUserViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
+        mUserViewModel = new ViewModelProvider(this, modelFactory).get(UserViewModel.class);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -106,11 +118,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     MapFragment mapFragment = new MapFragment();
                     this.startTransactionFragment(mapFragment);
                 break;
+            case R.id.activity_main_drawer_connection:
+                    configureSignIn();
+                break;
             default:
                 break;
         }
         this.mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /**
+     * Configure sign-in
+     */
+    private void configureSignIn() {
+        DialogAuthentication dialog = new DialogAuthentication();
+        dialog.show(getSupportFragmentManager(),"DialogAuthentication");
     }
 
     @Override
@@ -175,5 +198,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void callbackPropertyId(int propertyId) {
         this.mPropertyId = propertyId;
+    }
+
+    /**
+     * Get Dialog answer to Sign-in request.
+     * @param dialogAuthentication
+     */
+    @Override
+    public void onDialogAuthenticationSignInClick(DialogAuthentication dialogAuthentication) {
+        EditText editTextUserName = dialogAuthentication.getDialog().findViewById(R.id.name_user_editText);
+        String userName = editTextUserName.getText().toString();
+        EditText editTextPassword = dialogAuthentication.getDialog().findViewById(R.id.password_editText);
+        String password = editTextPassword.getText().toString();
+
+        mUserViewModel.getUser(userName,password).observe(this,this::getuser);
+        }
+
+    private void getuser(User user) {
+        if (user != null){
+            Snackbar.make(getCurrentFocus(),"Successful authentication", LENGTH_SHORT).show();
+        }else{
+            Snackbar.make(getCurrentFocus(),"Authentication failed", LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Get Dialog answer to register request.
+     * @param dialogAuthentication
+     */
+    @Override
+    public void onDialogAuthenticationRegisterClick(DialogAuthentication dialogAuthentication) {
+        EditText editTextUserName = dialogAuthentication.getDialog().findViewById(R.id.name_user_editText);
+        String userName = editTextUserName.getText().toString();
+        EditText editTextPassword = dialogAuthentication.getDialog().findViewById(R.id.password_editText);
+        String password = editTextPassword.getText().toString();
+        if (userName.isEmpty() || password.isEmpty()){
+            Snackbar.make(getCurrentFocus(),"Registration failed", LENGTH_SHORT).show();
+        }else {
+            User user = new User(userName, password);
+            mUserViewModel.createUser(user);
+            //TODO create user in db and conect it
+            Snackbar.make(getCurrentFocus(), "Successful registration", LENGTH_SHORT).show();
+        }
     }
 }

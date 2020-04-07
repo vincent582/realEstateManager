@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.openclassrooms.realestatemanager.Repository.AddressRepository;
 import com.openclassrooms.realestatemanager.Repository.PropertiesRepository;
+import com.openclassrooms.realestatemanager.Repository.UserRepository;
 import com.openclassrooms.realestatemanager.UI.ViewModels.AddressViewModel;
 import com.openclassrooms.realestatemanager.UI.ViewModels.PropertiesViewModel;
+import com.openclassrooms.realestatemanager.UI.ViewModels.UserViewModel;
 
 import java.util.concurrent.Executor;
 
@@ -15,11 +17,13 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
 
     private final PropertiesRepository mPropertiesRepository;
     private final AddressRepository mAddressRepository;
+    private final UserRepository mUserRepository;
     private final Executor mExecutor;
 
-    public ViewModelFactory(PropertiesRepository propertiesRepository, AddressRepository addressRepository, Executor executor) {
+    public ViewModelFactory(PropertiesRepository propertiesRepository, AddressRepository addressRepository,UserRepository userRepository,Executor executor) {
         this.mPropertiesRepository = propertiesRepository;
         this.mAddressRepository = addressRepository;
+        this.mUserRepository = userRepository;
         this.mExecutor = executor;
     }
 
@@ -31,6 +35,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         }
         if (modelClass.isAssignableFrom(AddressViewModel.class)){
             return (T) new AddressViewModel(mAddressRepository,mExecutor);
+        }
+        if (modelClass.isAssignableFrom(UserViewModel.class)){
+            return (T) new UserViewModel(mUserRepository,mExecutor);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }

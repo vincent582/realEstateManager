@@ -152,8 +152,7 @@ public class PropertyManagerFragment extends BaseFragment{
 
     private void createNewPropertyAndAddress() {
         Property property = new Property(mType, mPrice, mSurface, mNbrOfRoom,
-                mDescription, false, new Date(), new Date(),
-                new User("toto"));
+                mDescription, false, new Date(), new Date());
         mPropertiesViewModel.createProperty(property).observe(getViewLifecycleOwner(),this::createAddress);
     }
 

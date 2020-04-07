@@ -5,6 +5,7 @@ import android.content.Context;
 import com.openclassrooms.realestatemanager.Database.RealEstateManagerDataBase;
 import com.openclassrooms.realestatemanager.Repository.AddressRepository;
 import com.openclassrooms.realestatemanager.Repository.PropertiesRepository;
+import com.openclassrooms.realestatemanager.Repository.UserRepository;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -21,6 +22,11 @@ public class Injection {
         return new AddressRepository(dataBase.mAddressDAO());
     }
 
+    public static UserRepository provideUserDataSource(Context context){
+        RealEstateManagerDataBase dataBase = RealEstateManagerDataBase.getInstance(context);
+        return new UserRepository(dataBase.mUserDAO());
+    }
+
     public static Executor provideExecutor(){
         return Executors.newSingleThreadExecutor();
     }
@@ -28,7 +34,8 @@ public class Injection {
     public static ViewModelFactory provideViewModelFactory(Context context){
         PropertiesRepository propertiesRepository = providePropertyDataSource(context);
         AddressRepository addressRepository = provideAddressDataSource(context);
+        UserRepository userRepository = provideUserDataSource(context);
         Executor executor = provideExecutor();
-        return new ViewModelFactory(propertiesRepository, addressRepository, executor);
+        return new ViewModelFactory(propertiesRepository, addressRepository,userRepository, executor);
     }
 }

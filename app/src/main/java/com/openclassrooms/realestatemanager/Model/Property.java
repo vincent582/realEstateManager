@@ -23,10 +23,8 @@ public class Property {
     private Date addedDate;
     @Embedded
     private Date dateOfSale;
-    @Embedded
-    private User agentInCharge;
 
-    public Property(String type, int price, int surface, int nbrOfRooms, String description, Boolean sold, Date addedDate, Date dateOfSale, User agentInCharge) {
+    public Property(String type, int price, int surface, int nbrOfRooms, String description, Boolean sold, Date addedDate, Date dateOfSale) {
         this.type = type;
         this.price = price;
         this.surface = surface;
@@ -35,7 +33,6 @@ public class Property {
         this.sold = sold;
         this.addedDate = addedDate;
         this.dateOfSale = dateOfSale;
-        this.agentInCharge = agentInCharge;
     }
 
     public int getId() {
@@ -108,13 +105,5 @@ public class Property {
 
     public void setDateOfSale(Date dateOfSale) {
         this.dateOfSale = dateOfSale;
-    }
-
-    public User getAgentInCharge() {
-        return agentInCharge;
-    }
-
-    public void setAgentInCharge(User agentInCharge) {
-        this.agentInCharge = agentInCharge;
     }
 }
