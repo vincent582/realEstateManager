@@ -32,6 +32,11 @@ public class UserViewModel extends ViewModel {
         return mCurrentUser;
     }
 
+    public LiveData<User> getUserById(long id){
+        mCurrentUser = mUserRepository.getUser(id);
+        return mCurrentUser;
+    }
+
     public void createUser(User user){
         mExecutor.execute(()-> {
              mUserRepository.createUser(user);

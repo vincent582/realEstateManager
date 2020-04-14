@@ -13,18 +13,11 @@
         android:background="@drawable/border_layout"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/user_name_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Name :"
-            android:textColor="@color/secondaryTextColor"
-            android:textSize="14sp" />
-
         <EditText
             android:id="@+id/name_user_editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="Name"
             android:ems="10"
             android:inputType="text"
             android:textColor="@color/secondaryTextColor" />
@@ -37,18 +30,12 @@
         android:background="@drawable/border_layout"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/password_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Password :"
-            android:textColor="@color/secondaryTextColor" />
-
         <EditText
             android:id="@+id/password_editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="Password"
             android:inputType="textPassword"
             android:textColor="@color/secondaryTextColor" />
     </LinearLayout>

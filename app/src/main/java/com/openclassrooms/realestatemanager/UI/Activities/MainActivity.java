@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.UI.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -35,8 +36,9 @@ import butterknife.ButterKnife;
 
 import static com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_SHORT;
 import static com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity.PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER;
+import static com.openclassrooms.realestatemanager.UI.Fragment.Profile.ProfileFragment.CURRENT_USER_ID;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ListPropertiesFragment.sendPropertyIdToMainActivityOnClickListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, ListPropertiesFragment.sendPropertyIdToMainActivityOnClickListener , ProfileFragment.ConnectionCallback {
 
     @BindView(R.id.activity_main_toolbar)
     Toolbar mToolbar;
@@ -49,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private ListPropertiesFragment mListPropertiesFragment;
     private DetailsPropertyFragment mDetailsPropertyFragment;
-    private boolean twoPanes;
     private Integer mPropertyId;
 
     @Override
@@ -57,6 +58,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        currentUserId = getPreferences(MODE_PRIVATE).getLong(CURRENT_USER_ID,0);
+
         configureToolbar();
         configureDrawer();
         checkIfTwoPanes();
@@ -132,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     this.startTransactionFragment(mapFragment);
                 break;
             case R.id.activity_main_drawer_profile:
-                ProfileFragment profileFragment = new ProfileFragment();
+                ProfileFragment profileFragment = new ProfileFragment(this);
                 this.startTransactionFragment(profileFragment);
                 break;
             default:
@@ -164,26 +168,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .replace(R.id.activity_main_host_frame_layout,fragment)
                     .commit();
         }
-    }
-
-    /**
-     * Showing the right menu for Main Activity depends if User connected
-     * and the twoPanes mode
-     * @param menu
-     * @return
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //TODO change with real user
-        User mCurrentUser = null;
-        if (mCurrentUser != null) {
-            if (twoPanes) {
-                getMenuInflater().inflate(R.menu.activity_main_menu_two_panes_toolbar, menu);
-            } else {
-                getMenuInflater().inflate(R.menu.main_activity_menu_toolbar, menu);
-            }
-        }
-        return true;
     }
 
     /**
@@ -230,5 +214,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void callbackPropertyId(int propertyId) {
         this.mPropertyId = propertyId;
+    }
+
+    @Override
+    public void onConnectionManagement() {
+        onResume();
     }
 }

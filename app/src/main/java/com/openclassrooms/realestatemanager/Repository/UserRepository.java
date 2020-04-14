@@ -21,4 +21,7 @@ public class UserRepository {
         return mUserDAO.createUser(user);
     }
 
+    public LiveData<User> getUser(long id) {
+        return mUserDAO.getUserById(id);
+    }
 }
