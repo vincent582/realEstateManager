@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.UI.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -25,6 +26,7 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.DetailsProperty.DetailsPropertyFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.ListProperties.ListPropertiesFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.Map.MapFragment;
+import com.openclassrooms.realestatemanager.UI.Fragment.Profile.ProfileFragment;
 import com.openclassrooms.realestatemanager.UI.ViewModels.UserViewModel;
 import com.openclassrooms.realestatemanager.Utils.DialogAuthentication;
 
@@ -34,7 +36,7 @@ import butterknife.ButterKnife;
 import static com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_SHORT;
 import static com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity.PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ListPropertiesFragment.sendPropertyIdToMainActivityOnClickListener , DialogAuthentication.DialogAuthenticationListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ListPropertiesFragment.sendPropertyIdToMainActivityOnClickListener {
 
     @BindView(R.id.activity_main_toolbar)
     Toolbar mToolbar;
@@ -50,36 +52,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean twoPanes;
     private Integer mPropertyId;
 
-    private UserViewModel mUserViewModel;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        configureToolbar();
+        configureDrawer();
+        checkIfTwoPanes();
+        configureAndShowListFragment();
+        configureAndShowDetailsFragment();
+        mNavigationView.setNavigationItemSelectedListener(this);
+    }
 
-        ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
-        mUserViewModel = new ViewModelProvider(this, modelFactory).get(UserViewModel.class);
+    /**
+     * Check if the layout of details Activity is display.
+     */
+    private void checkIfTwoPanes() {
+        if (findViewById(R.id.details_activity_frame_layout) != null) twoPanes = true;
+    }
 
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
+    private void configureDrawer() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar,R.string.drawer_layout_open,R.string.drawer_layout_close);
         mDrawerLayout.addDrawerListener(toggle);
         toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.primaryTextColor));
         toggle.syncState();
+    }
 
-        mNavigationView.setNavigationItemSelectedListener(this);
-
-        if (findViewById(R.id.details_activity_frame_layout) != null) twoPanes = true;
-
-        configureAndShowListFragment();
-        configureAndShowDetailsFragment();
+    private void configureToolbar() {
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     /**
-     * Showing the list of properties with ListPropertiesFragment.
+     * Get host layout to show ListPropertyFragment
+     * If fragment already created update TwoPanes
      */
     private void configureAndShowListFragment() {
         mListPropertiesFragment = (ListPropertiesFragment) getSupportFragmentManager().findFragmentById(R.id.activity_main_host_frame_layout);
@@ -94,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * Display the DetailsPropertyFragment on tab device.
+     * Display the DetailsPropertyFragment on Two panes mode.
      */
     private void configureAndShowDetailsFragment() {
         mDetailsPropertyFragment = (DetailsPropertyFragment) getSupportFragmentManager().findFragmentById(R.id.details_activity_frame_layout);
@@ -106,6 +114,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Manage click on navigationView Items
+     * @param item
+     * @return
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -118,8 +131,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     MapFragment mapFragment = new MapFragment();
                     this.startTransactionFragment(mapFragment);
                 break;
-            case R.id.activity_main_drawer_connection:
-                    configureSignIn();
+            case R.id.activity_main_drawer_profile:
+                ProfileFragment profileFragment = new ProfileFragment();
+                this.startTransactionFragment(profileFragment);
                 break;
             default:
                 break;
@@ -129,13 +143,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * Configure sign-in
+     * Manage click back for navigationDrawer
      */
-    private void configureSignIn() {
-        DialogAuthentication dialog = new DialogAuthentication();
-        dialog.show(getSupportFragmentManager(),"DialogAuthentication");
-    }
-
     @Override
     public void onBackPressed() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)){
@@ -145,6 +154,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Replace the host fragment by the parameter fragment
+     * @param fragment
+     */
     public void startTransactionFragment(Fragment fragment){
         if(!fragment.isVisible()){
             getSupportFragmentManager().beginTransaction()
@@ -153,11 +166,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Showing the right menu for Main Activity depends if User connected
+     * and the twoPanes mode
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //currentUser
-        boolean test = true;
-        if (test) {
+        //TODO change with real user
+        User mCurrentUser = null;
+        if (mCurrentUser != null) {
             if (twoPanes) {
                 getMenuInflater().inflate(R.menu.activity_main_menu_two_panes_toolbar, menu);
             } else {
@@ -167,6 +186,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    /**
+     * Manage click on Toolbar Item selected
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -187,6 +211,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    /**
+     * Start PropertyManagerActivity
+     */
     public void startPropertyManagerActivity(){
         Intent intent = new Intent(this,PropertyManagerActivity.class);
         if (mPropertyId != null) {
@@ -195,50 +222,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(intent);
     }
 
+    /**
+     * Get propertyId from ListPropertyFragment Listener
+     * To give right property to update in ManagePropertyActivity
+     * @param propertyId
+     */
     @Override
     public void callbackPropertyId(int propertyId) {
         this.mPropertyId = propertyId;
-    }
-
-    /**
-     * Get Dialog answer to Sign-in request.
-     * @param dialogAuthentication
-     */
-    @Override
-    public void onDialogAuthenticationSignInClick(DialogAuthentication dialogAuthentication) {
-        EditText editTextUserName = dialogAuthentication.getDialog().findViewById(R.id.name_user_editText);
-        String userName = editTextUserName.getText().toString();
-        EditText editTextPassword = dialogAuthentication.getDialog().findViewById(R.id.password_editText);
-        String password = editTextPassword.getText().toString();
-
-        mUserViewModel.getUser(userName,password).observe(this,this::getuser);
-        }
-
-    private void getuser(User user) {
-        if (user != null){
-            Snackbar.make(getCurrentFocus(),"Successful authentication", LENGTH_SHORT).show();
-        }else{
-            Snackbar.make(getCurrentFocus(),"Authentication failed", LENGTH_SHORT).show();
-        }
-    }
-
-    /**
-     * Get Dialog answer to register request.
-     * @param dialogAuthentication
-     */
-    @Override
-    public void onDialogAuthenticationRegisterClick(DialogAuthentication dialogAuthentication) {
-        EditText editTextUserName = dialogAuthentication.getDialog().findViewById(R.id.name_user_editText);
-        String userName = editTextUserName.getText().toString();
-        EditText editTextPassword = dialogAuthentication.getDialog().findViewById(R.id.password_editText);
-        String password = editTextPassword.getText().toString();
-        if (userName.isEmpty() || password.isEmpty()){
-            Snackbar.make(getCurrentFocus(),"Registration failed", LENGTH_SHORT).show();
-        }else {
-            User user = new User(userName, password);
-            mUserViewModel.createUser(user);
-            //TODO create user in db and conect it
-            Snackbar.make(getCurrentFocus(), "Successful registration", LENGTH_SHORT).show();
-        }
     }
 }

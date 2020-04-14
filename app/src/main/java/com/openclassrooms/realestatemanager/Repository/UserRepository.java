@@ -17,8 +17,8 @@ public class UserRepository {
         return mUserDAO.getUser(name,password);
     }
 
-    public void createUser(User user){
-        mUserDAO.createUser(user);
+    public long createUser(User user){
+        return mUserDAO.createUser(user);
     }
 
 }

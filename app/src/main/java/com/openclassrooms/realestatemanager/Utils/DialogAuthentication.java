@@ -46,9 +46,9 @@ public class DialogAuthentication extends DialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try{
-            mListener = (DialogAuthenticationListener) getActivity();
+            mListener = (DialogAuthenticationListener) getTargetFragment();
         }catch (ClassCastException e){
-            throw new ClassCastException(getActivity().toString()+" must implement DialogAuthenticationListener");
+            throw new ClassCastException(getTargetFragment().toString()+" must implement DialogAuthenticationListener");
         }
     }
 }

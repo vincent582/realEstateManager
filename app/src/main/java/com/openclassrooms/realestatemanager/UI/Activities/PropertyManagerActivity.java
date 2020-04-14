@@ -7,13 +7,11 @@ import androidx.appcompat.widget.Toolbar;
 import android.os.Bundle;
 
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.UI.Fragment.DetailsProperty.DetailsPropertyFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.PropertyManager.PropertyManagerFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity.PROPERTY_ID_EXTRA;
 import static com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity.PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER;
 
 public class PropertyManagerActivity extends AppCompatActivity {
