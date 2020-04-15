@@ -1,9 +1,13 @@
 package com.openclassrooms.realestatemanager.UI.Activities;
 
-import android.util.Log;
 import android.view.Menu;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.openclassrooms.realestatemanager.R;
+
+import pub.devrel.easypermissions.EasyPermissions;
 
 import static com.openclassrooms.realestatemanager.UI.Fragment.Profile.ProfileFragment.CURRENT_USER_ID;
 
@@ -40,5 +44,11 @@ public class BaseActivity extends AppCompatActivity {
         super.onResume();
         currentUserId = getPreferences(MODE_PRIVATE).getLong(CURRENT_USER_ID,0);
         invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode,permissions,grantResults);
     }
 }

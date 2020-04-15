@@ -132,7 +132,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     this.startTransactionFragment(mListPropertiesFragment);
                 break;
             case R.id.activity_main_drawer_map:
-                    MapFragment mapFragment = new MapFragment();
+                    MapFragment mapFragment = new MapFragment(twoPanes, isCurrentUser());
                     this.startTransactionFragment(mapFragment);
                 break;
             case R.id.activity_main_drawer_profile:
