@@ -91,9 +91,13 @@ public class Address {
     }
 
     public String getFormatedAddress(){
-        return number+" "+street+" "+complement_street+" "+district+" "+state+" "+postCode+" "+country;
+        String formatedAddress = number + " " +street+" ";
+        if (complement_street!= null){
+            formatedAddress += complement_street+" ";
+        }
+        formatedAddress += district+" "+state+" "+postCode+" "+country;
+        return formatedAddress;
     }
-
 
     public long getId() {
         return id;

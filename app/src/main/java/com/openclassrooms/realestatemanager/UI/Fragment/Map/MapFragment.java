@@ -146,8 +146,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private void putMarkerOnMap(Address address) {
         LatLng latLng = Utils.getLocationFromAddress(getContext(), address.getFormatedAddress());
-        Marker marker = mMap.addMarker(new MarkerOptions().position(latLng));
-        marker.setTag(address.getPropertyId());
+        if (latLng != null) {
+            Marker marker = mMap.addMarker(new MarkerOptions().position(latLng));
+            marker.setTag(address.getPropertyId());
+        }
     }
 
     @Override
@@ -166,7 +168,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 .commit();
         }else{
             Intent intent = new Intent(getContext(), DetailsPropertyActivity.class);
-            intent.putExtra(PROPERTY_ID_EXTRA, propertyId);
+            intent.putExtra(PROPERTY_ID_EXTRA,(int) propertyId);
             startActivity(intent);
         }
         return false;

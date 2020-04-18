@@ -266,7 +266,7 @@ public class PropertyManagerFragment extends BaseFragment{
     }
 
     private void showConfirmationMessage(String message){
-        String messageText = "The property "+mProperty.getType()+" was successfully "+message+"!";
+        String messageText = "The property "+mProperty.getType()+" at the "+ mPropertyAddress.getFormatedAddress() +" was successfully "+message+"!";
         NotificationService notificationService = new NotificationService(getContext());
         notificationService.sendNotification(1,messageText);
     }
