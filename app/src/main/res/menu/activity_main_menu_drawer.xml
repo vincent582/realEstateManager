@@ -12,6 +12,10 @@
             android:id="@+id/activity_main_drawer_map"
             android:icon="@drawable/ic_launcher_foreground"
             android:title="@string/map"/>
+        <item
+            android:id="@+id/activity_main_drawer_loan_simulator"
+            android:icon="@drawable/ic_launcher_foreground"
+            android:title="Loan Simulator"/>
     </group>
 
     <item android:title="Configuration">

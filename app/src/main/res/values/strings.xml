@@ -14,4 +14,6 @@
     <string name="property_price_tv">Price :</string>
     <string name="property_surface_tv">Surface :</string>
     <string name="property_number_of_room_tv">Number of room</string>
+    <string name="channel_name">RealEstateManagerChanel</string>
+    <string name="channel_description">Channel to received notification for realEstateManager Application</string>
 </resources>

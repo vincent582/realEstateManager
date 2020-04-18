@@ -58,9 +58,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
         currentUserId = getPreferences(MODE_PRIVATE).getLong(CURRENT_USER_ID,0);
-
         configureToolbar();
         configureDrawer();
         checkIfTwoPanes();

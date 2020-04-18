@@ -20,6 +20,7 @@ import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.Model.User;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
+import com.openclassrooms.realestatemanager.Utils.NotificationService;
 
 import java.util.Date;
 import butterknife.BindView;
@@ -63,7 +64,6 @@ public class PropertyManagerFragment extends BaseFragment{
     private Integer mPropertyId;
     private Property mProperty;
     private Address mPropertyAddress;
-
 
     public PropertyManagerFragment() {}
 
@@ -266,6 +266,8 @@ public class PropertyManagerFragment extends BaseFragment{
     }
 
     private void showConfirmationMessage(String message){
-        Toast.makeText(getContext(),"The property was successfully "+message+"!",Toast.LENGTH_LONG).show();
+        String messageText = "The property "+mProperty.getType()+" was successfully "+message+"!";
+        NotificationService notificationService = new NotificationService(getContext());
+        notificationService.sendNotification(1,messageText);
     }
 }
