@@ -9,6 +9,8 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -26,9 +28,12 @@ import android.widget.Spinner;
 
 import com.openclassrooms.realestatemanager.Dummy.Dummy;
 import com.openclassrooms.realestatemanager.Model.Address;
+import com.openclassrooms.realestatemanager.Model.Picture;
 import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
+import com.openclassrooms.realestatemanager.Utils.DialogAuthentication;
+import com.openclassrooms.realestatemanager.Utils.DialogImagePreview;
 import com.openclassrooms.realestatemanager.Utils.NotificationService;
 import com.openclassrooms.realestatemanager.Utils.StorageUtils;
 
@@ -51,11 +56,13 @@ import static com.openclassrooms.realestatemanager.UI.Activities.DetailsProperty
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PropertyManagerFragment extends BaseFragment{
+public class PropertyManagerFragment extends BaseFragment implements DialogImagePreview.DialogImagePreviewListener {
 
-    private static final String FOLDERNAME = "RealEstateManager_images";
+    public static final String FOLDERNAME = "RealEstateManager_images";
+    private PicturesRecyclerViewAdapter mAdapter;
 
-    @BindView(R.id.display_picture_linear_layout) LinearLayout mDisplayPicturesLinearLayout;
+    @BindView(R.id.recycler_view_pictures) RecyclerView mPicturesRecyclerView;
+
     @BindView(R.id.add_picture_iv) ImageView mPictureImageView;
     @BindView(R.id.manager_layout_type_spinner) Spinner mPropertyTypeSpinner;
     @BindView(R.id.manager_layout_price_editText) EditText mPropertyPrice;
@@ -91,6 +98,8 @@ public class PropertyManagerFragment extends BaseFragment{
     private static final int RC_IMAGE_PERMS = 200;
     private Uri uriImageSelected;
     private static final int RC_CHOOSE_PHOTO = 300;
+    private Bitmap bitmap;
+    private List<Picture> mListPictures = new ArrayList<>();
 
     //CONSTRUCTOR
     public PropertyManagerFragment() {}
@@ -109,11 +118,18 @@ public class PropertyManagerFragment extends BaseFragment{
         configurePropertyTypeSpinner();
         setAddPropertyButtonOnclickListener();
         setAddPictureClickListener();
-
-        Bitmap bitmap = StorageUtils.getBitmapFromStorage(getActivity().getFilesDir(),getContext(),"image_8964.jpg",FOLDERNAME);
-        displayPropertyPictures(bitmap);
+        configureRecyclerView();
 
         return view;
+    }
+
+    private void configureRecyclerView() {
+        mAdapter = new PicturesRecyclerViewAdapter(getContext());
+        mPicturesRecyclerView.setAdapter(mAdapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        mPicturesRecyclerView.setLayoutManager(layoutManager);
+
+        mAdapter.updateListPictures(mListPictures);
     }
 
 
@@ -136,7 +152,6 @@ public class PropertyManagerFragment extends BaseFragment{
         Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(i, RC_CHOOSE_PHOTO);
     }
-
 
     /**
      * Check if the Fragment received arguments
@@ -338,13 +353,9 @@ public class PropertyManagerFragment extends BaseFragment{
         if (requestCode == RC_CHOOSE_PHOTO) {
             if (resultCode == RESULT_OK) { //SUCCESS
                 this.uriImageSelected = data.getData();
-
                 try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uriImageSelected);
-                    List<Bitmap> picturesList = new ArrayList<>();
-                    picturesList.add(bitmap);
-                    displayPropertyPictures(bitmap);
-                    SaveImage(bitmap);
+                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uriImageSelected);
+                    showDialogImagePreview(bitmap);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -352,23 +363,27 @@ public class PropertyManagerFragment extends BaseFragment{
         }
     }
 
-    private void displayPropertyPictures(Bitmap bitmap) {
-        ImageView image = new ImageView(getContext());
-        image.setImageBitmap(bitmap);
-        image.setLayoutParams(new RelativeLayout.LayoutParams((int) getResources().getDimension(R.dimen.item_property_image_size), (int) getResources().getDimension(R.dimen.item_property_image_size)));
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(image.getLayoutParams());
-        lp.setMargins(10, 0, 10, 0);
-        image.setLayoutParams(lp);
-        image.setScaleType(ImageView.ScaleType.FIT_XY);
-        mDisplayPicturesLinearLayout.addView(image);
+    private void showDialogImagePreview(Bitmap bitmap) {
+        DialogImagePreview dialog = new DialogImagePreview(bitmap);
+        dialog.setTargetFragment(this,1);
+        dialog.show(getParentFragmentManager(),"DialogImagePreview");
     }
 
-    private void SaveImage(Bitmap finalBitmap) {
+
+    @Override
+    public void onDialogImagePreviewSave(DialogImagePreview dialogImagePreview) {
+        EditText imageDescription = dialogImagePreview.getDialog().findViewById(R.id.dialog_picture_description_et);
+        String description = imageDescription.getText().toString();
+
         Random generator = new Random();
         int n = 10000;
         n = generator.nextInt(n);
         String imageName = "image_"+ n +".jpg";
 
-        StorageUtils.setBitmapInStorage(getActivity().getFilesDir(),getContext(),imageName,FOLDERNAME,finalBitmap);
+        Picture picture = new Picture(mPropertyId,imageName,description);
+        mListPictures.add(picture);
+        mAdapter.updateListPictures(mListPictures);
+
+        StorageUtils.setBitmapInStorage(getActivity().getFilesDir(),getContext(),imageName,FOLDERNAME,bitmap);
     }
 }

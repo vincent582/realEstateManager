@@ -13,11 +13,13 @@ public class Picture {
     private int id;
 
     private int propertyId;
-    private String fileName;
+    private String file;
+    private String description;
 
-    public Picture(int propertyId, String fileName) {
+    public Picture(int propertyId, String file, String description) {
         this.propertyId = propertyId;
-        this.fileName = fileName;
+        this.file = file;
+        this.description = description;
     }
 
     public int getId() {
@@ -34,5 +36,17 @@ public class Picture {
 
     public void setPropertyId(int propertyId) {
         this.propertyId = propertyId;
+    }
+
+    public String getFile() { return file; }
+
+    public void setFile(String file) { this.file = file; }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
