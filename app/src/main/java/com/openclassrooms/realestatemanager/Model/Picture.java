@@ -13,9 +13,11 @@ public class Picture {
     private int id;
 
     private int propertyId;
+    private String fileName;
 
-    public Picture(int propertyId) {
+    public Picture(int propertyId, String fileName) {
         this.propertyId = propertyId;
+        this.fileName = fileName;
     }
 
     public int getId() {

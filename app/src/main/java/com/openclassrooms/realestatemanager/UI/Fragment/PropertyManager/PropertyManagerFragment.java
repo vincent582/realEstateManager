@@ -1,9 +1,17 @@
 package com.openclassrooms.realestatemanager.UI.Fragment.PropertyManager;
 
+import android.Manifest;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,22 +19,33 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.openclassrooms.realestatemanager.Dummy.Dummy;
 import com.openclassrooms.realestatemanager.Model.Address;
 import com.openclassrooms.realestatemanager.Model.Property;
-import com.openclassrooms.realestatemanager.Model.User;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
 import com.openclassrooms.realestatemanager.Utils.NotificationService;
+import com.openclassrooms.realestatemanager.Utils.StorageUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Random;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
+import static android.app.Activity.RESULT_OK;
 import static com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity.PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER;
 
 /**
@@ -34,6 +53,10 @@ import static com.openclassrooms.realestatemanager.UI.Activities.DetailsProperty
  */
 public class PropertyManagerFragment extends BaseFragment{
 
+    private static final String FOLDERNAME = "RealEstateManager_images";
+
+    @BindView(R.id.display_picture_linear_layout) LinearLayout mDisplayPicturesLinearLayout;
+    @BindView(R.id.add_picture_iv) ImageView mPictureImageView;
     @BindView(R.id.manager_layout_type_spinner) Spinner mPropertyTypeSpinner;
     @BindView(R.id.manager_layout_price_editText) EditText mPropertyPrice;
     @BindView(R.id.manager_layout_description_editText) EditText mPropertyDescription;
@@ -45,15 +68,18 @@ public class PropertyManagerFragment extends BaseFragment{
     @BindView(R.id.manager_layout_address_state_editText) EditText mPropertyAddressState;
     @BindView(R.id.manager_layout_address_post_code_editText) EditText mPropertyAddressPostCode;
     @BindView(R.id.manager_layout_address_country_editText) EditText mPropertyAddressCountry;
-
     @BindView(R.id.manager_layout_btn_add_property) Button mAddPropertyButton;
 
+    //For Property
+    private Integer mPropertyId;
+    private Property mProperty;
     private String mType;
     private Integer mPrice;
     private String mDescription;
     private Integer mSurface;
     private Integer mNbrOfRoom;
-
+    //For Property Address
+    private Address mPropertyAddress;
     private Integer mAddressStreetNbr;
     private String mAddressStreet;
     private String mAddressDistrict;
@@ -61,10 +87,12 @@ public class PropertyManagerFragment extends BaseFragment{
     private Integer mAddressPostCode;
     private String mAddressCountry;
 
-    private Integer mPropertyId;
-    private Property mProperty;
-    private Address mPropertyAddress;
+    private static final String PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
+    private static final int RC_IMAGE_PERMS = 200;
+    private Uri uriImageSelected;
+    private static final int RC_CHOOSE_PHOTO = 300;
 
+    //CONSTRUCTOR
     public PropertyManagerFragment() {}
 
     @Override
@@ -73,18 +101,51 @@ public class PropertyManagerFragment extends BaseFragment{
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_property_manager, container, false);
         ButterKnife.bind(this,view);
-        Bundle args = getArguments();
-        if (!args.isEmpty()){
-            mPropertyId = getArguments().getInt(PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER);
-        }
+        checkIfArguments();
         configureViewModels(getContext());
         if (mPropertyId != null){
             mPropertiesViewModel.getPropertyById(mPropertyId).observe(getActivity(),this::updateProperty);
         }
-
         configurePropertyTypeSpinner();
         setAddPropertyButtonOnclickListener();
+        setAddPictureClickListener();
+
+        Bitmap bitmap = StorageUtils.getBitmapFromStorage(getActivity().getFilesDir(),getContext(),"image_8964.jpg",FOLDERNAME);
+        displayPropertyPictures(bitmap);
+
         return view;
+    }
+
+
+    private void setAddPictureClickListener() {
+        mPictureImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickAddFile();
+            }
+        });
+    }
+
+    @AfterPermissionGranted(RC_IMAGE_PERMS)
+    public void onClickAddFile() {
+        if (!EasyPermissions.hasPermissions(getContext(), PERMS)) {
+            EasyPermissions.requestPermissions(this, "We need permission to access to your pictures", RC_IMAGE_PERMS, PERMS);
+            return;
+        }
+        // 3 - Launch an "Selection Image" Activity
+        Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, RC_CHOOSE_PHOTO);
+    }
+
+
+    /**
+     * Check if the Fragment received arguments
+     */
+    private void checkIfArguments() {
+        Bundle args = getArguments();
+        if (!args.isEmpty()){
+            mPropertyId = getArguments().getInt(PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER);
+        }
     }
 
     private void updateProperty(Property property) {
@@ -269,5 +330,45 @@ public class PropertyManagerFragment extends BaseFragment{
         String messageText = "The property "+mProperty.getType()+" at the "+ mPropertyAddress.getFormatedAddress() +" was successfully "+message+"!";
         NotificationService notificationService = new NotificationService(getContext());
         notificationService.sendNotification(1,messageText);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_CHOOSE_PHOTO) {
+            if (resultCode == RESULT_OK) { //SUCCESS
+                this.uriImageSelected = data.getData();
+
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uriImageSelected);
+                    List<Bitmap> picturesList = new ArrayList<>();
+                    picturesList.add(bitmap);
+                    displayPropertyPictures(bitmap);
+                    SaveImage(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void displayPropertyPictures(Bitmap bitmap) {
+        ImageView image = new ImageView(getContext());
+        image.setImageBitmap(bitmap);
+        image.setLayoutParams(new RelativeLayout.LayoutParams((int) getResources().getDimension(R.dimen.item_property_image_size), (int) getResources().getDimension(R.dimen.item_property_image_size)));
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(image.getLayoutParams());
+        lp.setMargins(10, 0, 10, 0);
+        image.setLayoutParams(lp);
+        image.setScaleType(ImageView.ScaleType.FIT_XY);
+        mDisplayPicturesLinearLayout.addView(image);
+    }
+
+    private void SaveImage(Bitmap finalBitmap) {
+        Random generator = new Random();
+        int n = 10000;
+        n = generator.nextInt(n);
+        String imageName = "image_"+ n +".jpg";
+
+        StorageUtils.setBitmapInStorage(getActivity().getFilesDir(),getContext(),imageName,FOLDERNAME,finalBitmap);
     }
 }

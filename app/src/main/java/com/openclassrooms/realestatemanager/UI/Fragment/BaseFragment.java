@@ -16,7 +16,6 @@ public class BaseFragment extends Fragment {
     private ViewModelFactory modelFactory;
     protected PropertiesViewModel mPropertiesViewModel;
     protected AddressViewModel mAddressViewModel;
-    protected UserViewModel mUserViewModel;
 
     protected void configureViewModels(Context context) {
         modelFactory = Injection.provideViewModelFactory(context);
