@@ -42,6 +42,12 @@ public class DialogDeleteImage extends DialogFragment {
                 public void onClick(DialogInterface dialog, int which) {
                     mListener.onDialogDeleteClick(DialogDeleteImage.this);
                 }
+            })
+            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dismiss();
+                }
             });
         ImageView image = view.findViewById(R.id.dialog_picture_iv);
         image.setImageBitmap(this.mBitmap);

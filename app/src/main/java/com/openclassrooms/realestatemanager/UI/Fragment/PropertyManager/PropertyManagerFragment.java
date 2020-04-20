@@ -92,6 +92,7 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
     //Folder to Stock image on internalStorage
     public static final String FOLDERNAME = "RealEstateManager_images";
     private static final String PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int RC_IMAGE_PERMS = 200;
     private static final int RC_CHOOSE_PHOTO = 300;
     private PicturesRecyclerViewAdapter mAdapter;
@@ -208,10 +209,17 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         RadioButton albumCheckBox = dialog.getDialog().findViewById(R.id.from_album);
         RadioButton cameraCheckBox = dialog.getDialog().findViewById(R.id.from_camera);
         if (albumCheckBox.isChecked()){
-            onClickAddFile();
+            dispachChoosePictureFromAlbum();
         }
         if (cameraCheckBox.isChecked()){
+            dispatchTakePictureIntent();
+        }
+    }
 
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
 
@@ -220,7 +228,7 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
      * Start Activity to pick up one picture from the phone
      */
     @AfterPermissionGranted(RC_IMAGE_PERMS)
-    public void onClickAddFile() {
+    public void dispachChoosePictureFromAlbum() {
         if (!EasyPermissions.hasPermissions(getContext(), PERMS)) {
             EasyPermissions.requestPermissions(this, "We need permission to access to your pictures", RC_IMAGE_PERMS, PERMS);
             return;
@@ -249,6 +257,11 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
                     e.printStackTrace();
                 }
             }
+        }
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            bitmap = (Bitmap) extras.get("data");
+            showDialogImagePreview(bitmap);
         }
     }
 
