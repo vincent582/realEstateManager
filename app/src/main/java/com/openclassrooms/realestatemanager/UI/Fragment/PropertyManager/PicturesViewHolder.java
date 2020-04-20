@@ -20,15 +20,22 @@ import static com.openclassrooms.realestatemanager.UI.Fragment.PropertyManager.P
 
 public class PicturesViewHolder extends RecyclerView.ViewHolder {
 
+    public interface ListenerPictureClick{
+        void onClickPicture(Picture bitmap);
+    }
+
+    ListenerPictureClick mCallback;
+
     private final Context mContext;
     @BindView(R.id.property_picture_item)
     ImageView mPropertyPictureImageView;
     @BindView(R.id.property_picture_description)
     TextView mPropertyPictureDescriptionTextView;
 
-    public PicturesViewHolder(@NonNull View itemView, Context context) {
+    public PicturesViewHolder(@NonNull View itemView, Context context,ListenerPictureClick callback) {
         super(itemView);
         this.mContext = context;
+        this.mCallback = callback;
         ButterKnife.bind(this, itemView);
     }
 
@@ -36,5 +43,12 @@ public class PicturesViewHolder extends RecyclerView.ViewHolder {
         Bitmap bitmap = StorageUtils.getBitmapFromStorage(mContext.getFilesDir(),mContext,picture.getFile(),FOLDERNAME);
         mPropertyPictureImageView.setImageBitmap(bitmap);
         mPropertyPictureDescriptionTextView.setText(picture.getDescription());
+
+        mPropertyPictureImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.onClickPicture(picture);
+            }
+        });
     }
 }

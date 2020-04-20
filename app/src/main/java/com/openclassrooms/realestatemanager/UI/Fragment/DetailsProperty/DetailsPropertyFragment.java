@@ -1,7 +1,7 @@
 package com.openclassrooms.realestatemanager.UI.Fragment.DetailsProperty;
 
 
-import android.app.AlertDialog;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,18 +23,24 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.openclassrooms.realestatemanager.Model.FullProperty;
+import com.openclassrooms.realestatemanager.Model.Picture;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.PropertyManager.PicturesRecyclerViewAdapter;
+import com.openclassrooms.realestatemanager.UI.Fragment.PropertyManager.PicturesViewHolder;
+import com.openclassrooms.realestatemanager.Utils.DialogShowImage;
+import com.openclassrooms.realestatemanager.Utils.StorageUtils;
 import com.openclassrooms.realestatemanager.Utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.openclassrooms.realestatemanager.UI.Fragment.PropertyManager.PropertyManagerFragment.FOLDERNAME;
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyCallback {
+public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyCallback , PicturesViewHolder.ListenerPictureClick {
 
     private static final String INSTANCE_STATE = "INSTANCE_STATE";
     private static final String BUNDLE_INSTANCE_STATE = "BUNDLE_INSTANCE_STATE";
@@ -106,7 +112,7 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
     }
 
     private void configureRecyclerView() {
-        mAdapter = new PicturesRecyclerViewAdapter(getContext());
+        mAdapter = new PicturesRecyclerViewAdapter(getContext(),this);
         mPicturesRecyclerView.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         mPicturesRecyclerView.setLayoutManager(layoutManager);
@@ -158,5 +164,13 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
             bundle.putLong(BUNDLE_INSTANCE_STATE,mPropertyId);
             outState.putBundle(INSTANCE_STATE, bundle);
         }
+    }
+
+    @Override
+    public void onClickPicture(Picture picture) {
+        Bitmap bitmap = StorageUtils.getBitmapFromStorage(getActivity().getFilesDir(),getContext(),picture.getFile(),FOLDERNAME);
+        DialogShowImage dialog = new DialogShowImage(bitmap);
+        dialog.setTargetFragment(this,1);
+        dialog.show(getParentFragmentManager(),"DialogImagePreview");
     }
 }

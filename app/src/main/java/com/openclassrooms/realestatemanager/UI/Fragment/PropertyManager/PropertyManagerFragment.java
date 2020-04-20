@@ -18,8 +18,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -30,11 +32,13 @@ import com.openclassrooms.realestatemanager.Model.Picture;
 import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
+import com.openclassrooms.realestatemanager.Utils.DialogDeleteImage;
 import com.openclassrooms.realestatemanager.Utils.DialogImagePreview;
-import com.openclassrooms.realestatemanager.Utils.NotificationService;
+import com.openclassrooms.realestatemanager.Utils.DialogSelectPictureFrom;
 import com.openclassrooms.realestatemanager.Utils.StorageUtils;
 
 import java.io.IOException;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,7 +55,7 @@ import static com.openclassrooms.realestatemanager.UI.Activities.DetailsProperty
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PropertyManagerFragment extends BaseFragment implements DialogImagePreview.DialogImagePreviewListener {
+public class PropertyManagerFragment extends BaseFragment implements DialogImagePreview.DialogImagePreviewListener, PicturesViewHolder.ListenerPictureClick , DialogDeleteImage.DialogDeleteListener , DialogSelectPictureFrom.DialogSelectListener {
 
     @BindView(R.id.recycler_view_pictures) RecyclerView mPicturesRecyclerView;
     @BindView(R.id.add_picture_iv) ImageView mAddPictureImageView;
@@ -93,6 +97,8 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
     private PicturesRecyclerViewAdapter mAdapter;
     private Bitmap bitmap;
     private List<Picture> mListPictures = new ArrayList<>();
+    private Picture pictureTodelete;
+    private List<Picture> mListPicturesToDelete = new ArrayList<>();
 
     //CONSTRUCTOR
     public PropertyManagerFragment() {}
@@ -113,7 +119,7 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
     }
 
     private void configureRecyclerView() {
-        mAdapter = new PicturesRecyclerViewAdapter(getContext());
+        mAdapter = new PicturesRecyclerViewAdapter(getContext(),this);
         mPicturesRecyclerView.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         mPicturesRecyclerView.setLayoutManager(layoutManager);
@@ -140,7 +146,7 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
     private void populateEditItemWithPropertyValues(FullProperty fullProperty) {
         this.mFullProperty = fullProperty;
 
-        mListPictures = mFullProperty.getPictureList();
+        mListPictures = fullProperty.getPictureList();
         mAdapter.updateListPictures(mListPictures);
 
         //TODO set defaultvalue of spinner
@@ -186,9 +192,27 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         mAddPictureImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickAddFile();
+                showDialogToChoosePicture();
             }
         });
+    }
+
+    private void showDialogToChoosePicture() {
+        DialogSelectPictureFrom dialog = new DialogSelectPictureFrom();
+        dialog.setTargetFragment(this,1);
+        dialog.show(getParentFragmentManager(),"DialogSelectPictureFrom");
+    }
+
+    @Override
+    public void onDialogSelectedClick(DialogSelectPictureFrom dialog) {
+        RadioButton albumCheckBox = dialog.getDialog().findViewById(R.id.from_album);
+        RadioButton cameraCheckBox = dialog.getDialog().findViewById(R.id.from_camera);
+        if (albumCheckBox.isChecked()){
+            onClickAddFile();
+        }
+        if (cameraCheckBox.isChecked()){
+
+        }
     }
 
     /**
@@ -257,7 +281,6 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         Picture picture = new Picture(imageName,description);
         mListPictures.add(picture);
         mAdapter.updateListPictures(mListPictures);
-
         StorageUtils.setBitmapInStorage(getActivity().getFilesDir(),getContext(),imageName,FOLDERNAME,bitmap);
     }
 
@@ -390,7 +413,21 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         address.setPostCode(mAddressPostCode);
         address.setCountry(mAddressCountry);
         mAddressViewModel.updateAddress(address);
+
+        deletePictureInDatabase();
+
         //showConfirmationMessage("updated");
+    }
+
+    /**
+     * On save delete in database all the picture the user choose to delete
+     */
+    private void deletePictureInDatabase() {
+        if (!mListPicturesToDelete.isEmpty()) {
+            for (Picture pictureToDelete : mListPicturesToDelete) {
+                mPictureViewModel.deletePicture(pictureToDelete);
+            }
+        }
     }
 
     /**
@@ -409,12 +446,41 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         createPicturesForProperty(idProperty);
     }
 
+    /**
+     * Create Pictures in database with propertyId relation
+     * @param idProperty
+     */
     private void createPicturesForProperty(Integer idProperty) {
         for (Picture picture: mListPictures) {
             picture.setPropertyId(idProperty);
             mPictureViewModel.createPicture(picture);
         }
         //showConfirmationMessage("added");
+    }
+
+    /**
+     * Manage click on picture
+     * @param picture
+     */
+    @Override
+    public void onClickPicture(Picture picture) {
+        pictureTodelete = picture;
+        Bitmap bitmap = StorageUtils.getBitmapFromStorage(getActivity().getFilesDir(),getContext(),picture.getFile(),FOLDERNAME);
+        DialogDeleteImage dialog = new DialogDeleteImage(bitmap);
+        dialog.setTargetFragment(this,1);
+        dialog.show(getParentFragmentManager(),"DialogImagePreview");
+    }
+
+    /**
+     * Manage click to delete picture from list to show
+     * And add to list we will delete in database on save property
+     * @param dialogDeleteImage
+     */
+    @Override
+    public void onDialogDeleteClick(DialogDeleteImage dialogDeleteImage) {
+        mListPictures.remove(pictureTodelete);
+        mListPicturesToDelete.add(pictureTodelete);
+        mAdapter.updateListPictures(mListPictures);
     }
 
 

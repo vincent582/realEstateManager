@@ -43,7 +43,7 @@ public class ListPropertiesFragment extends BaseFragment implements PropertiesVi
     RecyclerView mRecyclerView;
 
     public interface sendPropertyIdToMainActivityOnClickListener{
-        void callbackPropertyId(long propertyId);
+        void callbackPropertyId(int propertyId);
     }
 
     private sendPropertyIdToMainActivityOnClickListener mListener;

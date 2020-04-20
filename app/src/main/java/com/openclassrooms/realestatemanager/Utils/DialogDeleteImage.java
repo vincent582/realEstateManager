@@ -16,17 +16,17 @@ import androidx.fragment.app.DialogFragment;
 
 import com.openclassrooms.realestatemanager.R;
 
-public class DialogImagePreview extends DialogFragment {
+public class DialogDeleteImage extends DialogFragment {
 
-    public interface DialogImagePreviewListener{
-        void onDialogImagePreviewSave(DialogImagePreview dialogImagePreview);
+    public interface DialogDeleteListener{
+        void onDialogDeleteClick(DialogDeleteImage dialogDeleteImage);
     }
 
-    DialogImagePreviewListener mListener;
+    DialogDeleteListener mListener;
 
     private Bitmap mBitmap;
 
-    public DialogImagePreview(Bitmap bitmap){
+    public DialogDeleteImage(Bitmap bitmap){
         this.mBitmap = bitmap;
     }
 
@@ -35,21 +35,14 @@ public class DialogImagePreview extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_image_preview,null);
+        View view = inflater.inflate(R.layout.dialog_image_show,null);
         builder.setView(view)
-            .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    mListener.onDialogImagePreviewSave(DialogImagePreview.this);
-                }
-            })
-            .setNegativeButton("Back", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
+                    mListener.onDialogDeleteClick(DialogDeleteImage.this);
                 }
             });
-
         ImageView image = view.findViewById(R.id.dialog_picture_iv);
         image.setImageBitmap(this.mBitmap);
 
@@ -60,9 +53,9 @@ public class DialogImagePreview extends DialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try{
-            mListener = (DialogImagePreviewListener) getTargetFragment();
+            mListener = (DialogDeleteImage.DialogDeleteListener) getTargetFragment();
         }catch (ClassCastException e){
-            throw new ClassCastException(getTargetFragment().toString()+" must implement DialogImagePreviewListener");
+            throw new ClassCastException(getTargetFragment().toString()+" must implement DialogDeleteListener");
         }
     }
 }

@@ -17,17 +17,19 @@ import java.util.List;
 public class PicturesRecyclerViewAdapter extends RecyclerView.Adapter<PicturesViewHolder> {
 
     private final Context mContext;
+    private PicturesViewHolder.ListenerPictureClick mCallback;
     private List<Picture> mListPictures = new ArrayList<>();
 
-    public PicturesRecyclerViewAdapter(Context context){
+    public PicturesRecyclerViewAdapter(Context context, PicturesViewHolder.ListenerPictureClick callback){
         this.mContext = context;
+        this.mCallback = callback;
     }
 
     @NonNull
     @Override
     public PicturesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_picture,parent,false);
-        return new PicturesViewHolder(view,mContext);
+        return new PicturesViewHolder(view,mContext,mCallback);
     }
 
     @Override

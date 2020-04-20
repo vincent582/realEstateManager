@@ -51,7 +51,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private ListPropertiesFragment mListPropertiesFragment;
     private DetailsPropertyFragment mDetailsPropertyFragment;
-    private Long mPropertyId;
+    private Integer mPropertyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,7 +210,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
      * @param propertyId
      */
     @Override
-    public void callbackPropertyId(long propertyId) {
+    public void callbackPropertyId(int propertyId) {
         this.mPropertyId = propertyId;
     }
 
