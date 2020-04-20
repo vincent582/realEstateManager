@@ -14,7 +14,7 @@ public class Address {
     @PrimaryKey(autoGenerate = true)
     private long id;
     @ColumnInfo(name = "propertyId")
-    private long propertyId;
+    private int propertyId;
     private int number;
     private String street;
     private String complement_street;
@@ -23,7 +23,7 @@ public class Address {
     private int postCode;
     private String country;
 
-    public Address(long propertyId, int number, String street, String complement_street, String district, String state, int postCode, String country) {
+    public Address(int propertyId, int number, String street, String complement_street, String district, String state, int postCode, String country) {
         this.propertyId = propertyId;
         this.number = number;
         this.street = street;
@@ -107,7 +107,7 @@ public class Address {
         this.id = id;
     }
 
-    public long getPropertyId() {
+    public int getPropertyId() {
         return propertyId;
     }
 

@@ -1,8 +1,10 @@
 package com.openclassrooms.realestatemanager.UI.Fragment.ListProperties;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -10,14 +12,20 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.openclassrooms.realestatemanager.Model.FullProperty;
 import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.Utils.StorageUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.openclassrooms.realestatemanager.UI.Fragment.PropertyManager.PropertyManagerFragment.FOLDERNAME;
+
 public class PropertiesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+    @BindView(R.id.property_list_picture_iv)
+    ImageView mPictureImageView;
     @BindView(R.id.item_property_type_text_view)
     TextView mPropertyType;
     @BindView(R.id.item_property_price_text_view)
@@ -28,12 +36,12 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder implements Vie
     LinearLayout mItemView;
 
     private final Context mContext;
-    private Property mProperty;
+    private FullProperty mProperty;
 
     private OnPropertyListener mOnPropertyListener;
 
     public interface OnPropertyListener{
-        void onPropertyClick(Integer propertyId);
+        void onPropertyClick(int propertyId);
     }
 
     public PropertiesViewHolder(@NonNull View itemView, Context context, OnPropertyListener propertyListener) {
@@ -43,11 +51,14 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder implements Vie
         ButterKnife.bind(this, itemView);
     }
 
-    public void updateView(Property property, int index) {
+    public void updateView(FullProperty property, int index) {
         this.mProperty = property;
-        mPropertyType.setText(property.getType());
-        mPropertyPrice.setText("$"+ property.getPrice());
-        //mPropertyDistrict.setText(property.getAddress().getDistrict());
+        Bitmap bitmap = StorageUtils.getBitmapFromStorage(mContext.getFilesDir(),mContext,property.getPictureList().get(0).getFile(),FOLDERNAME);
+        mPictureImageView.setImageBitmap(bitmap);
+
+        mPropertyType.setText(property.getProperty().getType());
+        mPropertyPrice.setText("$"+ property.getProperty().getPrice());
+        mPropertyDistrict.setText(property.getAddress().getDistrict());
 
         mItemView.setOnClickListener(this);
 
@@ -55,7 +66,7 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder implements Vie
     }
 
     private void changeBackgroundColor(int index) {
-        if(index == mProperty.getId()){
+        if(index == mProperty.getProperty().getId()){
             mItemView.setBackgroundResource(R.color.primaryLightColor);
             mPropertyPrice.setTextColor(ContextCompat.getColor(mContext,R.color.secondaryLightColor));
             mPropertyType.setTextColor(ContextCompat.getColor(mContext,R.color.primaryTextColor));
@@ -70,6 +81,6 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder implements Vie
 
     @Override
     public void onClick(View v) {
-        mOnPropertyListener.onPropertyClick(mProperty.getId());
+        mOnPropertyListener.onPropertyClick(mProperty.getProperty().getId());
     }
 }

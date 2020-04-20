@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.Model;
 
 import androidx.room.Embedded;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
@@ -34,6 +35,9 @@ public class Property {
         this.addedDate = addedDate;
         this.dateOfSale = dateOfSale;
     }
+
+    @Ignore
+    public Property(){}
 
     public int getId() {
         return id;

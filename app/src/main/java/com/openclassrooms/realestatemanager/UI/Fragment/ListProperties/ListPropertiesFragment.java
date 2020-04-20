@@ -19,6 +19,7 @@ import com.openclassrooms.realestatemanager.Database.RealEstateManagerDataBase;
 import com.openclassrooms.realestatemanager.Injection.Injection;
 import com.openclassrooms.realestatemanager.Injection.ViewModelFactory;
 import com.openclassrooms.realestatemanager.Model.Address;
+import com.openclassrooms.realestatemanager.Model.FullProperty;
 import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity;
@@ -42,13 +43,13 @@ public class ListPropertiesFragment extends BaseFragment implements PropertiesVi
     RecyclerView mRecyclerView;
 
     public interface sendPropertyIdToMainActivityOnClickListener{
-        void callbackPropertyId(int propertyId);
+        void callbackPropertyId(long propertyId);
     }
 
     private sendPropertyIdToMainActivityOnClickListener mListener;
 
     private PropertiesRecyclerViewAdapter mAdapter;
-    private List<Property> mListProperties;
+    private List<FullProperty> mListProperties;
     private boolean twoPanes;
 
     public ListPropertiesFragment(){}
@@ -66,12 +67,12 @@ public class ListPropertiesFragment extends BaseFragment implements PropertiesVi
         ButterKnife.bind(this,view);
 
         configureViewModels(getContext());
-        mPropertiesViewModel.getProperties().observe(getViewLifecycleOwner(),this::updateListProperties);
+        mPropertiesViewModel.getFullProperties().observe(getViewLifecycleOwner(),this::updateListProperties);
 
         return view;
     }
 
-    private void updateListProperties(List<Property> properties) {
+    private void updateListProperties(List<FullProperty> properties) {
         mListProperties = properties;
         configureRecyclerView();
     }
@@ -84,7 +85,7 @@ public class ListPropertiesFragment extends BaseFragment implements PropertiesVi
     }
 
     @Override
-    public void onPropertyClick(Integer propertyId) {
+    public void onPropertyClick(int propertyId) {
         if (twoPanes){
             mListener.callbackPropertyId(propertyId);
             FragmentManager fragmentManager =  getParentFragmentManager();

@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.Repository;
 import androidx.lifecycle.LiveData;
 
 import com.openclassrooms.realestatemanager.Database.DAO.PropertyDAO;
+import com.openclassrooms.realestatemanager.Model.FullProperty;
 import com.openclassrooms.realestatemanager.Model.Property;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class PropertiesRepository {
         return mPropertyDAO.getAllProperty();
     }
 
-    public LiveData<Property> getPropertyById(int id){ return mPropertyDAO.getPropertyById(id); }
+    public LiveData<FullProperty> getPropertyById(int id){ return mPropertyDAO.getPropertyById(id); }
 
     public long createProperty(Property property) {
         return mPropertyDAO.insertProperty(property);
@@ -27,5 +28,9 @@ public class PropertiesRepository {
 
     public void updateProperty(Property property) {
         mPropertyDAO.updateProerty(property);
+    }
+
+    public LiveData<List<FullProperty>> getFullProperties(){
+        return mPropertyDAO.getFullProperties();
     }
 }

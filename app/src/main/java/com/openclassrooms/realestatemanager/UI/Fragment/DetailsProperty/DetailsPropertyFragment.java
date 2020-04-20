@@ -1,10 +1,13 @@
 package com.openclassrooms.realestatemanager.UI.Fragment.DetailsProperty;
 
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +22,10 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.openclassrooms.realestatemanager.Model.Address;
-import com.openclassrooms.realestatemanager.Model.Property;
+import com.openclassrooms.realestatemanager.Model.FullProperty;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
+import com.openclassrooms.realestatemanager.UI.Fragment.PropertyManager.PicturesRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.Utils.Utils;
 
 import butterknife.BindView;
@@ -36,6 +39,8 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
     private static final String INSTANCE_STATE = "INSTANCE_STATE";
     private static final String BUNDLE_INSTANCE_STATE = "BUNDLE_INSTANCE_STATE";
 
+    @BindView(R.id.recycler_view_pictures)
+    RecyclerView mPicturesRecyclerView;
     @BindView(R.id.no_property_selected_details_fragment)
     LinearLayout mNoSelectedProperty;
     @BindView(R.id.scroll_view_details_property)
@@ -59,10 +64,10 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
     @BindView(R.id.mapView)
     MapView mMapView;
 
-    private Property mProperty;
-    private Address mAddressProperty;
+    private FullProperty mFullProperty;
     private GoogleMap mGoogleMap;
     private Integer mPropertyId;
+    private PicturesRecyclerViewAdapter mAdapter;
 
     public DetailsPropertyFragment(){}
 
@@ -95,28 +100,38 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
 
         mMapView.onCreate(savedInstanceState);
 
+        configureRecyclerView();
+
         return view;
     }
 
-    private void updateProperty(Property property) {
-        this.mProperty = property;
-        if (mProperty != null){
-            mDescription.setText(mProperty.getDescription());
-            mSurface.setText(String.valueOf(mProperty.getSurface()));
-            mNbrOfRooms.setText(String.valueOf(mProperty.getNbrOfRooms()));
-            
-            mAddressViewModel.getAddressOfProperty(property.getId()).observe(this,this::getAddressOfProperty);
-        }
+    private void configureRecyclerView() {
+        mAdapter = new PicturesRecyclerViewAdapter(getContext());
+        mPicturesRecyclerView.setAdapter(mAdapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        mPicturesRecyclerView.setLayoutManager(layoutManager);
     }
 
-    private void getAddressOfProperty(Address address) {
-        this.mAddressProperty = address;
-        mAddressStreet.setText(address.getStreet());
-        mAddressStreetComplement.setText(address.getComplement_street());
-        mAddressDistrict.setText(address.getDistrict());
-        mAddressStateAndPostCode.setText(address.getState()+" "+ address.getPostCode());
-        mAddressCountry.setText(address.getCountry());
-        mMapView.getMapAsync(this);
+    private void updateProperty(FullProperty property) {
+        this.mFullProperty = property;
+        mAdapter.updateListPictures(mFullProperty.getPictureList());
+
+        if (mFullProperty != null){
+            mDescription.setText(mFullProperty.getProperty().getDescription());
+            mSurface.setText(String.valueOf(mFullProperty.getProperty().getSurface()));
+            mNbrOfRooms.setText(String.valueOf(mFullProperty.getProperty().getNbrOfRooms()));
+
+            mAddressStreet.setText(mFullProperty.getAddress().getStreet());
+            if (mFullProperty.getAddress().getComplement_street() != null) {
+                mAddressStreetComplement.setText(mFullProperty.getAddress().getComplement_street());
+            }else {
+                mAddressStreetComplement.setVisibility(View.GONE);
+            }
+            mAddressDistrict.setText(mFullProperty.getAddress().getDistrict());
+            mAddressStateAndPostCode.setText(mFullProperty.getAddress().getState()+" "+ mFullProperty.getAddress().getPostCode());
+            mAddressCountry.setText(mFullProperty.getAddress().getCountry());
+            mMapView.getMapAsync(this);
+        }
     }
 
     @Override
@@ -124,7 +139,7 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
         mGoogleMap = googleMap;
         mGoogleMap.getUiSettings().setMapToolbarEnabled(false);
 
-        String formattedAddress = mAddressProperty.getFormatedAddress();
+        String formattedAddress = mFullProperty.getAddress().getFormatedAddress();
         LatLng position = Utils.getLocationFromAddress(getContext(), formattedAddress);
 
         if (position != null){
@@ -140,7 +155,7 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
         super.onSaveInstanceState(outState);
         if (mPropertyId != null) {
             Bundle bundle = new Bundle();
-            bundle.putInt(BUNDLE_INSTANCE_STATE,mPropertyId);
+            bundle.putLong(BUNDLE_INSTANCE_STATE,mPropertyId);
             outState.putBundle(INSTANCE_STATE, bundle);
         }
     }

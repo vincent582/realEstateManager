@@ -16,8 +16,7 @@ public class Picture {
     private String file;
     private String description;
 
-    public Picture(int propertyId, String file, String description) {
-        this.propertyId = propertyId;
+    public Picture(String file, String description) {
         this.file = file;
         this.description = description;
     }

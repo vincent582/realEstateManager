@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.openclassrooms.realestatemanager.Model.FullProperty;
 import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.Repository.PropertiesRepository;
 
@@ -32,7 +33,11 @@ public class PropertiesViewModel extends ViewModel {
 
     public LiveData<List<Property>> getProperties(){ return mPropertyList; }
 
-    public LiveData<Property> getPropertyById(int id) { return mPropertiesRepository.getPropertyById(id); }
+    public LiveData<List<FullProperty>> getFullProperties(){
+        return mPropertiesRepository.getFullProperties();
+    }
+
+    public LiveData<FullProperty> getPropertyById(int id) { return mPropertiesRepository.getPropertyById(id); }
 
     public MutableLiveData<Integer> createProperty(Property property){
         mExecutor.execute(()-> {

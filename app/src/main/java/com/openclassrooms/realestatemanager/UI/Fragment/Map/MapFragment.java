@@ -160,15 +160,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        long propertyId = (long) marker.getTag();
+        int propertyId = (int) marker.getTag();
         if (twoPanes){
             FragmentManager fragmentManager =  getParentFragmentManager();
             fragmentManager.beginTransaction()
-                .replace(R.id.details_activity_frame_layout,new DetailsPropertyFragment((int) propertyId))
+                .replace(R.id.details_activity_frame_layout,new DetailsPropertyFragment(propertyId))
                 .commit();
         }else{
             Intent intent = new Intent(getContext(), DetailsPropertyActivity.class);
-            intent.putExtra(PROPERTY_ID_EXTRA,(int) propertyId);
+            intent.putExtra(PROPERTY_ID_EXTRA, propertyId);
             startActivity(intent);
         }
         return false;

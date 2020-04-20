@@ -54,30 +54,13 @@
                 android:textSize="@dimen/details_view_text_section_size"
                 android:textStyle="bold" />
 
-            <HorizontalScrollView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_pictures"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/add_picture_iv"
-                        android:layout_width="@dimen/item_property_image_size"
-                        android:layout_height="@dimen/item_property_image_size"
-                        android:layout_margin="@dimen/item_property_details_margin_image"
-                        tools:srcCompat="@tools:sample/backgrounds/scenic[1]" />
-
-                    <ImageView
-                        android:id="@+id/imageView3"
-                        android:layout_width="@dimen/item_property_image_size"
-                        android:layout_height="@dimen/item_property_image_size"
-                        android:layout_margin="@dimen/item_property_details_margin_image"
-                        tools:srcCompat="@tools:sample/backgrounds/scenic[2]" />
-                </LinearLayout>
-            </HorizontalScrollView>
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal"/>
 
             <TextView
                 android:id="@+id/textView2"
