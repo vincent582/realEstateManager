@@ -18,12 +18,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.Dummy.Dummy;
 import com.openclassrooms.realestatemanager.Model.Address;
@@ -38,7 +37,6 @@ import com.openclassrooms.realestatemanager.Utils.DialogSelectPictureFrom;
 import com.openclassrooms.realestatemanager.Utils.StorageUtils;
 
 import java.io.IOException;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -58,7 +56,7 @@ import static com.openclassrooms.realestatemanager.UI.Activities.DetailsProperty
 public class PropertyManagerFragment extends BaseFragment implements DialogImagePreview.DialogImagePreviewListener, PicturesViewHolder.ListenerPictureClick , DialogDeleteImage.DialogDeleteListener , DialogSelectPictureFrom.DialogSelectListener {
 
     @BindView(R.id.recycler_view_pictures) RecyclerView mPicturesRecyclerView;
-    @BindView(R.id.add_picture_iv) ImageView mAddPictureImageView;
+    @BindView(R.id.add_picture_fab) FloatingActionButton mAddPictureFAB;
     @BindView(R.id.manager_layout_type_spinner) Spinner mPropertyTypeSpinner;
     @BindView(R.id.manager_layout_price_editText) EditText mPropertyPrice;
     @BindView(R.id.manager_layout_description_editText) EditText mPropertyDescription;
@@ -190,7 +188,7 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
      * Manage Click on add picture Button
      */
     private void setAddPictureClickListener() {
-        mAddPictureImageView.setOnClickListener(new View.OnClickListener() {
+        mAddPictureFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialogToChoosePicture();

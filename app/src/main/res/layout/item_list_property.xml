@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/property_list_picture_iv"
-        android:layout_width="@dimen/item_property_image_size"
-        android:layout_height="@dimen/item_property_image_size"
+        android:layout_width="@dimen/item_property_list_image_size"
+        android:layout_height="@dimen/item_property_list_image_size"
         android:layout_margin="4dp"
         android:scaleType="centerCrop"
         tools:srcCompat="@tools:sample/backgrounds/scenic[15]" />

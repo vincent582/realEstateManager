@@ -24,38 +24,31 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/add_picture_iv"
-            android:layout_width="@dimen/item_property_image_size"
-            android:layout_height="@dimen/item_property_image_size"
-            android:clickable="true"
-            android:foreground="@drawable/add_photo"
-            app:layout_constraintStart_toStartOf="@+id/manager_layout_picture_tv"
-            app:layout_constraintTop_toBottomOf="@+id/manager_layout_picture_tv" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_pictures"
             android:layout_width="0dp"
-            android:layout_height="@dimen/item_property_image_size"
+            android:layout_height="150dp"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/border_layout"
             android:orientation="horizontal"
             app:layout_constraintBottom_toTopOf="@+id/manager_layout_type_tv"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/add_picture_iv"
-            app:layout_constraintTop_toBottomOf="@id/manager_layout_picture_tv"/>
+            app:layout_constraintEnd_toEndOf="@+id/manager_layout_price_editText"
+            app:layout_constraintStart_toEndOf="@+id/add_picture_fab"
+            app:layout_constraintTop_toBottomOf="@id/manager_layout_picture_tv" />
 
         <TextView
             android:id="@+id/manager_layout_type_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text="@string/property_type_tv"
             app:layout_constraintEnd_toStartOf="@+id/manager_layout_price_tv"
-            app:layout_constraintHorizontal_bias="0.773"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/add_picture_iv" />
+            app:layout_constraintTop_toBottomOf="@id/recycler_view_pictures" />
 
         <TextView
         android:id="@+id/manager_layout_price_tv"
@@ -374,6 +367,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/checkBox_is_sold" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_picture_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="@+id/recycler_view_pictures"
+            app:layout_constraintStart_toStartOf="@+id/manager_layout_picture_tv"
+            app:layout_constraintTop_toTopOf="@+id/recycler_view_pictures"
+            app:srcCompat="@drawable/add_photo" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

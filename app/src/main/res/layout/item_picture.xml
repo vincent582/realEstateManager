@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:background="@color/blackTransparent"
         android:fontFamily="sans-serif"
-        android:padding="5dp"
+        android:padding="10dp"
         android:text="TextView"
         android:textColor="@android:color/white"
         android:textSize="12sp"
