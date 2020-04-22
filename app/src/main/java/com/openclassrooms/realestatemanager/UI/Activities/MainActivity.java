@@ -26,6 +26,7 @@ import com.openclassrooms.realestatemanager.Model.User;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.DetailsProperty.DetailsPropertyFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.ListProperties.ListPropertiesFragment;
+import com.openclassrooms.realestatemanager.UI.Fragment.LoanSimulator.LoanSimulatorFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.Map.MapFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.Profile.ProfileFragment;
 import com.openclassrooms.realestatemanager.UI.ViewModels.UserViewModel;
@@ -136,6 +137,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.activity_main_drawer_profile:
                 ProfileFragment profileFragment = new ProfileFragment(this);
                 this.startTransactionFragment(profileFragment);
+                break;
+            case R.id.activity_main_drawer_loan_simulator:
+                LoanSimulatorFragment loanSimulatorFragment = new LoanSimulatorFragment();
+                this.startTransactionFragment(loanSimulatorFragment);
                 break;
             default:
                 break;

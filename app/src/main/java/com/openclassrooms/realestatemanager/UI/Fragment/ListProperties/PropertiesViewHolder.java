@@ -57,7 +57,7 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder implements Vie
         mPictureImageView.setImageBitmap(bitmap);
 
         mPropertyType.setText(property.getProperty().getType());
-        mPropertyPrice.setText("$"+ property.getProperty().getPrice());
+        mPropertyPrice.setText("$"+ String.format("%,d", property.getProperty().getPrice()));
         mPropertyDistrict.setText(property.getAddress().getDistrict());
 
         mItemView.setOnClickListener(this);
