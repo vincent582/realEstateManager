@@ -164,9 +164,9 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/checkBox_supermarket"
+        app:layout_constraintEnd_toEndOf="@+id/checkBox_park"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/checkBox_supermarket"
+        app:layout_constraintStart_toStartOf="@+id/checkBox_park"
         app:layout_constraintTop_toTopOf="@+id/textView8" />
 
     <EditText
@@ -229,31 +229,31 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Address"
-        app:layout_constraintEnd_toEndOf="@+id/checkBox_wifi"
-        app:layout_constraintStart_toStartOf="@+id/checkBox_wifi"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox_wifi" />
+        app:layout_constraintEnd_toEndOf="@+id/checkBox_store"
+        app:layout_constraintStart_toStartOf="@+id/checkBox_store"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox_store" />
 
-    <CheckBox
-        android:id="@+id/checkBox_supermarket"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Supermarket"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/checkBox_station"
-        app:layout_constraintStart_toStartOf="@+id/checkBox_station"
-        app:layout_constraintTop_toBottomOf="@id/checkBox_station"></CheckBox>
+        <CheckBox
+            android:id="@+id/checkBox_park"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Park"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/checkBox_station"
+            app:layout_constraintStart_toStartOf="@+id/checkBox_station"
+            app:layout_constraintTop_toBottomOf="@id/checkBox_station"></CheckBox>
 
-    <CheckBox
-        android:id="@+id/checkBox_wifi"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Wifi"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/checkBox_school"
-        app:layout_constraintStart_toStartOf="@+id/checkBox_school"
-        app:layout_constraintTop_toBottomOf="@id/checkBox_school"></CheckBox>
+        <CheckBox
+            android:id="@+id/checkBox_store"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Store"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/checkBox_school"
+            app:layout_constraintStart_toStartOf="@+id/checkBox_school"
+            app:layout_constraintTop_toBottomOf="@id/checkBox_school"></CheckBox>
 
     <CheckBox
         android:id="@+id/checkBox_station"
@@ -369,14 +369,26 @@
             app:layout_constraintTop_toBottomOf="@+id/checkBox_is_sold" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_picture_fab"
+            android:id="@+id/take_picture_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:clickable="true"
-            app:layout_constraintBottom_toBottomOf="@+id/recycler_view_pictures"
+            android:tint="@android:color/black"
             app:layout_constraintStart_toStartOf="@+id/manager_layout_picture_tv"
             app:layout_constraintTop_toTopOf="@+id/recycler_view_pictures"
             app:srcCompat="@drawable/add_photo" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_picture_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="@+id/recycler_view_pictures"
+            app:layout_constraintStart_toStartOf="@+id/manager_layout_picture_tv"
+            app:layout_constraintTop_toBottomOf="@+id/take_picture_fab"
+            app:srcCompat="@drawable/ic_filter_black_24dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

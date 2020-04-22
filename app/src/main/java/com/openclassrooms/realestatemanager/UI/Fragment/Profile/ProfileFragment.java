@@ -165,7 +165,7 @@ public class ProfileFragment extends Fragment implements DialogAuthentication.Di
     private void getuser(User user) {
         if (user != null){
             mCurrentUser = user;
-            preferences.edit().putLong(CURRENT_USER_ID, user.getId()).apply();
+            preferences.edit().putLong(CURRENT_USER_ID, user.getUid()).apply();
             updateView();
             mCallback.onConnectionManagement();
             Snackbar.make(getView(),"Successful authentication", LENGTH_SHORT).show();

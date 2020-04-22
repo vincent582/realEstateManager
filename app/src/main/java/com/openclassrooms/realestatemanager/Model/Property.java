@@ -4,8 +4,10 @@ import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
-import java.util.ArrayList;
+import com.openclassrooms.realestatemanager.Utils.ListConverterToGson;
+
 import java.util.Date;
 import java.util.List;
 
@@ -20,20 +22,25 @@ public class Property {
     private int nbrOfRooms;
     private String description;
     private Boolean sold;
+    @TypeConverters(ListConverterToGson.class)
+    private List<String> facilities;
     @Embedded
     private Date addedDate;
     @Embedded
     private Date dateOfSale;
+    private long userId;
 
-    public Property(String type, int price, int surface, int nbrOfRooms, String description, Boolean sold, Date addedDate, Date dateOfSale) {
+    public Property(String type, int price, int surface, int nbrOfRooms, String description, Boolean sold, List<String> facilities, Date addedDate, Date dateOfSale, long userId) {
         this.type = type;
         this.price = price;
         this.surface = surface;
         this.nbrOfRooms = nbrOfRooms;
         this.description = description;
         this.sold = sold;
+        this.facilities = facilities;
         this.addedDate = addedDate;
         this.dateOfSale = dateOfSale;
+        this.userId = userId;
     }
 
     @Ignore
@@ -109,5 +116,21 @@ public class Property {
 
     public void setDateOfSale(Date dateOfSale) {
         this.dateOfSale = dateOfSale;
+    }
+
+    public List<String> getFacilities() {
+        return facilities;
+    }
+
+    public void setFacilities(List<String> facilities) {
+        this.facilities = facilities;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 }

@@ -18,6 +18,7 @@ public class BaseFragment extends Fragment {
     protected PropertiesViewModel mPropertiesViewModel;
     protected AddressViewModel mAddressViewModel;
     protected PictureViewModel mPictureViewModel;
+    protected UserViewModel mUserViewModel;
 
     protected void configureViewModels(Context context) {
         modelFactory = Injection.provideViewModelFactory(context);
@@ -25,5 +26,6 @@ public class BaseFragment extends Fragment {
         mPropertiesViewModel.init();
         mAddressViewModel = new ViewModelProvider(getActivity(),modelFactory).get(AddressViewModel.class);
         mPictureViewModel = new ViewModelProvider(getActivity(),modelFactory).get(PictureViewModel.class);
+        mUserViewModel = new ViewModelProvider(getActivity(),modelFactory).get(UserViewModel.class);
     }
 }

@@ -53,8 +53,10 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder implements Vie
 
     public void updateView(FullProperty property, int index) {
         this.mProperty = property;
-        Bitmap bitmap = StorageUtils.getBitmapFromStorage(mContext.getFilesDir(),mContext,property.getPictureList().get(0).getFile(),FOLDERNAME);
-        mPictureImageView.setImageBitmap(bitmap);
+        if (!mProperty.getPictureList().isEmpty()) {
+            Bitmap bitmap = StorageUtils.getBitmapFromStorage(mContext.getFilesDir(), mContext, property.getPictureList().get(0).getFile(), FOLDERNAME);
+            mPictureImageView.setImageBitmap(bitmap);
+        }
 
         mPropertyType.setText(property.getProperty().getType());
         mPropertyPrice.setText("$"+ String.format("%,d", property.getProperty().getPrice()));
