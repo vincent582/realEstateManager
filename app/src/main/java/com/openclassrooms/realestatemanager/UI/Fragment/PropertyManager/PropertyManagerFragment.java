@@ -109,6 +109,7 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
     private List<Picture> mListPicturesToDelete = new ArrayList<>();
     private List<String> mListFacilities = new ArrayList<>();
     private long userId;
+    private Boolean mIsSold = false;
 
     //CONSTRUCTOR
     public PropertyManagerFragment() {}
@@ -200,6 +201,9 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         mPropertyAddressCountry.setText(mFullProperty.getAddress().getCountry());
 
         //TODO add isSold boolean
+        if (mFullProperty.getProperty().getSold()){
+            mCheckboxIsSold.setChecked(true);
+        }
         mAddPropertyButton.setText("Update Property");
     }
 
@@ -419,6 +423,12 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
             mListFacilities.add("Store");
         }
 
+        if (mCheckboxIsSold.isChecked()){
+            mIsSold = true;
+        }else {
+            mIsSold = false;
+        }
+
         return values;
     }
 
@@ -436,7 +446,7 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         property.setFacilities(mListFacilities);
 
         //TODO getValue of checkbox sold
-        property.setSold(false);
+        property.setSold(mIsSold);
         property.setDateOfSale(new Date());
 
         mPropertiesViewModel.updateProperty(property);
@@ -479,7 +489,7 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
      * Create new Property and address related
      */
     private void createNewPropertyAndAddress() {
-        Property property = new Property(mType, mPrice, mSurface, mNbrOfRoom, mDescription, false, mListFacilities, new Date(), new Date(), userId);
+        Property property = new Property(mType, mPrice, mSurface, mNbrOfRoom, mDescription, mIsSold, mListFacilities, new Date(), new Date(), userId);
         mPropertiesViewModel.createProperty(property).observe(getViewLifecycleOwner(),this::createAddress);
     }
 

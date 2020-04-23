@@ -32,6 +32,8 @@ import com.openclassrooms.realestatemanager.Utils.DialogShowImage;
 import com.openclassrooms.realestatemanager.Utils.StorageUtils;
 import com.openclassrooms.realestatemanager.Utils.Utils;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -57,6 +59,11 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
     TextView mSurface;
     @BindView(R.id.details_nbr_of_rooms_value_text_view)
     TextView mNbrOfRooms;
+    @BindView(R.id.facilities_info_tv) TextView mFacilitiesList;
+    @BindView(R.id.linear_layout_park) LinearLayout mFacilitiesPark;
+    @BindView(R.id.linear_layout_school) LinearLayout mFacilitiesSchool;
+    @BindView(R.id.linear_layout_station) LinearLayout mFacilitiesStation;
+    @BindView(R.id.linear_layout_store) LinearLayout mFacilitiesStore;
     @BindView(R.id.details_address_street_text_view)
     TextView mAddressStreet;
     @BindView(R.id.details_address_complement_street_text_view)
@@ -137,6 +144,34 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
             mAddressStateAndPostCode.setText(mFullProperty.getAddress().getState()+" "+ mFullProperty.getAddress().getPostCode());
             mAddressCountry.setText(mFullProperty.getAddress().getCountry());
             mMapView.getMapAsync(this);
+        }
+
+        List<String> facilities = property.getProperty().getFacilities();
+        if (!facilities.isEmpty()){
+            mFacilitiesList.setVisibility(View.VISIBLE);
+            mFacilitiesSchool.setVisibility(View.GONE);
+            mFacilitiesStore.setVisibility(View.GONE);
+            mFacilitiesStation.setVisibility(View.GONE);
+            mFacilitiesPark.setVisibility(View.GONE);
+
+            for (String facility: facilities) {
+                switch (facility){
+                    case "School":
+                        mFacilitiesSchool.setVisibility(View.VISIBLE);
+                        break;
+                    case "Store":
+                        mFacilitiesStore.setVisibility(View.VISIBLE);
+                        break;
+                    case "Station":
+                        mFacilitiesStation.setVisibility(View.VISIBLE);
+                        break;
+                    case "Park":
+                        mFacilitiesPark.setVisibility(View.VISIBLE);
+                        break;
+                }
+            }
+        } else {
+            mFacilitiesList.setVisibility(View.GONE);
         }
     }
 
