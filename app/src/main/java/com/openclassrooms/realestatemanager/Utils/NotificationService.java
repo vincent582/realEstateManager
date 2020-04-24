@@ -24,7 +24,7 @@ public class NotificationService {
 
     public void sendNotification(int notificationId,String message){
         builder
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_location_city_black_24dp)
             .setContentTitle("Real Estate Manager")
             .setContentText(message)
             .setStyle(new NotificationCompat.BigTextStyle()

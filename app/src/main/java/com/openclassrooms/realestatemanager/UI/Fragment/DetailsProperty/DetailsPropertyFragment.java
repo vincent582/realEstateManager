@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.UI.Fragment.DetailsProperty;
 
-
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
@@ -47,43 +46,36 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
     private static final String INSTANCE_STATE = "INSTANCE_STATE";
     private static final String BUNDLE_INSTANCE_STATE = "BUNDLE_INSTANCE_STATE";
 
-    @BindView(R.id.recycler_view_pictures)
-    RecyclerView mPicturesRecyclerView;
-    @BindView(R.id.no_property_selected_details_fragment)
-    LinearLayout mNoSelectedProperty;
-    @BindView(R.id.scroll_view_details_property)
-    ScrollView mScrollViewDetailsProperty;
-    @BindView(R.id.details_description_text_view)
-    TextView mDescription;
-    @BindView(R.id.details_surface_value_text_view)
-    TextView mSurface;
-    @BindView(R.id.details_nbr_of_rooms_value_text_view)
-    TextView mNbrOfRooms;
+    @BindView(R.id.recycler_view_pictures) RecyclerView mPicturesRecyclerView;
+    @BindView(R.id.no_property_selected_details_fragment) LinearLayout mNoSelectedProperty;
+    @BindView(R.id.scroll_view_details_property) ScrollView mScrollViewDetailsProperty;
+    @BindView(R.id.details_description_text_view) TextView mDescription;
+    @BindView(R.id.details_surface_value_text_view) TextView mSurface;
+    @BindView(R.id.details_nbr_of_rooms_value_text_view) TextView mNbrOfRooms;
     @BindView(R.id.facilities_info_tv) TextView mFacilitiesList;
     @BindView(R.id.linear_layout_park) LinearLayout mFacilitiesPark;
     @BindView(R.id.linear_layout_school) LinearLayout mFacilitiesSchool;
     @BindView(R.id.linear_layout_station) LinearLayout mFacilitiesStation;
     @BindView(R.id.linear_layout_store) LinearLayout mFacilitiesStore;
-    @BindView(R.id.details_address_street_text_view)
-    TextView mAddressStreet;
-    @BindView(R.id.details_address_complement_street_text_view)
-    TextView mAddressStreetComplement;
-    @BindView(R.id.details_address_district_text_view)
-    TextView mAddressDistrict;
-    @BindView(R.id.details_address_state_and_postcode_text_view)
-    TextView mAddressStateAndPostCode;
-    @BindView(R.id.details_address_country_text_view)
-    TextView mAddressCountry;
-    @BindView(R.id.mapView)
-    MapView mMapView;
+    @BindView(R.id.details_address_street_text_view) TextView mAddressStreet;
+    @BindView(R.id.details_address_complement_street_text_view) TextView mAddressStreetComplement;
+    @BindView(R.id.details_address_district_text_view) TextView mAddressDistrict;
+    @BindView(R.id.details_address_state_and_postcode_text_view) TextView mAddressStateAndPostCode;
+    @BindView(R.id.details_address_country_text_view) TextView mAddressCountry;
+    @BindView(R.id.mapView) MapView mMapView;
 
-    private FullProperty mFullProperty;
     private GoogleMap mGoogleMap;
     private Integer mPropertyId;
     private PicturesRecyclerViewAdapter mAdapter;
+    private FullProperty property;
 
+    //CONSTRUCTOR
     public DetailsPropertyFragment(){}
 
+    /**
+     * Constructor with parameter to get propertyId
+     * @param propertyId
+     */
     public DetailsPropertyFragment(int propertyId) {
         this.mPropertyId = propertyId;
     }
@@ -95,29 +87,28 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
         ButterKnife.bind(this,view);
 
         configureViewModels(getContext());
+        checkIfInstanceState(savedInstanceState);
+        configureRecyclerView();
+        checkIfPropertyId();
+        mMapView.onCreate(savedInstanceState);
+        return view;
+    }
 
+    /**
+     * check if savedInstanceState exist then get the propertyId saved
+     * @param savedInstanceState
+     */
+    private void checkIfInstanceState(Bundle savedInstanceState) {
         if (savedInstanceState != null){
             if (savedInstanceState.getBundle(BUNDLE_INSTANCE_STATE) != null) {
                 mPropertyId = savedInstanceState.getBundle(BUNDLE_INSTANCE_STATE).getInt(INSTANCE_STATE);
             }
         }
-
-        if (mPropertyId != null) {
-            mPropertiesViewModel.getPropertyById(mPropertyId).observe(getActivity(),this::updateProperty);
-            mScrollViewDetailsProperty.setVisibility(View.VISIBLE);
-            mNoSelectedProperty.setVisibility(View.GONE);
-        }else{
-            mScrollViewDetailsProperty.setVisibility(View.GONE);
-            mNoSelectedProperty.setVisibility(View.VISIBLE);
-        }
-
-        mMapView.onCreate(savedInstanceState);
-
-        configureRecyclerView();
-
-        return view;
     }
 
+    /**
+     * configure recyclerView horizontally to display pictures
+     */
     private void configureRecyclerView() {
         mAdapter = new PicturesRecyclerViewAdapter(getContext(),this);
         mPicturesRecyclerView.setAdapter(mAdapter);
@@ -125,15 +116,35 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
         mPicturesRecyclerView.setLayoutManager(layoutManager);
     }
 
-    private void updateProperty(FullProperty property) {
-        this.mFullProperty = property;
-        mAdapter.updateListPictures(mFullProperty.getPictureList());
+    /**
+     * if propertyId exit manage Layout to show
+     * then get Property by this id.
+     */
+    private void checkIfPropertyId() {
+        if (mPropertyId != null) {
+            mScrollViewDetailsProperty.setVisibility(View.VISIBLE);
+            mNoSelectedProperty.setVisibility(View.GONE);
+            mPropertiesViewModel.getPropertyById(mPropertyId).observe(getActivity(),this::updateProperty);
+        }else{
+            mScrollViewDetailsProperty.setVisibility(View.GONE);
+            mNoSelectedProperty.setVisibility(View.VISIBLE);
+        }
+    }
 
+    /**
+     * On received property from viewModel
+     * display information in the fragment.
+     * @param mFullProperty
+     */
+    private void updateProperty(FullProperty mFullProperty) {
+        property = mFullProperty;
         if (mFullProperty != null){
+            //Update pictures of this property in recyclerView
+            mAdapter.updateListPictures(mFullProperty.getPictureList());
+            //setUp information
             mDescription.setText(mFullProperty.getProperty().getDescription());
             mSurface.setText(String.valueOf(mFullProperty.getProperty().getSurface()));
             mNbrOfRooms.setText(String.valueOf(mFullProperty.getProperty().getNbrOfRooms()));
-
             mAddressStreet.setText(mFullProperty.getAddress().getStreet());
             if (mFullProperty.getAddress().getComplement_street() != null) {
                 mAddressStreetComplement.setText(mFullProperty.getAddress().getComplement_street());
@@ -146,14 +157,17 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
             mMapView.getMapAsync(this);
         }
 
-        List<String> facilities = property.getProperty().getFacilities();
+        List<String> facilities = mFullProperty.getProperty().getFacilities();
+        showingListOfFacilities(facilities);
+    }
+
+    /**
+     * Display facilities on view
+     * @param facilities
+     */
+    private void showingListOfFacilities(List<String> facilities) {
         if (!facilities.isEmpty()){
             mFacilitiesList.setVisibility(View.VISIBLE);
-            mFacilitiesSchool.setVisibility(View.GONE);
-            mFacilitiesStore.setVisibility(View.GONE);
-            mFacilitiesStation.setVisibility(View.GONE);
-            mFacilitiesPark.setVisibility(View.GONE);
-
             for (String facility: facilities) {
                 switch (facility){
                     case "School":
@@ -170,19 +184,32 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
                         break;
                 }
             }
-        } else {
-            mFacilitiesList.setVisibility(View.GONE);
         }
     }
 
+    /**
+     * hiding property on view to display correctly on get property.
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        mFacilitiesList.setVisibility(View.GONE);
+        mFacilitiesSchool.setVisibility(View.GONE);
+        mFacilitiesStore.setVisibility(View.GONE);
+        mFacilitiesStation.setVisibility(View.GONE);
+        mFacilitiesPark.setVisibility(View.GONE);
+    }
+
+    /**
+     * When map is ready got the address of property to show it with marker.
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         mGoogleMap.getUiSettings().setMapToolbarEnabled(false);
-
-        String formattedAddress = mFullProperty.getAddress().getFormatedAddress();
+        String formattedAddress = property.getAddress().getFormatedAddress();
         LatLng position = Utils.getLocationFromAddress(getContext(), formattedAddress);
-
         if (position != null){
             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(position));
             mGoogleMap.addMarker(new MarkerOptions()
@@ -191,6 +218,10 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
         }
     }
 
+    /**
+     * Save the propertyId to get it back on configurationChanged
+     * @param outState
+     */
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -201,6 +232,10 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
         }
     }
 
+    /**
+     * On click of a picture get it in storage, then display in Dialog box.
+     * @param picture
+     */
     @Override
     public void onClickPicture(Picture picture) {
         Bitmap bitmap = StorageUtils.getBitmapFromStorage(getActivity().getFilesDir(),getContext(),picture.getFile(),FOLDERNAME);

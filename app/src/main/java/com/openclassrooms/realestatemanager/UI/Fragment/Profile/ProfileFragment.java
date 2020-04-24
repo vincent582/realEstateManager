@@ -3,10 +3,7 @@ package com.openclassrooms.realestatemanager.UI.Fragment.Profile;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +12,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
-import com.openclassrooms.realestatemanager.Injection.Injection;
-import com.openclassrooms.realestatemanager.Injection.ViewModelFactory;
 import com.openclassrooms.realestatemanager.Model.User;
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.UI.ViewModels.UserViewModel;
+import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
 import com.openclassrooms.realestatemanager.Utils.DialogAuthentication;
 
 import butterknife.BindView;
@@ -29,31 +23,27 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_SHORT;
+import static com.openclassrooms.realestatemanager.UI.Activities.BaseActivity.PREFERENCES_NAME;
 
-public class ProfileFragment extends Fragment implements DialogAuthentication.DialogAuthenticationListener{
-
-    @BindView(R.id.picture_user_iv)
-    ImageView mUserImageView;
-    @BindView(R.id.user_name_tv)
-    TextView mUserTextView;
-    @BindView(R.id.connection_btn)
-    Button logInBtn;
-    @BindView(R.id.logout_btn)
-    Button logOutBtn;
-
-    private UserViewModel mUserViewModel;
-    private ViewModelFactory modelFactory;
-    private User mCurrentUser;
-    private SharedPreferences preferences;
-
-    public static String CURRENT_USER_ID = "CURRENT_USER_ID";
+public class ProfileFragment extends BaseFragment implements DialogAuthentication.DialogAuthenticationListener{
 
     public interface ConnectionCallback{
         void onConnectionManagement();
     }
 
+    @BindView(R.id.picture_user_iv) ImageView mUserImageView;
+    @BindView(R.id.user_name_tv) TextView mUserTextView;
+    @BindView(R.id.connection_btn) Button logInBtn;
+    @BindView(R.id.logout_btn) Button logOutBtn;
+
+    public static String CURRENT_USER_ID = "CURRENT_USER_ID";
+
+    private User mCurrentUser;
+    private SharedPreferences preferences;
+
     private ConnectionCallback mCallback;
 
+    //CONSTRUCTOR
     public ProfileFragment(ConnectionCallback connectionCallback) {
         this.mCallback = connectionCallback;
     }
@@ -64,20 +54,36 @@ public class ProfileFragment extends Fragment implements DialogAuthentication.Di
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this,view);
-        preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-        configureViewModel();
+        preferences = getActivity().getSharedPreferences(PREFERENCES_NAME,Context.MODE_PRIVATE);
+        configureViewModels(getContext());
         checkIfUser();
         return view;
     }
 
     /**
-     * Configure ViewModel to get UserViewModel instance with factory
+     * Manage on click SignIn button
      */
-    private void configureViewModel() {
-        modelFactory = Injection.provideViewModelFactory(getActivity());
-        mUserViewModel = new ViewModelProvider(this, modelFactory).get(UserViewModel.class);
+    @OnClick(R.id.connection_btn)
+    public void submit() {
+        configureSignIn();
     }
 
+    /**
+     * Manage on click SignOut button
+     * Clear SharedPrefrences
+     */
+    @OnClick(R.id.logout_btn)
+    public void logout(){
+        preferences.edit().clear().apply();
+        mCurrentUser = null;
+        onResume();
+        Snackbar.make(getView(),"You've been disconnected", LENGTH_SHORT).show();
+        mCallback.onConnectionManagement();
+    }
+
+    /**
+     * Check if user saved in SharedPreferences
+     */
     public void checkIfUser(){
         long userId = preferences.getLong(CURRENT_USER_ID,0);
         mUserViewModel.getUserById(userId).observe(getActivity(),user -> {
@@ -86,13 +92,12 @@ public class ProfileFragment extends Fragment implements DialogAuthentication.Di
         });
     }
 
+    /**
+     * Update view with userInformation
+     */
     private void updateView() {
         if (mCurrentUser != null) {
-            Glide.with(this)
-                .load(getResources().getIdentifier("no_picture_user", "drawable", getActivity().getPackageName()))
-                .centerCrop()
-                .into(mUserImageView);
-
+            mUserImageView.setVisibility(View.VISIBLE);
             mUserTextView.setText(mCurrentUser.getName());
             mUserImageView.setVisibility(View.VISIBLE);
             logInBtn.setVisibility(View.GONE);
@@ -105,22 +110,8 @@ public class ProfileFragment extends Fragment implements DialogAuthentication.Di
         }
     }
 
-    @OnClick(R.id.connection_btn)
-    public void submit() {
-        configureSignIn();
-    }
-
-    @OnClick(R.id.logout_btn)
-    public void logout(){
-        preferences.edit().clear().apply();
-        mCurrentUser = null;
-        updateView();
-        Snackbar.make(getView(),"You've been disconnected", LENGTH_SHORT).show();
-        mCallback.onConnectionManagement();
-    }
-
     /**
-     * Configure sign-in
+     * Show dialogAuthentication
      */
     private void configureSignIn() {
         DialogAuthentication dialog = new DialogAuthentication();
@@ -138,8 +129,24 @@ public class ProfileFragment extends Fragment implements DialogAuthentication.Di
         String userName = editTextUserName.getText().toString();
         EditText editTextPassword = dialogAuthentication.getDialog().findViewById(R.id.password_editText);
         String password = editTextPassword.getText().toString();
+        mUserViewModel.getUser(userName,password).observe(this,this::getConnectedUser);
+    }
 
-        mUserViewModel.getUser(userName,password).observe(this,this::getuser);
+    /**
+     * After connection edit preferences user_id
+     * and update View
+     * @param user
+     */
+    private void getConnectedUser(User user) {
+        if (user != null){
+            mCurrentUser = user;
+            preferences.edit().putLong(CURRENT_USER_ID, user.getUid()).apply();
+            onResume();
+            mCallback.onConnectionManagement();
+            Snackbar.make(getView(),"Successful authentication", LENGTH_SHORT).show();
+        }else{
+            Snackbar.make(getView(),"Authentication failed", LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -153,24 +160,39 @@ public class ProfileFragment extends Fragment implements DialogAuthentication.Di
         EditText editTextPassword = dialogAuthentication.getDialog().findViewById(R.id.password_editText);
         String password = editTextPassword.getText().toString();
         if (userName.isEmpty() || password.isEmpty()){
-            Snackbar.make(getView(),"Registration failed", LENGTH_SHORT).show();
+            Snackbar.make(getView(),"Registration failed, you didn't fill all fields.", LENGTH_SHORT).show();
         }else {
             User user = new User(userName, password);
-            mUserViewModel.createUser(user);
-            //TODO create user in db and conect it
-            Snackbar.make(getView(), "Successful registration", LENGTH_SHORT).show();
+            mUserViewModel.createUser(user).observe(this,this::getNewUserId);
         }
     }
 
-    private void getuser(User user) {
+    /**
+     * Get New User_id
+     * @param id
+     */
+    private void getNewUserId(Integer id) {
+        mUserViewModel.getUserById(id).observe(this,this::connectNewUser);
+    }
+
+    /**
+     * After Registration, edit preferences user_id and update View
+     * @param user
+     */
+    private void connectNewUser(User user) {
+        Log.e("TAG", "connectNewUser: "+user );
         if (user != null){
-            mCurrentUser = user;
             preferences.edit().putLong(CURRENT_USER_ID, user.getUid()).apply();
-            updateView();
+            mCurrentUser = user;
             mCallback.onConnectionManagement();
-            Snackbar.make(getView(),"Successful authentication", LENGTH_SHORT).show();
-        }else{
-            Snackbar.make(getView(),"Authentication failed", LENGTH_SHORT).show();
+            Snackbar.make(getView(),"Successful Registration", LENGTH_SHORT).show();
+            onResume();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        checkIfUser();
     }
 }

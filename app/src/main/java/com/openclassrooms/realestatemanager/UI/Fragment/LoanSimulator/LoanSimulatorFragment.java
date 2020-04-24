@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LoanSimulatorFragment extends Fragment {
+public class LoanSimulatorFragment extends Fragment implements View.OnClickListener {
 
     @BindView(R.id.seekBar) SeekBar mSeekBar;
     @BindView(R.id.simulator_nbr_of_years_tv) TextView mDisplayNbrOfYears;
@@ -33,16 +33,14 @@ public class LoanSimulatorFragment extends Fragment {
     @BindView(R.id.simulator_total_payment_tv) TextView mTotalPayment;
     @BindView(R.id.simulator_reset_fab) FloatingActionButton mResetFab;
 
-    private int mLoanAmount = 0;
-    private int mFinancialContribution = 0;
-    private float mAmountOfInterestPerYears = 0;
-    private float mAmountOfInterestFromAmountValues = 0;
-    private int mNbrOfYears = 0;
+    private int mLoanAmount;
+    private int mFinancialContribution;
+    private float mAmountOfInterestPerYears;
+    private float mAmountOfInterestFromAmountValues;
+    private int mNbrOfYears;
 
-    public LoanSimulatorFragment() {
-        // Required empty public constructor
-    }
-
+    //CONSTRUCTOR
+    public LoanSimulatorFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,16 +52,44 @@ public class LoanSimulatorFragment extends Fragment {
         setUpSeekBar();
         setUpLoanAmountEditText();
         setUpFinancialContributionEditText();
-
-        mResetFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setDefaultValues();
-            }
-        });
+        mResetFab.setOnClickListener(this);
         return view;
     }
 
+    /**
+     * set default value of variables
+     */
+    private void setDefaultValues() {
+        mLoanAmount = 0;
+        mLoanAmountEditText.setText("");
+        mFinancialContribution = 0;
+        mFinancialContributionEditText.setText("");
+        mSeekBar.setProgress(0);
+        mNbrOfYears = 0;
+        mAmountOfInterestFromAmountValues = 0;
+        mAmountOfInterestPerYears = 0;
+        totalLoanAmount();
+    }
+
+    /**
+     * Update field in view with all values
+     */
+    private void totalLoanAmount() {
+        mDisplayNbrOfYears.setText(String.valueOf(mNbrOfYears)+ " year(s)");
+        float mTotalPercentOfInterest = mAmountOfInterestFromAmountValues + mAmountOfInterestPerYears;
+        mDisplayRateFees.setText(String.format("%.2f", mTotalPercentOfInterest) + " %");
+        float totalAmountOfInterest = mLoanAmount * mTotalPercentOfInterest / 100;
+        float totalAmountWithFees = mLoanAmount + totalAmountOfInterest;
+        mTotalPayment.setText((String.format("%,.2f",totalAmountWithFees) + " $"));
+        if (mNbrOfYears > 0){
+            float totalPerMonth = totalAmountWithFees / mNbrOfYears / 12;
+            mMonthlyPayment.setText(String.format("%,.2f",totalPerMonth) + " $");
+        }
+    }
+
+    /**
+     * Get amount of loan on user typing
+     */
     private void setUpLoanAmountEditText() {
         mLoanAmountEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -86,6 +112,9 @@ public class LoanSimulatorFragment extends Fragment {
         });
     }
 
+    /**
+     * Get amount of financial contribution on user typing
+     */
     private void setUpFinancialContributionEditText() {
         mFinancialContributionEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -108,6 +137,9 @@ public class LoanSimulatorFragment extends Fragment {
         });
     }
 
+    /**
+     * Manage number of years
+     */
     private void setUpSeekBar() {
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -124,53 +156,38 @@ public class LoanSimulatorFragment extends Fragment {
         });
     }
 
+    /**
+     * calculate the interest fees by years
+     */
     private void calculateInterestWhenChangeNbrOfYears(){
-            mAmountOfInterestPerYears = (float) (0.29 * mNbrOfYears);
+            mAmountOfInterestPerYears = (float) (0.27 * mNbrOfYears);
             totalLoanAmount();
     }
 
+    /**
+     * Calculate percent of financial amount of customer
+     * then calculate the interest fees from this percent
+     */
     private void calculateInterestFromAmount(){
         int percentOfAmount = (100 * mFinancialContribution) / mLoanAmount;
         if (percentOfAmount <= 10){
-            mAmountOfInterestFromAmountValues = (float) 1.30;
+            mAmountOfInterestFromAmountValues = (float) 9;
         }else if(percentOfAmount > 10 && percentOfAmount <= 30){
-            mAmountOfInterestFromAmountValues = (float) 1.1;
+            mAmountOfInterestFromAmountValues = (float) 7.10;
         }else if(percentOfAmount > 30 && percentOfAmount <= 50){
-            mAmountOfInterestFromAmountValues = (float) 0.80;
+            mAmountOfInterestFromAmountValues = (float) 6.50;
         }else if(percentOfAmount > 50 && percentOfAmount <= 70){
-            mAmountOfInterestFromAmountValues = (float) 0.50;
+            mAmountOfInterestFromAmountValues = (float) 4.25;
         }else if(percentOfAmount > 70 && percentOfAmount <= 90){
-            mAmountOfInterestFromAmountValues = (float) 0.20;
+            mAmountOfInterestFromAmountValues = (float) 2.75;
         }else {
-            mAmountOfInterestFromAmountValues = 0;
+            mAmountOfInterestFromAmountValues = (float) 1.25;
         }
         totalLoanAmount();
     }
 
-    private void totalLoanAmount() {
-        mDisplayNbrOfYears.setText(String.valueOf(mNbrOfYears)+ " year(s)");
-        int totalAmountWithoutFees = mLoanAmount - mFinancialContribution;
-        float mTotalInterest = mAmountOfInterestFromAmountValues + mAmountOfInterestPerYears;
-        mDisplayRateFees.setText(String.format("%.2f", mTotalInterest) + " %");
-        float totalAmountOfInterest = totalAmountWithoutFees * mTotalInterest / 100;
-        float totalAmountWithFees = totalAmountWithoutFees + totalAmountOfInterest;
-        mTotalPayment.setText((String.format("%,.2f",totalAmountWithFees) + " $"));
-        if (mNbrOfYears > 0){
-            float totalPerMonth = totalAmountWithFees / mNbrOfYears / 12;
-            mMonthlyPayment.setText(String.format("%,.2f",totalPerMonth) + " $");
-        }
+    @Override
+    public void onClick(View v) {
+        setDefaultValues();
     }
-
-    private void setDefaultValues() {
-        mLoanAmountEditText.setText("");
-        mLoanAmount = 0;
-        mFinancialContributionEditText.setText("");
-        mFinancialContribution = 0;
-        mSeekBar.setProgress(0);
-        mNbrOfYears = 0;
-        mAmountOfInterestFromAmountValues = 0;
-        mAmountOfInterestPerYears = 0;
-        totalLoanAmount();
-    }
-
 }

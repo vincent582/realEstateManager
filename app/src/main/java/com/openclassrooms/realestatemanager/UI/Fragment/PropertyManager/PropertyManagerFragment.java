@@ -1,18 +1,11 @@
 package com.openclassrooms.realestatemanager.UI.Fragment.PropertyManager;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +16,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -35,6 +33,7 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
 import com.openclassrooms.realestatemanager.Utils.DialogDeleteImage;
 import com.openclassrooms.realestatemanager.Utils.DialogImagePreview;
+import com.openclassrooms.realestatemanager.Utils.NotificationService;
 import com.openclassrooms.realestatemanager.Utils.StorageUtils;
 
 import java.io.IOException;
@@ -49,6 +48,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.app.Activity.RESULT_OK;
+import static com.openclassrooms.realestatemanager.UI.Activities.BaseActivity.PREFERENCES_NAME;
 import static com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity.PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER;
 import static com.openclassrooms.realestatemanager.UI.Fragment.Profile.ProfileFragment.CURRENT_USER_ID;
 
@@ -99,13 +99,15 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
     //Folder to Stock image on internalStorage
     public static final String FOLDERNAME = "RealEstateManager_images";
     private static final String PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
+    //For permission
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int RC_IMAGE_PERMS = 200;
     private static final int RC_CHOOSE_PHOTO = 300;
+    //For data
     private PicturesRecyclerViewAdapter mAdapter;
     private Bitmap bitmap;
     private List<Picture> mListPictures = new ArrayList<>();
-    private Picture pictureTodelete;
+    private Picture pictureToDelete;
     private List<Picture> mListPicturesToDelete = new ArrayList<>();
     private List<String> mListFacilities = new ArrayList<>();
     private long userId;
@@ -131,8 +133,7 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
     }
 
     private void getCurrentUser() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());;
-        userId = preferences.getLong(CURRENT_USER_ID,0);
+        userId = getActivity().getSharedPreferences(PREFERENCES_NAME,Context.MODE_PRIVATE).getLong(CURRENT_USER_ID,0);
     }
 
     private void configureRecyclerView() {
@@ -470,8 +471,7 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         mAddressViewModel.updateAddress(address);
 
         deletePictureInDatabase();
-
-        //showConfirmationMessage("updated");
+        showConfirmationMessage("updated");
     }
 
     /**
@@ -510,7 +510,7 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
             picture.setPropertyId(idProperty);
             mPictureViewModel.createPicture(picture);
         }
-        //showConfirmationMessage("added");
+        showConfirmationMessage("added");
     }
 
     /**
@@ -519,7 +519,7 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
      */
     @Override
     public void onClickPicture(Picture picture) {
-        pictureTodelete = picture;
+        pictureToDelete = picture;
         Bitmap bitmap = StorageUtils.getBitmapFromStorage(getActivity().getFilesDir(),getContext(),picture.getFile(),FOLDERNAME);
         DialogDeleteImage dialog = new DialogDeleteImage(bitmap);
         dialog.setTargetFragment(this,1);
@@ -533,22 +533,18 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
      */
     @Override
     public void onDialogDeleteClick(DialogDeleteImage dialogDeleteImage) {
-        mListPictures.remove(pictureTodelete);
-        mListPicturesToDelete.add(pictureTodelete);
+        mListPictures.remove(pictureToDelete);
+        mListPicturesToDelete.add(pictureToDelete);
         mAdapter.updateListPictures(mListPictures);
     }
-
-
+    
     /**
      * Showing Confirmation message in notification
      * @param message
      */
-    /*
     private void showConfirmationMessage(String message){
-        String messageText = "The property "+ mFullProperty.getProperty().getType()+" at the "+ mFullProperty.getAddress().getFormatedAddress() +" was successfully "+message+"!";
+        String messageText = "The property "+ mFullProperty.getProperty().getType()+" on the number "+ mFullProperty.getAddress().getNumber() +" of the street \"" + mFullProperty.getAddress().getStreet() +"\" in the district of \""+ mFullProperty.getAddress().getDistrict() +"\" was successfully "+message+"!";
         NotificationService notificationService = new NotificationService(getContext());
         notificationService.sendNotification(1,messageText);
     }
-    */
-
 }

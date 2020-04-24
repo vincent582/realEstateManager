@@ -2,7 +2,6 @@ package com.openclassrooms.realestatemanager.UI.Fragment.ListProperties;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,7 +12,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.Model.FullProperty;
-import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.Utils.StorageUtils;
 
@@ -44,6 +42,7 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder implements Vie
         void onPropertyClick(int propertyId);
     }
 
+    //CONSTRUCTOR
     public PropertiesViewHolder(@NonNull View itemView, Context context, OnPropertyListener propertyListener) {
         super(itemView);
         this.mContext = context;
@@ -51,19 +50,22 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder implements Vie
         ButterKnife.bind(this, itemView);
     }
 
+    /**
+     * Update view with property values
+     * @param property
+     * @param index
+     */
     public void updateView(FullProperty property, int index) {
         this.mProperty = property;
+        //get first image of property image list if not empty
         if (!mProperty.getPictureList().isEmpty()) {
             Bitmap bitmap = StorageUtils.getBitmapFromStorage(mContext.getFilesDir(), mContext, property.getPictureList().get(0).getFile(), FOLDERNAME);
             mPictureImageView.setImageBitmap(bitmap);
         }
-
         mPropertyType.setText(property.getProperty().getType());
         mPropertyPrice.setText("$"+ String.format("%,d", property.getProperty().getPrice()));
         mPropertyDistrict.setText(property.getAddress().getDistrict());
-
         mItemView.setOnClickListener(this);
-
         changeBackgroundColor(index);
     }
 

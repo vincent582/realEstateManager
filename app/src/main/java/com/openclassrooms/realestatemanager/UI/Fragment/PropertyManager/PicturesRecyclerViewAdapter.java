@@ -20,6 +20,7 @@ public class PicturesRecyclerViewAdapter extends RecyclerView.Adapter<PicturesVi
     private PicturesViewHolder.ListenerPictureClick mCallback;
     private List<Picture> mListPictures = new ArrayList<>();
 
+    //CONSTRUCTOR
     public PicturesRecyclerViewAdapter(Context context, PicturesViewHolder.ListenerPictureClick callback){
         this.mContext = context;
         this.mCallback = callback;

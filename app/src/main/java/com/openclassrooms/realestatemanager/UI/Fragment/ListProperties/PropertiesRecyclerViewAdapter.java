@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.openclassrooms.realestatemanager.Model.Address;
 import com.openclassrooms.realestatemanager.Model.FullProperty;
-import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 
 import java.util.List;
@@ -22,6 +20,7 @@ public class PropertiesRecyclerViewAdapter extends RecyclerView.Adapter<Properti
     private PropertiesViewHolder.OnPropertyListener mPropertyListener;
     private int index = 0;
 
+    //CONSTRUCTOR
     public PropertiesRecyclerViewAdapter(List<FullProperty> listProperties, PropertiesViewHolder.OnPropertyListener propertyListener, Context context) {
         this.mListProperties = listProperties;
         this.mPropertyListener = propertyListener;
@@ -49,6 +48,10 @@ public class PropertiesRecyclerViewAdapter extends RecyclerView.Adapter<Properti
         }
     }
 
+    /**
+     * Onclick on item set the value of index equals to the property_id
+     * @param propertyId
+     */
     public void updateBackgroundColor(int propertyId){
         for (FullProperty property: mListProperties) {
             if (property.getProperty().getId() == propertyId){

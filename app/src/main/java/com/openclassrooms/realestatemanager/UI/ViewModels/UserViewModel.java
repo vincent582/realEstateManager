@@ -13,33 +13,26 @@ public class UserViewModel extends ViewModel {
 
     private final UserRepository mUserRepository;
     private final Executor mExecutor;
-    private LiveData<User> mCurrentUser;
 
     public UserViewModel(UserRepository userRepository, Executor executor) {
         mUserRepository = userRepository;
         mExecutor = executor;
     }
 
-    public LiveData<User> getCurrentUser(){
-        if (mCurrentUser == null){
-            return new MutableLiveData<>();
-        }
-        return mCurrentUser;
-    }
-
     public LiveData<User> getUser(String name, String password){
-        mCurrentUser = mUserRepository.getUser(name,password);
-        return mCurrentUser;
+         return mUserRepository.getUser(name,password);
     }
 
     public LiveData<User> getUserById(long id){
-        mCurrentUser = mUserRepository.getUser(id);
-        return mCurrentUser;
+        return mUserRepository.getUser(id);
     }
 
-    public void createUser(User user){
+    public MutableLiveData<Integer> createUser(User user){
+        MutableLiveData<Integer> idCreatedUser = new MutableLiveData<>();
         mExecutor.execute(()-> {
-             mUserRepository.createUser(user);
+            long idReturn = mUserRepository.createUser(user);
+            idCreatedUser.postValue((int) idReturn);
         });
+        return idCreatedUser;
     }
 }

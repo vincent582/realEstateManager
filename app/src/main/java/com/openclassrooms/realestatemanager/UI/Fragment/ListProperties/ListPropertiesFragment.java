@@ -2,32 +2,23 @@ package com.openclassrooms.realestatemanager.UI.Fragment.ListProperties;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.openclassrooms.realestatemanager.Database.RealEstateManagerDataBase;
-import com.openclassrooms.realestatemanager.Injection.Injection;
-import com.openclassrooms.realestatemanager.Injection.ViewModelFactory;
-import com.openclassrooms.realestatemanager.Model.Address;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.openclassrooms.realestatemanager.Model.FullProperty;
-import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity;
 import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.DetailsProperty.DetailsPropertyFragment;
 
 import java.util.List;
-import java.util.concurrent.Executor;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,9 +30,9 @@ import static com.openclassrooms.realestatemanager.UI.Activities.DetailsProperty
  */
 public class ListPropertiesFragment extends BaseFragment implements PropertiesViewHolder.OnPropertyListener {
 
-    @BindView(R.id.list_properties_recycler_view)
-    RecyclerView mRecyclerView;
+    @BindView(R.id.list_properties_recycler_view) RecyclerView mRecyclerView;
 
+    //Interface
     public interface sendPropertyIdToMainActivityOnClickListener{
         void callbackPropertyId(int propertyId);
     }
@@ -49,11 +40,16 @@ public class ListPropertiesFragment extends BaseFragment implements PropertiesVi
     private sendPropertyIdToMainActivityOnClickListener mListener;
 
     private PropertiesRecyclerViewAdapter mAdapter;
-    private List<FullProperty> mListProperties;
     private boolean twoPanes;
 
+    //CONSTRUCTOR
     public ListPropertiesFragment(){}
 
+    /**
+     * Constructor with parameters
+     * @param twoPanes
+     * @param listener
+     */
     public ListPropertiesFragment(boolean twoPanes,sendPropertyIdToMainActivityOnClickListener listener) {
         this.twoPanes = twoPanes;
         this.mListener = listener;
@@ -62,28 +58,30 @@ public class ListPropertiesFragment extends BaseFragment implements PropertiesVi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         ButterKnife.bind(this,view);
-
         configureViewModels(getContext());
-        mPropertiesViewModel.getFullProperties().observe(getViewLifecycleOwner(),this::updateListProperties);
-
+        //get all property from viewModel
+        mPropertiesViewModel.getFullProperties().observe(getViewLifecycleOwner(),this::configureRecyclerView);
         return view;
     }
 
-    private void updateListProperties(List<FullProperty> properties) {
-        mListProperties = properties;
-        configureRecyclerView();
-    }
-
-    private void configureRecyclerView() {
-        mAdapter = new PropertiesRecyclerViewAdapter(mListProperties,this,getContext());
+    /**
+     * On received list from viewModel, pass it to recyclerView
+     * @param properties
+     */
+    private void configureRecyclerView(List<FullProperty> properties) {
+        mAdapter = new PropertiesRecyclerViewAdapter(properties,this,getContext());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
 
+    /**
+     * Get onclick property interface from view holder, received propertyId
+     * Pass this propertyId in DetailsFragment or DetailsActivity depends on twoPanes mode.
+     * @param propertyId
+     */
     @Override
     public void onPropertyClick(int propertyId) {
         if (twoPanes){
@@ -100,6 +98,11 @@ public class ListPropertiesFragment extends BaseFragment implements PropertiesVi
         mAdapter.updateBackgroundColor(propertyId);
     }
 
+    /**
+     * If configuration changed update the twoPanes mode
+     * @param twoPanes
+     * @param listener
+     */
     public void updateTwoPanesAndListenerToFragment(boolean twoPanes, sendPropertyIdToMainActivityOnClickListener listener) {
         this.twoPanes = twoPanes;
         this.mListener = listener;

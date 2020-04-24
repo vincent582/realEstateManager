@@ -16,8 +16,7 @@ import static com.openclassrooms.realestatemanager.UI.Activities.DetailsProperty
 
 public class PropertyManagerActivity extends AppCompatActivity {
 
-    @BindView(R.id.activity_main_toolbar)
-    Toolbar mToolbar;
+    @BindView(R.id.activity_main_toolbar) Toolbar mToolbar;
 
     private PropertyManagerFragment mPropertyManagerFragment;
     private Integer mPropertyId;
@@ -28,22 +27,36 @@ public class PropertyManagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_property_manager);
         ButterKnife.bind(this);
+        configureToolbar();
+        checkIfIntentAsExtra();
+        configureAndShowPropertyManagerFragment();
+    }
 
+    /**
+     * Configure toolbar to manage click back from this activity.
+     */
+    private void configureToolbar() {
+        setSupportActionBar(mToolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+    }
+
+    /**
+     * check if intent as extra to add it in bundle.
+     */
+    private void checkIfIntentAsExtra() {
         if (getIntent().hasExtra(PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER)){
             mPropertyId = getIntent().getIntExtra(PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER,0);
             bundle.putInt(PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER,mPropertyId);
         }
-
-        setSupportActionBar(mToolbar);
-        ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
-
-        configureAndShowPropertyManagerFragment();
     }
 
+    /**
+     * Manage to show the PropertyManagerFragment in the frameLayout of this activity.
+     * Pass the bundle in argument to get it in fragment.
+     */
     private void configureAndShowPropertyManagerFragment() {
         mPropertyManagerFragment = (PropertyManagerFragment) getSupportFragmentManager().findFragmentById(R.id.property_manager_activity_frame_layout);
-
         if (mPropertyManagerFragment == null){
             mPropertyManagerFragment = new PropertyManagerFragment();
             mPropertyManagerFragment.setArguments(bundle);

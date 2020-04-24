@@ -1,51 +1,44 @@
 package com.openclassrooms.realestatemanager.UI.Activities;
 
-import android.view.Menu;
-
+import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.openclassrooms.realestatemanager.R;
-
 import pub.devrel.easypermissions.EasyPermissions;
-
 import static com.openclassrooms.realestatemanager.UI.Fragment.Profile.ProfileFragment.CURRENT_USER_ID;
 
 public class BaseActivity extends AppCompatActivity {
 
+    public static String PREFERENCES_NAME = "com.openclassrooms.realestatemanager.prefereneces";
     protected long currentUserId;
     protected boolean twoPanes;
 
+    /**
+     * Check if a currentUser is logged
+     * @return
+     */
     public boolean isCurrentUser(){
         if (currentUserId != 0) return true;
         return false;
     }
 
     /**
-     * Showing the right menu for Main Activity depends if User connected
-     * and the twoPanes mode
-     * @param menu
-     * @return
+     * onResume Activity update currentUserId
+     * cancel the displayed menu
      */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (isCurrentUser()) {
-            if (twoPanes) {
-                getMenuInflater().inflate(R.menu.activity_main_menu_two_panes_toolbar, menu);
-            } else {
-                getMenuInflater().inflate(R.menu.main_activity_menu_toolbar, menu);
-            }
-        }
-        return true;
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
-        currentUserId = getPreferences(MODE_PRIVATE).getLong(CURRENT_USER_ID,0);
+        currentUserId = getSharedPreferences(PREFERENCES_NAME,Context.MODE_PRIVATE).getLong(CURRENT_USER_ID,0);
         invalidateOptionsMenu();
     }
 
+    /**
+     * Get the result of permission with EasyPermissions dependency.
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

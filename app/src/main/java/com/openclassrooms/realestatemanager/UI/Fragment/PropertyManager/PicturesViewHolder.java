@@ -43,7 +43,6 @@ public class PicturesViewHolder extends RecyclerView.ViewHolder {
         Bitmap bitmap = StorageUtils.getBitmapFromStorage(mContext.getFilesDir(),mContext,picture.getFile(),FOLDERNAME);
         mPropertyPictureImageView.setImageBitmap(bitmap);
         mPropertyPictureDescriptionTextView.setText(picture.getDescription());
-
         mPropertyPictureImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

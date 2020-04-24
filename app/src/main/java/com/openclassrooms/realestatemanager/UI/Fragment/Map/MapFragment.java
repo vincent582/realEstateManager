@@ -4,13 +4,12 @@ import android.Manifest;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -23,15 +22,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
-import com.openclassrooms.realestatemanager.Injection.Injection;
-import com.openclassrooms.realestatemanager.Injection.ViewModelFactory;
-import com.openclassrooms.realestatemanager.Model.Address;
-import com.openclassrooms.realestatemanager.Model.Property;
+import com.openclassrooms.realestatemanager.Model.FullProperty;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity;
+import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.DetailsProperty.DetailsPropertyFragment;
-import com.openclassrooms.realestatemanager.UI.ViewModels.AddressViewModel;
-import com.openclassrooms.realestatemanager.UI.ViewModels.PropertiesViewModel;
 import com.openclassrooms.realestatemanager.Utils.Utils;
 
 import java.util.List;
@@ -39,28 +34,25 @@ import java.util.List;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_SHORT;
 import static com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity.PROPERTY_ID_EXTRA;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class MapFragment extends BaseFragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private static final String PERMS = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final int RC_LOCATION_PERMS = 100;
+
     private final boolean twoPanes;
     private final boolean isUserConnected;
-
     private View mView;
     private FusedLocationProviderClient fusedLocationClient;
     private Location mCurrentUserLocation;
     private GoogleMap mMap;
+    private List<FullProperty> mListProperties;
 
-    private PropertiesViewModel mPropertiesViewModel;
-    protected AddressViewModel mAddressViewModel;
-    private List<Property> mListProperties;
-
+    //CONSTRUCTOR
     public MapFragment(boolean twoPanes, boolean currentUser){
         this.twoPanes = twoPanes;
         this.isUserConnected = currentUser;
@@ -69,25 +61,51 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_map, container, false);
-        configureViewModel();
+        configureViewModels(getActivity());
+        mPropertiesViewModel.getFullProperties().observe(getActivity(),this::getAllProperties);
         checkPermission();
         return mView;
     }
 
-    private void configureViewModel() {
-        ViewModelFactory modelFactory = Injection.provideViewModelFactory(getActivity());
-        mPropertiesViewModel = new ViewModelProvider(getActivity(),modelFactory).get(PropertiesViewModel.class);
-        mAddressViewModel = new ViewModelProvider(getActivity(),modelFactory).get(AddressViewModel.class);
-        mPropertiesViewModel.getProperties().observe(getActivity(),this::getAllProperties);
+    /**
+     * get list of all properties
+     * @param fullProperties
+     */
+    private void getAllProperties(List<FullProperty> fullProperties) {
+        mListProperties = fullProperties;
     }
 
-    private void getAllProperties(List<Property> properties) {
-        mListProperties = properties;
+    /**
+     * Check if permission to access location are granted
+     * then get map fragment and move camera to user location
+     */
+    @AfterPermissionGranted(RC_LOCATION_PERMS)
+    public void checkPermission() {
+        if (!EasyPermissions.hasPermissions(getActivity(),PERMS)) {
+            EasyPermissions.requestPermissions(this, "We need your permission to access to your location.", RC_LOCATION_PERMS, PERMS);
+            return;
+        }else {
+            if (isUserConnected) {
+                configureMapFragment();
+                fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
+                fusedLocationClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        mCurrentUserLocation = location;
+                        movePositionOnMap();
+                    }
+                });
+            }else{
+                Snackbar.make(mView,"No user connected.", Snackbar.LENGTH_LONG).show();
+            }
+        }
     }
 
-    public void getMapFragment(){
+    /**
+     * get Google map fragment
+     */
+    public void configureMapFragment(){
         if (mMap != null) {
             return;
         }else {
@@ -103,28 +121,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         mMap.setOnMarkerClickListener(this);
     }
 
-    @AfterPermissionGranted(RC_LOCATION_PERMS)
-    public void checkPermission() {
-        if (!EasyPermissions.hasPermissions(getActivity(),PERMS)) {
-            EasyPermissions.requestPermissions(this, "We need your permission to access to your location.", RC_LOCATION_PERMS, PERMS);
-            return;
-        }else {
-            if (isUserConnected) {
-                getMapFragment();
-                fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
-                fusedLocationClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        mCurrentUserLocation = location;
-                        movePositionOnMap();
-                    }
-                });
-            }else{
-                Snackbar.make(mView,"No user connected.", Snackbar.LENGTH_LONG).show();
-            }
-        }
-    }
-
+    /**
+     * Move map camera to user location
+     */
     private void movePositionOnMap() {
         if (mCurrentUserLocation != null) {
             mMap.setMyLocationEnabled(true);
@@ -132,23 +131,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(mCurrentUserLocation.getLatitude(),
                     mCurrentUserLocation.getLongitude()), 12));
-            getAddressForProperties();
+            putMarkersOnMap();
         }
     }
 
-    private void getAddressForProperties() {
+    /**
+     * Put markers on map foreach properties
+     */
+    private void putMarkersOnMap() {
         if (!mListProperties.isEmpty()){
-            for (Property property: mListProperties) {
-                mAddressViewModel.getAddressOfProperty(property.getId()).observe(this,this::putMarkerOnMap);
+            for (FullProperty property: mListProperties) {
+                LatLng latLng = Utils.getLocationFromAddress(getContext(), property.getAddress().getFormatedAddress());
+                if (latLng != null) {
+                    Marker marker = mMap.addMarker(new MarkerOptions().position(latLng));
+                    marker.setTag(property.getAddress().getPropertyId());
+                }
             }
-        }
-    }
-
-    private void putMarkerOnMap(Address address) {
-        LatLng latLng = Utils.getLocationFromAddress(getContext(), address.getFormatedAddress());
-        if (latLng != null) {
-            Marker marker = mMap.addMarker(new MarkerOptions().position(latLng));
-            marker.setTag(address.getPropertyId());
         }
     }
 
@@ -158,6 +156,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         checkPermission();
     }
 
+    /**
+     * Manage click on marker to start Details Activity/Fragment
+     * @param marker
+     * @return
+     */
     @Override
     public boolean onMarkerClick(Marker marker) {
         int propertyId = (int) marker.getTag();

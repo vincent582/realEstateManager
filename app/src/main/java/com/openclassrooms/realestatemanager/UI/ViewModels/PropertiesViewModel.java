@@ -16,7 +16,7 @@ public class PropertiesViewModel extends ViewModel {
     private PropertiesRepository mPropertiesRepository;
     private Executor mExecutor;
 
-    private LiveData<List<Property>> mPropertyList;
+    private LiveData<List<FullProperty>> mPropertyList;
     private MutableLiveData<Integer> idCreatedProperty = new MutableLiveData<>();
 
     public PropertiesViewModel(PropertiesRepository propertiesRepository, Executor executor) {
@@ -26,15 +26,13 @@ public class PropertiesViewModel extends ViewModel {
 
     public void init(){
         if (mPropertyList == null){
-            mPropertyList = mPropertiesRepository.getProperties();
+            mPropertyList = mPropertiesRepository.getFullProperties();
         }
         return;
     }
 
-    public LiveData<List<Property>> getProperties(){ return mPropertyList; }
-
     public LiveData<List<FullProperty>> getFullProperties(){
-        return mPropertiesRepository.getFullProperties();
+        return mPropertyList;
     }
 
     public LiveData<FullProperty> getPropertyById(int id) { return mPropertiesRepository.getPropertyById(id); }

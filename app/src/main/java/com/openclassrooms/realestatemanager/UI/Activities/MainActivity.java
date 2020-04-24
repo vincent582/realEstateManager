@@ -1,54 +1,38 @@
 package com.openclassrooms.realestatemanager.UI.Activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import com.openclassrooms.realestatemanager.Injection.Injection;
-import com.openclassrooms.realestatemanager.Injection.ViewModelFactory;
-import com.openclassrooms.realestatemanager.Model.User;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.DetailsProperty.DetailsPropertyFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.ListProperties.ListPropertiesFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.LoanSimulator.LoanSimulatorFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.Map.MapFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.Profile.ProfileFragment;
-import com.openclassrooms.realestatemanager.UI.ViewModels.UserViewModel;
-import com.openclassrooms.realestatemanager.Utils.DialogAuthentication;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_SHORT;
 import static com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity.PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER;
-import static com.openclassrooms.realestatemanager.UI.Fragment.Profile.ProfileFragment.CURRENT_USER_ID;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, ListPropertiesFragment.sendPropertyIdToMainActivityOnClickListener , ProfileFragment.ConnectionCallback {
 
-    @BindView(R.id.activity_main_toolbar)
-    Toolbar mToolbar;
-    @BindView(R.id.activity_main_drawer_layout)
-    DrawerLayout mDrawerLayout;
-    @BindView(R.id.activity_main_host_frame_layout)
-    FrameLayout mFrameLayout;
-    @BindView(R.id.activity_main_navigation_view)
-    NavigationView mNavigationView;
+    @BindView(R.id.activity_main_toolbar) Toolbar mToolbar;
+    @BindView(R.id.activity_main_drawer_layout) DrawerLayout mDrawerLayout;
+    @BindView(R.id.activity_main_host_frame_layout) FrameLayout mHostFrameLayout;
+    @BindView(R.id.activity_main_navigation_view) NavigationView mNavigationView;
 
     private ListPropertiesFragment mListPropertiesFragment;
     private DetailsPropertyFragment mDetailsPropertyFragment;
@@ -59,22 +43,32 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        currentUserId = getPreferences(MODE_PRIVATE).getLong(CURRENT_USER_ID,0);
         configureToolbar();
         configureDrawer();
         checkIfTwoPanes();
-        configureAndShowListFragment();
+        configureAndShowHostFragment();
         configureAndShowDetailsFragment();
         mNavigationView.setNavigationItemSelectedListener(this);
     }
 
     /**
-     * Check if the layout of details Activity is display.
+     * Configure toolbar and manage the hamburger icon for navigation drawer
+     */
+    private void configureToolbar() {
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
+
+    /**
+     * If the frame layout for details Activity is display, the twoPane mode is active.
      */
     private void checkIfTwoPanes() {
         if (findViewById(R.id.details_activity_frame_layout) != null) twoPanes = true;
     }
 
+    /**
+     * Configure navigationDrawer and mange click on hamburger icon
+     */
     private void configureDrawer() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar,R.string.drawer_layout_open,R.string.drawer_layout_close);
         mDrawerLayout.addDrawerListener(toggle);
@@ -82,17 +76,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         toggle.syncState();
     }
 
-    private void configureToolbar() {
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-    }
-
     /**
      * Get host layout to show ListPropertyFragment
      * If fragment already created update TwoPanes
      */
-    private void configureAndShowListFragment() {
+    private void configureAndShowHostFragment() {
+        //TODO manage differently cause bug on rotation screen if the host fragment is not instance of ListPropertiesFragment
         mListPropertiesFragment = (ListPropertiesFragment) getSupportFragmentManager().findFragmentById(R.id.activity_main_host_frame_layout);
         if (mListPropertiesFragment == null){
             mListPropertiesFragment = new ListPropertiesFragment(twoPanes,this);
@@ -210,8 +199,25 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     /**
+     * Display Different menu on this activity if User logged and the twoPanes mode is active.
+     * @param menu
+     * @return
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (isCurrentUser()) {
+            if (twoPanes) {
+                getMenuInflater().inflate(R.menu.activity_main_menu_two_panes_toolbar, menu);
+            } else {
+                getMenuInflater().inflate(R.menu.main_activity_menu_toolbar, menu);
+            }
+        }
+        return true;
+    }
+
+    /**
      * Get propertyId from ListPropertyFragment Listener
-     * To give right property to update in ManagePropertyActivity
+     * To give right propertyId in intent when start ManagePropertyActivity
      * @param propertyId
      */
     @Override
@@ -219,6 +225,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         this.mPropertyId = propertyId;
     }
 
+    /**
+     * Callback From Profile fragment to call the onResume function
+     * For update menu if user logged or not.
+     */
     @Override
     public void onConnectionManagement() {
         onResume();

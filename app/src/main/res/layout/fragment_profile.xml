@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.29"
-        tools:src="@drawable/no_picture_user" />
+        android:src="@drawable/no_picture_user" />
 
     <TextView
         android:id="@+id/user_name_tv"

@@ -91,11 +91,11 @@ public class Address {
     }
 
     public String getFormatedAddress(){
-        String formatedAddress = number + " " +street+" ";
+        String formatedAddress = number + ", " +street+", ";
         if (complement_street!= null){
-            formatedAddress += complement_street+" ";
+            formatedAddress += complement_street+", ";
         }
-        formatedAddress += district+" "+state+" "+postCode+" "+country;
+        formatedAddress += district+", "+state+", "+postCode+", "+country;
         return formatedAddress;
     }
 
