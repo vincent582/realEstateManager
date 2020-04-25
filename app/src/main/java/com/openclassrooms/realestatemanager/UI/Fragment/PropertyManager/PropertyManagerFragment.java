@@ -167,13 +167,11 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         mListPictures = fullProperty.getPictureList();
         mAdapter.updateListPictures(mListPictures);
 
-        //TODO set defaultvalue of spinner
         mPropertyTypeSpinner.setSelection(Dummy.propertyType.indexOf(fullProperty.getProperty().getType()));
         mPropertyPrice.setText(String.valueOf(fullProperty.getProperty().getPrice()));
         mPropertyDescription.setText(fullProperty.getProperty().getDescription());
         mPropertySurface.setText(String.valueOf(fullProperty.getProperty().getSurface()));
         mPropertyNbrOfRooms.setText(String.valueOf(fullProperty.getProperty().getNbrOfRooms()));
-        //TODO add facilities
         List<String> facilities = mFullProperty.getProperty().getFacilities();
         if (facilities != null){
             for (String facility: facilities) {
@@ -201,7 +199,6 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         mPropertyAddressPostCode.setText(String.valueOf(mFullProperty.getAddress().getPostCode()));
         mPropertyAddressCountry.setText(mFullProperty.getAddress().getCountry());
 
-        //TODO add isSold boolean
         if (mFullProperty.getProperty().getSold()){
             mCheckboxIsSold.setChecked(true);
         }
@@ -446,7 +443,6 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         property.setDescription(mDescription);
         property.setFacilities(mListFacilities);
 
-        //TODO getValue of checkbox sold
         property.setSold(mIsSold);
         property.setDateOfSale(new Date());
 
@@ -537,7 +533,7 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         mListPicturesToDelete.add(pictureToDelete);
         mAdapter.updateListPictures(mListPictures);
     }
-    
+
     /**
      * Showing Confirmation message in notification
      * @param message

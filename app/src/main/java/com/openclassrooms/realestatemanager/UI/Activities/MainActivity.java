@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -77,19 +78,24 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     /**
-     * Get host layout to show ListPropertyFragment
-     * If fragment already created update TwoPanes
+     * Manage host layout to show ListPropertyFragment
+     * If fragment already created update TwoPanes.
      */
     private void configureAndShowHostFragment() {
-        //TODO manage differently cause bug on rotation screen if the host fragment is not instance of ListPropertiesFragment
-        mListPropertiesFragment = (ListPropertiesFragment) getSupportFragmentManager().findFragmentById(R.id.activity_main_host_frame_layout);
-        if (mListPropertiesFragment == null){
-            mListPropertiesFragment = new ListPropertiesFragment(twoPanes,this);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.activity_main_host_frame_layout, mListPropertiesFragment)
-                    .commit();
-        }else{
+        Fragment fragmentInFrame = getSupportFragmentManager().findFragmentById(R.id.activity_main_host_frame_layout);
+        if (fragmentInFrame == null) {
+            mListPropertiesFragment = new ListPropertiesFragment(twoPanes, this);
+            startTransactionFragment(mListPropertiesFragment);
+        }else if (fragmentInFrame instanceof ListPropertiesFragment){
+            mListPropertiesFragment = (ListPropertiesFragment) fragmentInFrame;
             mListPropertiesFragment.updateTwoPanesAndListenerToFragment(twoPanes,this);
+            showDetailsFrameLayout(true);
+        }else if (fragmentInFrame instanceof MapFragment){
+            MapFragment mapFragment = (MapFragment) fragmentInFrame;
+            mapFragment.updateTwoPanesMode(twoPanes);
+            showDetailsFrameLayout(true);
+        }else if (fragmentInFrame instanceof ProfileFragment || fragmentInFrame instanceof LoanSimulatorFragment){
+            showDetailsFrameLayout(false);
         }
     }
 
@@ -118,18 +124,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.activity_main_drawer_list:
                     if (mListPropertiesFragment == null) mListPropertiesFragment = new ListPropertiesFragment(twoPanes,this);
                     this.startTransactionFragment(mListPropertiesFragment);
+                    showDetailsFrameLayout(true);
                 break;
             case R.id.activity_main_drawer_map:
                     MapFragment mapFragment = new MapFragment(twoPanes, isCurrentUser());
                     this.startTransactionFragment(mapFragment);
+                    showDetailsFrameLayout(true);
                 break;
             case R.id.activity_main_drawer_profile:
                 ProfileFragment profileFragment = new ProfileFragment(this);
                 this.startTransactionFragment(profileFragment);
+                showDetailsFrameLayout(false);
                 break;
             case R.id.activity_main_drawer_loan_simulator:
                 LoanSimulatorFragment loanSimulatorFragment = new LoanSimulatorFragment();
                 this.startTransactionFragment(loanSimulatorFragment);
+                showDetailsFrameLayout(false);
                 break;
             default:
                 break;
@@ -232,5 +242,23 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void onConnectionManagement() {
         onResume();
+    }
+
+    /**
+     * Showing details frame layout or not depends on screen rotation and item clicked
+     * @param b
+     */
+    private void showDetailsFrameLayout(boolean b) {
+        if (b) {
+            if (findViewById(R.id.details_activity_frame_layout) != null) {
+                FrameLayout detailsLayout = findViewById(R.id.details_activity_frame_layout);
+                detailsLayout.setVisibility(View.VISIBLE);
+            }
+        }else {
+            if (findViewById(R.id.details_activity_frame_layout) != null) {
+                FrameLayout detailsLayout = findViewById(R.id.details_activity_frame_layout);
+                detailsLayout.setVisibility(View.GONE);
+            }
+        }
     }
 }

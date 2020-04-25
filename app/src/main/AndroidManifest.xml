@@ -27,7 +27,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/GOOGLE_API_KEY" />
 
-        <activity android:name=".UI.Activities.MainActivity">
+        <activity android:name=".UI.Activities.MainActivity"
+            android:configChanges="orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

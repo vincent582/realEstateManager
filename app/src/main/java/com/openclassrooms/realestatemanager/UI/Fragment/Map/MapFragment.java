@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -44,13 +45,18 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
     private static final String PERMS = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final int RC_LOCATION_PERMS = 100;
 
-    private final boolean twoPanes;
-    private final boolean isUserConnected;
+    //For savedInstanceState
+    private String USER_LOGGED_ID = "USER_LOGGED_ID";
+
+    private boolean twoPanes;
+    private boolean isUserConnected;
     private View mView;
     private FusedLocationProviderClient fusedLocationClient;
     private Location mCurrentUserLocation;
     private GoogleMap mMap;
     private List<FullProperty> mListProperties;
+
+    public MapFragment(){}
 
     //CONSTRUCTOR
     public MapFragment(boolean twoPanes, boolean currentUser){
@@ -59,9 +65,11 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_map, container, false);
+        if (savedInstanceState != null){
+            isUserConnected = savedInstanceState.getBoolean(USER_LOGGED_ID);
+        }
         configureViewModels(getActivity());
         mPropertiesViewModel.getFullProperties().observe(getActivity(),this::getAllProperties);
         checkPermission();
@@ -150,12 +158,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        checkPermission();
-    }
-
     /**
      * Manage click on marker to start Details Activity/Fragment
      * @param marker
@@ -175,5 +177,15 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
             startActivity(intent);
         }
         return false;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(USER_LOGGED_ID, isUserConnected);
+    }
+
+    public void updateTwoPanesMode(boolean twoPanes) {
+        this.twoPanes = twoPanes;
     }
 }

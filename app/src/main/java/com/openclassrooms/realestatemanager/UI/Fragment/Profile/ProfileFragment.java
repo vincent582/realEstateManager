@@ -43,6 +43,8 @@ public class ProfileFragment extends BaseFragment implements DialogAuthenticatio
 
     private ConnectionCallback mCallback;
 
+    public ProfileFragment(){}
+
     //CONSTRUCTOR
     public ProfileFragment(ConnectionCallback connectionCallback) {
         this.mCallback = connectionCallback;
