@@ -8,7 +8,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
-    <uses-feature android:name="android.hardware.camera"
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
     <application
@@ -27,13 +28,17 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/GOOGLE_API_KEY" />
 
-        <activity android:name=".UI.Activities.MainActivity"
-            android:configChanges="orientation">
+        <activity android:name=".UI.Activities.AuthenticationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".UI.Activities.MainActivity"
+            android:configChanges="orientation">
         </activity>
         <activity
             android:name=".UI.Activities.DetailsPropertyActivity"
@@ -50,7 +55,7 @@
             android:parentActivityName=".UI.Activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".UI.Activities.MainActivity"></meta-data>
+                android:value=".UI.Activities.MainActivity" />
         </activity>
     </application>
 

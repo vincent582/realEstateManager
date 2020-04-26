@@ -28,7 +28,7 @@ import butterknife.ButterKnife;
 
 import static com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity.PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER;
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, ListPropertiesFragment.sendPropertyIdToMainActivityOnClickListener , ProfileFragment.ConnectionCallback {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, ListPropertiesFragment.sendPropertyIdToMainActivityOnClickListener {
 
     @BindView(R.id.activity_main_toolbar) Toolbar mToolbar;
     @BindView(R.id.activity_main_drawer_layout) DrawerLayout mDrawerLayout;
@@ -132,7 +132,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     showDetailsFrameLayout(true);
                 break;
             case R.id.activity_main_drawer_profile:
-                ProfileFragment profileFragment = new ProfileFragment(this);
+                ProfileFragment profileFragment = new ProfileFragment();
                 this.startTransactionFragment(profileFragment);
                 showDetailsFrameLayout(false);
                 break;
@@ -233,15 +233,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void callbackPropertyId(int propertyId) {
         this.mPropertyId = propertyId;
-    }
-
-    /**
-     * Callback From Profile fragment to call the onResume function
-     * For update menu if user logged or not.
-     */
-    @Override
-    public void onConnectionManagement() {
-        onResume();
     }
 
     /**
