@@ -74,9 +74,7 @@ public class DetailsPropertyActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        if (isCurrentUser()) {
             getMenuInflater().inflate(R.menu.details_activity_menu_toolbar, menu);
-        }
         return true;
     }
 

@@ -8,9 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -22,12 +20,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.Model.FullProperty;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity;
 import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
-import com.openclassrooms.realestatemanager.UI.Fragment.DetailsProperty.DetailsPropertyFragment;
 import com.openclassrooms.realestatemanager.Utils.Utils;
 
 import java.util.List;
@@ -45,33 +41,21 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
     private static final String PERMS = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final int RC_LOCATION_PERMS = 100;
 
-    //For savedInstanceState
-    private String USER_LOGGED_ID = "USER_LOGGED_ID";
-
-    private boolean twoPanes;
-    private boolean isUserConnected;
     private View mView;
     private FusedLocationProviderClient fusedLocationClient;
     private Location mCurrentUserLocation;
     private GoogleMap mMap;
     private List<FullProperty> mListProperties;
 
-    public MapFragment(){}
-
     //CONSTRUCTOR
-    public MapFragment(boolean twoPanes, boolean currentUser){
-        this.twoPanes = twoPanes;
-        this.isUserConnected = currentUser;
-    }
+    public MapFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_map, container, false);
-        if (savedInstanceState != null){
-            isUserConnected = savedInstanceState.getBoolean(USER_LOGGED_ID);
-        }
         configureViewModels(getActivity());
         mPropertiesViewModel.getFullProperties().observe(getActivity(),this::getAllProperties);
+        configureMapFragment();
         checkPermission();
         return mView;
     }
@@ -94,19 +78,14 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
             EasyPermissions.requestPermissions(this, "We need your permission to access to your location.", RC_LOCATION_PERMS, PERMS);
             return;
         }else {
-            if (isUserConnected) {
-                configureMapFragment();
-                fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
-                fusedLocationClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        mCurrentUserLocation = location;
-                        movePositionOnMap();
-                    }
-                });
-            }else{
-                Snackbar.make(mView,"No user connected.", Snackbar.LENGTH_LONG).show();
-            }
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
+            fusedLocationClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    mCurrentUserLocation = location;
+                    movePositionOnMap();
+                }
+            });
         }
     }
 
@@ -127,6 +106,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setOnMarkerClickListener(this);
+        putMarkersOnMap();
     }
 
     /**
@@ -139,7 +119,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(mCurrentUserLocation.getLatitude(),
                     mCurrentUserLocation.getLongitude()), 12));
-            putMarkersOnMap();
         }
     }
 
@@ -159,33 +138,16 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
     }
 
     /**
-     * Manage click on marker to start Details Activity/Fragment
+     * Manage click on marker to start Details Activity
      * @param marker
      * @return
      */
     @Override
     public boolean onMarkerClick(Marker marker) {
         int propertyId = (int) marker.getTag();
-        if (twoPanes){
-            FragmentManager fragmentManager =  getParentFragmentManager();
-            fragmentManager.beginTransaction()
-                .replace(R.id.details_activity_frame_layout,new DetailsPropertyFragment(propertyId))
-                .commit();
-        }else{
-            Intent intent = new Intent(getContext(), DetailsPropertyActivity.class);
-            intent.putExtra(PROPERTY_ID_EXTRA, propertyId);
-            startActivity(intent);
-        }
+        Intent intent = new Intent(getContext(), DetailsPropertyActivity.class);
+        intent.putExtra(PROPERTY_ID_EXTRA, propertyId);
+        startActivity(intent);
         return false;
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(USER_LOGGED_ID, isUserConnected);
-    }
-
-    public void updateTwoPanesMode(boolean twoPanes) {
-        this.twoPanes = twoPanes;
     }
 }

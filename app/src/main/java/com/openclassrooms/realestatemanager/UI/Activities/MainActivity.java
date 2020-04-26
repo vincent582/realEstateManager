@@ -92,8 +92,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             showDetailsFrameLayout(true);
         }else if (fragmentInFrame instanceof MapFragment){
             MapFragment mapFragment = (MapFragment) fragmentInFrame;
-            mapFragment.updateTwoPanesMode(twoPanes);
-            showDetailsFrameLayout(true);
+            showDetailsFrameLayout(false);
         }else if (fragmentInFrame instanceof ProfileFragment || fragmentInFrame instanceof LoanSimulatorFragment){
             showDetailsFrameLayout(false);
         }
@@ -127,9 +126,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     showDetailsFrameLayout(true);
                 break;
             case R.id.activity_main_drawer_map:
-                    MapFragment mapFragment = new MapFragment(twoPanes, isCurrentUser());
+                    MapFragment mapFragment = new MapFragment();
                     this.startTransactionFragment(mapFragment);
-                    showDetailsFrameLayout(true);
+                    showDetailsFrameLayout(false);
                 break;
             case R.id.activity_main_drawer_profile:
                 ProfileFragment profileFragment = new ProfileFragment();
@@ -209,18 +208,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     /**
-     * Display Different menu on this activity if User logged and the twoPanes mode is active.
+     * Display Different menu on this activity if the twoPanes mode is active.
      * @param menu
      * @return
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (isCurrentUser()) {
-            if (twoPanes) {
-                getMenuInflater().inflate(R.menu.activity_main_menu_two_panes_toolbar, menu);
-            } else {
-                getMenuInflater().inflate(R.menu.main_activity_menu_toolbar, menu);
-            }
+        if (twoPanes) {
+            getMenuInflater().inflate(R.menu.activity_main_menu_two_panes_toolbar, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.main_activity_menu_toolbar, menu);
         }
         return true;
     }
