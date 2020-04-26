@@ -17,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -55,7 +56,7 @@ import static com.openclassrooms.realestatemanager.UI.Fragment.Profile.ProfileFr
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PropertyManagerFragment extends BaseFragment implements DialogImagePreview.DialogImagePreviewListener, PicturesViewHolder.ListenerPictureClick , DialogDeleteImage.DialogDeleteListener {
+public class PropertyManagerFragment extends BaseFragment implements DialogImagePreview.DialogImagePreviewListener, PicturesViewHolder.ListenerPictureClick , DialogDeleteImage.DialogDeleteListener , EasyPermissions.PermissionCallbacks {
 
     @BindView(R.id.recycler_view_pictures) RecyclerView mPicturesRecyclerView;
     @BindView(R.id.add_picture_fab) FloatingActionButton mAddPictureFAB;
@@ -229,7 +230,7 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         mAddPictureFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dispachChoosePictureFromAlbum();
+                dispatchChoosePictureFromAlbum();
             }
         });
         mTakePictureFAB.setOnClickListener(new View.OnClickListener() {
@@ -248,7 +249,7 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
      * Start Activity to pick up one picture from the phone
      */
     @AfterPermissionGranted(RC_IMAGE_PERMS)
-    public void dispachChoosePictureFromAlbum() {
+    public void dispatchChoosePictureFromAlbum() {
         if (!EasyPermissions.hasPermissions(getContext(), PERMS)) {
             EasyPermissions.requestPermissions(this, "We need permission to access to your pictures", RC_IMAGE_PERMS, PERMS);
             return;
@@ -256,6 +257,8 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(i, RC_CHOOSE_PHOTO);
     }
+
+
 
     /**
      * On Result success to get Picture from phone
@@ -542,5 +545,22 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         String messageText = "The property "+ mFullProperty.getProperty().getType()+" on the number "+ mFullProperty.getAddress().getNumber() +" of the street \"" + mFullProperty.getAddress().getStreet() +"\" in the district of \""+ mFullProperty.getAddress().getDistrict() +"\" was successfully "+message+"!";
         NotificationService notificationService = new NotificationService(getContext());
         notificationService.sendNotification(1,messageText);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+        if (requestCode == RC_CHOOSE_PHOTO) {
+            dispatchChoosePictureFromAlbum();
+        }
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode,permissions,grantResults,this);
     }
 }
