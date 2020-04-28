@@ -23,8 +23,8 @@
         android:theme="@style/AppTheme">
 
         <provider
-            android:authorities="provider.PropertyProvider"
-            android:name="com.openclassrooms.realestatemanager.Utils.PropertyProvider"
+            android:name=".Utils.PropertyProvider"
+            android:authorities="com.openclassrooms.realestatemanager.Utils.PropertyProvider"
             android:exported="true"/>
 
         <meta-data

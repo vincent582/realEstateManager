@@ -10,6 +10,7 @@ import androidx.room.TypeConverters;
 
 import com.openclassrooms.realestatemanager.Utils.DateConverter;
 import com.openclassrooms.realestatemanager.Utils.ListConverterToGson;
+import com.openclassrooms.realestatemanager.Utils.Utils;
 
 import java.util.Collections;
 import java.util.Date;
@@ -151,7 +152,8 @@ public class Property {
             List<String> facilities = ListConverterToGson.stringToFacilitiesList(values.getAsString("facilities"));
             property.setFacilities(facilities);
         }
-        //TODO add dates
+        if (values.containsKey("addedDate")) property.setAddedDate(DateConverter.toDate(values.getAsLong("addedDate")));
+        if (values.containsKey("dateOfSale")) property.setDateOfSale(DateConverter.toDate(values.getAsLong("dateOfSale")));
         if (values.containsKey("userId")) property.setUserId(values.getAsLong("userId"));
         return property;
     }

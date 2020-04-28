@@ -385,7 +385,6 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
                     }else {
                         createNewPropertyAndAddress();
                     }
-                    getActivity().finish();
                 }
             }
         });
@@ -534,6 +533,7 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
 
         deletePictureInDatabase();
         showConfirmationMessage("updated");
+        getActivity().finish();
     }
 
     /**
@@ -574,8 +574,9 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         }
         mPropertiesViewModel.getPropertyById(idProperty).observe(this, fullProperty -> {
             mFullProperty = fullProperty;
-            PropertyManagerFragment.this.showConfirmationMessage("added");
         });
+        PropertyManagerFragment.this.showConfirmationMessage("added");
+        getActivity().finish();
     }
 
     /**
