@@ -86,4 +86,13 @@ public class Utils {
 
         return latLng;
     }
+
+    /**
+     * Format date
+     * @return
+     */
+    public static String formatDate(Date date){
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        return dateFormat.format(date);
+    }
 }

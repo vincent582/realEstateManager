@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -52,6 +53,16 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
     @BindView(R.id.details_description_text_view) TextView mDescription;
     @BindView(R.id.details_surface_value_text_view) TextView mSurface;
     @BindView(R.id.details_nbr_of_rooms_value_text_view) TextView mNbrOfRooms;
+
+    @BindView(R.id.details_property_type_value_text_view) TextView mPropertyType;
+    @BindView(R.id.details_price_value_text_view) TextView mPrice;
+    @BindView(R.id.details_entry_date_value_text_view) TextView mDateOfEntry;
+    @BindView(R.id.details_sold_date_value_text_view) TextView mDateOfSold;
+    @BindView(R.id.details_agent_in_charge_value_text_view) TextView mAgentInCharge;
+    @BindView(R.id.details_property_status_value_text_view) TextView mPropertyStatus;
+
+    @BindView(R.id.linear_Layout_sold_date) LinearLayout mSoldDateLayout;
+
     @BindView(R.id.facilities_info_tv) TextView mFacilitiesList;
     @BindView(R.id.linear_layout_park) LinearLayout mFacilitiesPark;
     @BindView(R.id.linear_layout_school) LinearLayout mFacilitiesSchool;
@@ -139,9 +150,27 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
     private void updateProperty(FullProperty mFullProperty) {
         property = mFullProperty;
         if (mFullProperty != null){
+            mUserViewModel.getUserById(mFullProperty.getProperty().getUserId()).observe(this,user -> {
+                if (user!=null) {
+                    mAgentInCharge.setText(user.getName());
+                }
+            });
             //Update pictures of this property in recyclerView
             mAdapter.updateListPictures(mFullProperty.getPictureList());
             //setUp information
+            mDateOfEntry.setText(Utils.formatDate(mFullProperty.getProperty().getAddedDate()));
+            if (mFullProperty.getProperty().getSold()){
+                mPropertyStatus.setText("Sold Out");
+                mPropertyStatus.setTextColor(ContextCompat.getColor(getContext(),R.color.red));
+                mSoldDateLayout.setVisibility(View.VISIBLE);
+                mDateOfSold.setText(Utils.formatDate(mFullProperty.getProperty().getDateOfSale()));
+            }else {
+                mPropertyStatus.setText("Available");
+                mSoldDateLayout.setVisibility(View.GONE);
+                mPropertyStatus.setTextColor(ContextCompat.getColor(getContext(),R.color.green));
+            }
+            mPrice.setText("$"+ String.format("%,d", mFullProperty.getProperty().getPrice()));
+            mPropertyType.setText(mFullProperty.getProperty().getType());
             mDescription.setText(mFullProperty.getProperty().getDescription());
             mSurface.setText(String.valueOf(mFullProperty.getProperty().getSurface()));
             mNbrOfRooms.setText(String.valueOf(mFullProperty.getProperty().getNbrOfRooms()));

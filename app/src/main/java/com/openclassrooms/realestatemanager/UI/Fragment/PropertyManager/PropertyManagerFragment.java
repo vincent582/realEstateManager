@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +15,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,18 +38,23 @@ import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
 import com.openclassrooms.realestatemanager.Utils.DialogDeleteImage;
+import com.openclassrooms.realestatemanager.Utils.DialogEntryDatePicker;
 import com.openclassrooms.realestatemanager.Utils.DialogImagePreview;
+import com.openclassrooms.realestatemanager.Utils.DialogSoldDatePiker;
 import com.openclassrooms.realestatemanager.Utils.NotificationService;
 import com.openclassrooms.realestatemanager.Utils.StorageUtils;
+import com.openclassrooms.realestatemanager.Utils.Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -56,7 +66,9 @@ import static com.openclassrooms.realestatemanager.UI.Fragment.Profile.ProfileFr
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PropertyManagerFragment extends BaseFragment implements DialogImagePreview.DialogImagePreviewListener, PicturesViewHolder.ListenerPictureClick , DialogDeleteImage.DialogDeleteListener , EasyPermissions.PermissionCallbacks {
+public class PropertyManagerFragment extends BaseFragment implements DialogImagePreview.DialogImagePreviewListener, PicturesViewHolder.ListenerPictureClick ,
+    DialogDeleteImage.DialogDeleteListener , EasyPermissions.PermissionCallbacks, DialogEntryDatePicker.DialogEntryDatePickerListener,
+    DialogSoldDatePiker.DialogSoldDatePickerListener {
 
     @BindView(R.id.recycler_view_pictures) RecyclerView mPicturesRecyclerView;
     @BindView(R.id.add_picture_fab) FloatingActionButton mAddPictureFAB;
@@ -73,6 +85,9 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
     @BindView(R.id.manager_layout_address_post_code_editText) EditText mPropertyAddressPostCode;
     @BindView(R.id.manager_layout_address_country_editText) EditText mPropertyAddressCountry;
     @BindView(R.id.manager_layout_btn_add_property) Button mAddPropertyButton;
+
+    @BindView(R.id.sold_date_selector_btn) Button mSoldDateSelector;
+    @BindView(R.id.entry_date_text_view) TextView mEntryDateTv;
 
     @BindView(R.id.checkBox_park) CheckBox mCheckboxPark;
     @BindView(R.id.checkBox_school) CheckBox mCheckboxSchool;
@@ -114,6 +129,9 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
     private long userId;
     private Boolean mIsSold = false;
 
+    private Date dateOfEntry;
+    private Date dateOfSale;
+
     //CONSTRUCTOR
     public PropertyManagerFragment() {}
 
@@ -130,7 +148,31 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         configurePropertyTypeSpinner();
         setAddPictureClickListener();
         setAddPropertyButtonOnclickListener();
+        onSelectedSoldCheckbox();
         return view;
+    }
+
+    private void onSelectedSoldCheckbox() {
+        mCheckboxIsSold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    mSoldDateSelector.setVisibility(View.VISIBLE);
+                }else {
+                    mSoldDateSelector.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    @OnClick(R.id.entry_date_selector_btn)
+    public void showDialogDatePicker(){
+        showDatePikerDialog();
+    }
+
+    @OnClick(R.id.sold_date_selector_btn)
+    public void showDialogSoldDatePicker(){
+        showSoldDatePikerDialog();
     }
 
     private void getCurrentUser() {
@@ -164,6 +206,7 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
      */
     private void populateEditItemWithPropertyValues(FullProperty fullProperty) {
         this.mFullProperty = fullProperty;
+        Log.e("TAG", "populateEditItemWithPropertyValues: " +mFullProperty.getProperty().getAddedDate());
 
         mListPictures = fullProperty.getPictureList();
         mAdapter.updateListPictures(mListPictures);
@@ -200,8 +243,18 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         mPropertyAddressPostCode.setText(String.valueOf(mFullProperty.getAddress().getPostCode()));
         mPropertyAddressCountry.setText(mFullProperty.getAddress().getCountry());
 
+        if (mFullProperty.getProperty().getAddedDate() != null){
+            dateOfEntry = mFullProperty.getProperty().getAddedDate();
+            mEntryDateTv.setText(Utils.formatDate(mFullProperty.getProperty().getAddedDate()));
+        }
+
         if (mFullProperty.getProperty().getSold()){
             mCheckboxIsSold.setChecked(true);
+            dateOfSale = mFullProperty.getProperty().getDateOfSale();
+            mSoldDateSelector.setText(Utils.formatDate(mFullProperty.getProperty().getDateOfSale()));
+            mSoldDateSelector.setVisibility(View.VISIBLE);
+        }else {
+            mSoldDateSelector.setVisibility(View.GONE);
         }
         mAddPropertyButton.setText("Update Property");
     }
@@ -257,8 +310,6 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(i, RC_CHOOSE_PHOTO);
     }
-
-
 
     /**
      * On Result success to get Picture from phone
@@ -424,10 +475,20 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
             mListFacilities.add("Store");
         }
 
+        if (dateOfEntry == null){
+            Snackbar.make(getView(),"You have to select the entry date.",Snackbar.LENGTH_LONG).show();
+            values = false;
+        }
+
         if (mCheckboxIsSold.isChecked()){
             mIsSold = true;
+            if (dateOfSale == null){
+                Snackbar.make(getView(),"You have to select the sold out date.",Snackbar.LENGTH_LONG).show();
+                values = false;
+            }
         }else {
             mIsSold = false;
+            dateOfSale = null;
         }
 
         return values;
@@ -447,7 +508,9 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         property.setFacilities(mListFacilities);
 
         property.setSold(mIsSold);
-        property.setDateOfSale(new Date());
+        property.setAddedDate(dateOfEntry);
+        property.setDateOfSale(dateOfSale);
+        property.setUserId(userId);
 
         mPropertiesViewModel.updateProperty(property);
         createPicturesForProperty(mFullProperty.getProperty().getId());
@@ -488,7 +551,7 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
      * Create new Property and address related
      */
     private void createNewPropertyAndAddress() {
-        Property property = new Property(mType, mPrice, mSurface, mNbrOfRoom, mDescription, mIsSold, mListFacilities, new Date(), new Date(), userId);
+        Property property = new Property(mType, mPrice, mSurface, mNbrOfRoom, mDescription, mIsSold, mListFacilities, dateOfEntry, dateOfSale, userId);
         mPropertiesViewModel.createProperty(property).observe(getViewLifecycleOwner(),this::createAddress);
     }
 
@@ -509,7 +572,10 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
             picture.setPropertyId(idProperty);
             mPictureViewModel.createPicture(picture);
         }
-        showConfirmationMessage("added");
+        mPropertiesViewModel.getPropertyById(idProperty).observe(this, fullProperty -> {
+            mFullProperty = fullProperty;
+            PropertyManagerFragment.this.showConfirmationMessage("added");
+        });
     }
 
     /**
@@ -542,7 +608,11 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
      * @param message
      */
     private void showConfirmationMessage(String message){
-        String messageText = "The property "+ mFullProperty.getProperty().getType()+" on the number "+ mFullProperty.getAddress().getNumber() +" of the street \"" + mFullProperty.getAddress().getStreet() +"\" in the district of \""+ mFullProperty.getAddress().getDistrict() +"\" was successfully "+message+"!";
+        String messageText = "The property "+ mFullProperty.getProperty().getType()
+            +" on the number "+ mFullProperty.getAddress().getNumber()
+            +" of the street \"" + mFullProperty.getAddress().getStreet()
+            +"\" in the district of \""+ mFullProperty.getAddress().getDistrict()
+            +"\" was successfully "+message+"!";
         NotificationService notificationService = new NotificationService(getContext());
         notificationService.sendNotification(1,messageText);
     }
@@ -562,5 +632,45 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         EasyPermissions.onRequestPermissionsResult(requestCode,permissions,grantResults,this);
+    }
+
+    private void showDatePikerDialog() {
+        DialogEntryDatePicker dialog = new DialogEntryDatePicker();
+        dialog.setTargetFragment(this,2);
+        dialog.show(getParentFragmentManager(),"DialogDatePickerFragment");
+    }
+
+    private void showSoldDatePikerDialog() {
+        DialogSoldDatePiker dialog = new DialogSoldDatePiker();
+        dialog.setTargetFragment(this,2);
+        dialog.show(getParentFragmentManager(),"DialogDatePickerFragment");
+    }
+
+    @Override
+    public void onDialogDatePikerValidateClick(DialogEntryDatePicker dialog) {
+        DatePicker datePicker = dialog.getDialog().findViewById(R.id.entry_date_dp);
+
+        int day = datePicker.getDayOfMonth();
+        int month = datePicker.getMonth();
+        int year =  datePicker.getYear();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+        dateOfEntry = calendar.getTime();
+        mEntryDateTv.setText(Utils.formatDate(dateOfEntry));
+    }
+
+    @Override
+    public void onDialogSoldDatePikerValidateClick(DialogSoldDatePiker dialog) {
+        DatePicker datePicker = dialog.getDialog().findViewById(R.id.entry_date_dp);
+
+        int day = datePicker.getDayOfMonth();
+        int month = datePicker.getMonth();
+        int year =  datePicker.getYear();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+        dateOfSale = calendar.getTime();
+        mSoldDateSelector.setText(Utils.formatDate(dateOfSale));
     }
 }

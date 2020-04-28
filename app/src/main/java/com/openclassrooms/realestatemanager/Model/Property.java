@@ -1,13 +1,17 @@
 package com.openclassrooms.realestatemanager.Model;
 
+import android.content.ContentValues;
+
 import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
+import com.openclassrooms.realestatemanager.Utils.DateConverter;
 import com.openclassrooms.realestatemanager.Utils.ListConverterToGson;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -24,9 +28,9 @@ public class Property {
     private Boolean sold;
     @TypeConverters(ListConverterToGson.class)
     private List<String> facilities;
-    @Embedded
+    @TypeConverters(DateConverter.class)
     private Date addedDate;
-    @Embedded
+    @TypeConverters(DateConverter.class)
     private Date dateOfSale;
     private long userId;
 
@@ -132,5 +136,23 @@ public class Property {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public static Property fromContentValue(ContentValues values){
+        final Property property = new Property();
+        if (values.containsKey("id")) property.setId(values.getAsInteger("id"));
+        if (values.containsKey("type")) property.setType(values.getAsString("type"));
+        if (values.containsKey("price")) property.setPrice(values.getAsInteger("price"));
+        if (values.containsKey("surface")) property.setSurface(values.getAsInteger("surface"));
+        if (values.containsKey("nbrOfRooms")) property.setNbrOfRooms(values.getAsInteger("nbrOfRooms"));
+        if (values.containsKey("description")) property.setDescription(values.getAsString("description"));
+        if (values.containsKey("sold")) property.setSold(values.getAsBoolean("sold"));
+        if (values.containsKey("facilities")){
+            List<String> facilities = ListConverterToGson.stringToFacilitiesList(values.getAsString("facilities"));
+            property.setFacilities(facilities);
+        }
+        //TODO add dates
+        if (values.containsKey("userId")) property.setUserId(values.getAsLong("userId"));
+        return property;
     }
 }

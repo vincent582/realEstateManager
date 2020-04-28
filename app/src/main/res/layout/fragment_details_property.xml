@@ -124,16 +124,18 @@
                 android:layout_marginEnd="8dp"
                 app:layout_constraintBottom_toTopOf="@id/facilities_info_tv"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/details_info_property">
 
                 <LinearLayout
                     android:id="@+id/linear_Layout_surface"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
                     android:orientation="horizontal"
                     android:padding="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/linear_Layout_price"
                     app:layout_constraintEnd_toStartOf="@id/linear_layout_nbr_of_room"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -165,20 +167,255 @@
                             android:text="750 sq m" />
 
                     </LinearLayout>
+                </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/linear_Layout_price"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toTopOf="@id/linear_Layout_agent_in_charge"
+                    app:layout_constraintEnd_toEndOf="@+id/linear_Layout_surface"
+                    app:layout_constraintStart_toStartOf="@+id/linear_Layout_surface"
+                    app:layout_constraintTop_toBottomOf="@id/linear_Layout_surface">
 
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/ic_attach_money_black_24dp"
+                        android:tint="@color/secondaryColor" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Price"
+                            android:textColor="@color/primaryDarkColor"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/details_price_value_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="1,000,000$" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear_Layout_agent_in_charge"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toTopOf="@id/linear_Layout_property_status"
+                    app:layout_constraintEnd_toEndOf="@+id/linear_Layout_price"
+                    app:layout_constraintStart_toStartOf="@+id/linear_Layout_price"
+                    app:layout_constraintTop_toBottomOf="@id/linear_Layout_price">
+
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/ic_account_box_black_24dp"
+                        android:tint="@color/secondaryColor" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Agent in charge"
+                            android:textColor="@color/primaryDarkColor"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/details_agent_in_charge_value_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear_Layout_property_status"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/linear_Layout_agent_in_charge"
+                    app:layout_constraintStart_toStartOf="@+id/linear_Layout_agent_in_charge"
+                    app:layout_constraintTop_toBottomOf="@id/linear_Layout_agent_in_charge">
+
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/ic_status"
+                        android:tint="@color/secondaryColor" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Property status"
+                            android:textColor="@color/primaryDarkColor"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/details_property_status_value_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:textColor="@android:color/holo_green_dark"
+                            android:text="Available"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear_Layout_entry_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/linear_Layout_price"
+                    app:layout_constraintEnd_toEndOf="@+id/linear_layout_nbr_of_room"
+                    app:layout_constraintStart_toStartOf="@+id/linear_layout_nbr_of_room"
+                    app:layout_constraintTop_toTopOf="@+id/linear_Layout_price">
+
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/ic_date_range_black_24dp"
+                        android:tint="@color/secondaryColor" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Entry Date"
+                            android:textColor="@color/primaryDarkColor"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/details_entry_date_value_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="12/12/2001" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear_Layout_property_type"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/linear_Layout_agent_in_charge"
+                    app:layout_constraintEnd_toEndOf="@+id/linear_Layout_entry_date"
+                    app:layout_constraintStart_toStartOf="@+id/linear_Layout_entry_date"
+                    app:layout_constraintTop_toTopOf="@+id/linear_Layout_agent_in_charge">
+
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/ic_location_city_black_24dp"
+                        android:tint="@color/secondaryColor" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Property type"
+                            android:textColor="@color/primaryDarkColor"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/details_property_type_value_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="House" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear_Layout_sold_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/linear_Layout_property_status"
+                    app:layout_constraintEnd_toEndOf="@+id/linear_Layout_property_type"
+                    app:layout_constraintStart_toStartOf="@+id/linear_Layout_property_type"
+                    app:layout_constraintTop_toBottomOf="@+id/linear_Layout_agent_in_charge">
+
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/ic_date_range_black_24dp"
+                        android:tint="@color/secondaryColor" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Date of sale"
+                            android:textColor="@color/primaryDarkColor"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/details_sold_date_value_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="12/12/2001" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/linear_layout_nbr_of_room"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginEnd="16dp"
                     android:orientation="horizontal"
                     android:padding="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/linear_Layout_surface"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/linear_Layout_surface"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="@+id/linear_Layout_surface">
 
                     <ImageView
                         android:layout_width="26dp"
@@ -344,6 +581,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -355,6 +593,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/facilities_info_tv">
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -447,6 +686,15 @@
                 </FrameLayout>
 
             </LinearLayout>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

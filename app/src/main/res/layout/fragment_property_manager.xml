@@ -7,9 +7,9 @@
     android:id="@+id/property_manager_fragment_scrollView">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".UI.Fragment.PropertyManager.PropertyManagerFragment">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".UI.Fragment.PropertyManager.PropertyManagerFragment">
 
         <TextView
             android:id="@+id/manager_layout_picture_tv"
@@ -51,187 +51,238 @@
             app:layout_constraintTop_toBottomOf="@id/recycler_view_pictures" />
 
         <TextView
-        android:id="@+id/manager_layout_price_tv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="24dp"
-        android:text="@string/property_price_tv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/manager_layout_type_tv"
-        app:layout_constraintTop_toTopOf="@+id/manager_layout_type_tv" />
+            android:id="@+id/manager_layout_price_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="24dp"
+            android:text="@string/property_price_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/manager_layout_type_tv"
+            app:layout_constraintTop_toTopOf="@+id/manager_layout_type_tv" />
 
-    <Spinner
-        android:id="@+id/manager_layout_type_spinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/manager_layout_type_tv"
-        app:layout_constraintStart_toStartOf="@+id/manager_layout_type_tv"
-        app:layout_constraintTop_toBottomOf="@+id/manager_layout_type_tv" />
+        <Spinner
+            android:id="@+id/manager_layout_type_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/manager_layout_type_tv"
+            app:layout_constraintStart_toStartOf="@+id/manager_layout_type_tv"
+            app:layout_constraintTop_toBottomOf="@+id/manager_layout_type_tv" />
 
-    <EditText
-        android:id="@+id/manager_layout_price_editText"
-        android:layout_width="0dp"
-        android:imeOptions="flagNoExtractUi"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/manager_layout_price_tv"
-        app:layout_constraintStart_toStartOf="@+id/manager_layout_price_tv"
-        app:layout_constraintTop_toBottomOf="@+id/manager_layout_price_tv" />
+        <EditText
+            android:id="@+id/manager_layout_price_editText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:imeOptions="flagNoExtractUi"
+            android:inputType="number"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/manager_layout_price_tv"
+            app:layout_constraintStart_toStartOf="@+id/manager_layout_price_tv"
+            app:layout_constraintTop_toBottomOf="@+id/manager_layout_price_tv" />
 
-    <TextView
-        android:id="@+id/manager_layout_description_tv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/property_description_tv"
-        app:layout_constraintEnd_toEndOf="@+id/manager_layout_type_spinner"
-        app:layout_constraintStart_toStartOf="@+id/manager_layout_type_spinner"
-        app:layout_constraintTop_toBottomOf="@+id/manager_layout_type_spinner" />
+        <TextView
+            android:id="@+id/manager_layout_description_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/property_description_tv"
+            app:layout_constraintEnd_toEndOf="@+id/manager_layout_type_spinner"
+            app:layout_constraintStart_toStartOf="@+id/manager_layout_type_spinner"
+            app:layout_constraintTop_toBottomOf="@+id/manager_layout_type_spinner" />
 
-    <EditText
-        android:id="@+id/manager_layout_description_editText"
-        android:layout_width="0dp"
-        android:imeOptions="flagNoExtractUi"
-        android:layout_height="50dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="24dp"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/manager_layout_description_tv"></EditText>
+        <EditText
+            android:id="@+id/manager_layout_description_editText"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="24dp"
+            android:imeOptions="flagNoExtractUi"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/manager_layout_description_tv"></EditText>
 
-    <TextView
-        android:id="@+id/manager_layout_surface_tv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/property_surface_tv"
-        app:layout_constraintEnd_toEndOf="@+id/manager_layout_description_tv"
-        app:layout_constraintStart_toStartOf="@+id/manager_layout_description_tv"
-        app:layout_constraintTop_toBottomOf="@+id/manager_layout_description_editText" />
+        <TextView
+            android:id="@+id/manager_layout_surface_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/property_surface_tv"
+            app:layout_constraintEnd_toEndOf="@+id/manager_layout_description_tv"
+            app:layout_constraintStart_toStartOf="@+id/manager_layout_description_tv"
+            app:layout_constraintTop_toBottomOf="@+id/manager_layout_description_editText" />
 
-    <EditText
-        android:id="@+id/manager_layout_surface_editText"
-        android:layout_width="0dp"
-        android:imeOptions="flagNoExtractUi"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:inputType="number"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/manager_layout_surface_tv"
-        app:layout_constraintStart_toStartOf="@+id/manager_layout_surface_tv"
-        app:layout_constraintTop_toBottomOf="@+id/manager_layout_surface_tv" />
+        <EditText
+            android:id="@+id/manager_layout_surface_editText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:imeOptions="flagNoExtractUi"
+            android:inputType="number"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/manager_layout_surface_tv"
+            app:layout_constraintStart_toStartOf="@+id/manager_layout_surface_tv"
+            app:layout_constraintTop_toBottomOf="@+id/manager_layout_surface_tv" />
 
-    <TextView
-        android:id="@+id/manager_layout_number_of_room_tv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/property_number_of_room_tv"
-        app:layout_constraintEnd_toEndOf="@+id/manager_layout_price_editText"
-        app:layout_constraintStart_toStartOf="@+id/manager_layout_price_editText"
-        app:layout_constraintTop_toTopOf="@+id/manager_layout_surface_tv" />
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="10dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintTop_toBottomOf="@+id/manager_layout_surface_editText"
+            app:layout_constraintBottom_toTopOf="@id/entry_date_selector_btn"/>
 
-    <EditText
-        android:id="@+id/manager_layout_nbr_of_room_editText"
-        android:layout_width="0dp"
-        android:imeOptions="flagNoExtractUi"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:inputType="number"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/manager_layout_number_of_room_tv"
-        app:layout_constraintStart_toStartOf="@+id/manager_layout_number_of_room_tv"
-        app:layout_constraintTop_toBottomOf="@+id/manager_layout_number_of_room_tv" />
+        <Button
+            android:id="@+id/entry_date_selector_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/secondaryColor"
+            android:text="Entry Date"
+            app:layout_constraintBottom_toTopOf="@id/manager_layout_facilities_tv"
+            app:layout_constraintEnd_toEndOf="@+id/manager_layout_surface_editText"
+            app:layout_constraintStart_toStartOf="@+id/manager_layout_surface_editText"
+            app:layout_constraintTop_toBottomOf="@+id/manager_layout_surface_editText" />
+
+        <TextView
+            android:id="@+id/entry_date_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select an market entry date"
+            app:layout_constraintBottom_toTopOf="@+id/manager_layout_facilities_tv"
+            app:layout_constraintEnd_toEndOf="@+id/manager_layout_nbr_of_room_editText"
+            app:layout_constraintStart_toStartOf="@+id/manager_layout_nbr_of_room_editText"
+            app:layout_constraintTop_toBottomOf="@+id/manager_layout_surface_editText" />
+
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="10dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintTop_toBottomOf="@+id/entry_date_selector_btn"
+            app:layout_constraintBottom_toTopOf="@id/manager_layout_facilities_tv"/>
+
+        <TextView
+            android:id="@+id/manager_layout_number_of_room_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/property_number_of_room_tv"
+            app:layout_constraintEnd_toEndOf="@+id/manager_layout_price_editText"
+            app:layout_constraintStart_toStartOf="@+id/manager_layout_price_editText"
+            app:layout_constraintTop_toTopOf="@+id/manager_layout_surface_tv" />
+
+        <EditText
+            android:id="@+id/manager_layout_nbr_of_room_editText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:imeOptions="flagNoExtractUi"
+            android:inputType="number"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/manager_layout_number_of_room_tv"
+            app:layout_constraintStart_toStartOf="@+id/manager_layout_number_of_room_tv"
+            app:layout_constraintTop_toBottomOf="@+id/manager_layout_number_of_room_tv" />
 
 
-    <CheckBox
-        android:id="@+id/checkBox_is_sold"
-        android:layout_width="196dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Is Sold"
-        app:layout_constraintEnd_toEndOf="@+id/textView13"
-        app:layout_constraintStart_toStartOf="@+id/textView13"
-        app:layout_constraintTop_toBottomOf="@+id/textView13"></CheckBox>
+        <CheckBox
+            android:id="@+id/checkBox_is_sold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Is Sold"
+            app:layout_constraintBottom_toTopOf="@id/manager_layout_btn_add_property"
+            app:layout_constraintEnd_toEndOf="@+id/textView13"
+            app:layout_constraintStart_toStartOf="@+id/textView13"
+            app:layout_constraintTop_toBottomOf="@+id/manager_layout_address_country_editText"></CheckBox>
 
-    <EditText
-        android:id="@+id/manager_layout_address_nbr_of_street_editText"
-        android:layout_width="0dp"
-        android:imeOptions="flagNoExtractUi"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/checkBox_park"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/checkBox_park"
-        app:layout_constraintTop_toTopOf="@+id/textView8" />
+        <Button
+            android:id="@+id/sold_date_selector_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Sold Date"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_country_editText"
+            app:layout_constraintStart_toStartOf="@+id/manager_layout_address_country_editText"
+            app:layout_constraintTop_toBottomOf="@+id/manager_layout_address_country_editText"></Button>
 
-    <EditText
-        android:id="@+id/manager_layout_address_street_editText"
-        android:layout_width="0dp"
-        android:imeOptions="flagNoExtractUi"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_nbr_of_street_editText"
-        app:layout_constraintStart_toStartOf="@+id/manager_layout_address_nbr_of_street_editText"
-        app:layout_constraintTop_toTopOf="@+id/textView9" />
+        <EditText
+            android:id="@+id/manager_layout_address_nbr_of_street_editText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:imeOptions="flagNoExtractUi"
+            android:inputType="number"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/checkBox_park"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/checkBox_park"
+            app:layout_constraintTop_toTopOf="@+id/textView8" />
 
-    <EditText
-        android:id="@+id/manager_layout_address_district_editText"
-        android:layout_width="0dp"
-        android:imeOptions="flagNoExtractUi"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_street_editText"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/manager_layout_address_street_editText"
-        app:layout_constraintTop_toTopOf="@+id/textView10" />
+        <EditText
+            android:id="@+id/manager_layout_address_street_editText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:imeOptions="flagNoExtractUi"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_nbr_of_street_editText"
+            app:layout_constraintStart_toStartOf="@+id/manager_layout_address_nbr_of_street_editText"
+            app:layout_constraintTop_toTopOf="@+id/textView9" />
 
-    <EditText
-        android:id="@+id/manager_layout_address_state_editText"
-        android:layout_width="0dp"
-        android:imeOptions="flagNoExtractUi"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_district_editText"
-        app:layout_constraintStart_toStartOf="@+id/manager_layout_address_district_editText"
-        app:layout_constraintTop_toTopOf="@+id/textView11" />
+        <EditText
+            android:id="@+id/manager_layout_address_district_editText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:imeOptions="flagNoExtractUi"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_street_editText"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/manager_layout_address_street_editText"
+            app:layout_constraintTop_toTopOf="@+id/textView10" />
 
-    <EditText
-        android:id="@+id/manager_layout_address_country_editText"
-        android:layout_width="0dp"
-        android:imeOptions="flagNoExtractUi"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_district_editText"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/manager_layout_address_district_editText"
-        app:layout_constraintTop_toTopOf="@+id/textView13" />
+        <EditText
+            android:id="@+id/manager_layout_address_state_editText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:imeOptions="flagNoExtractUi"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_district_editText"
+            app:layout_constraintStart_toStartOf="@+id/manager_layout_address_district_editText"
+            app:layout_constraintTop_toTopOf="@+id/textView11" />
 
-    <EditText
-        android:id="@+id/manager_layout_address_post_code_editText"
-        android:layout_width="0dp"
-        android:imeOptions="flagNoExtractUi"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_state_editText"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/manager_layout_address_state_editText"
-        app:layout_constraintTop_toTopOf="@+id/textView12" />
+        <EditText
+            android:id="@+id/manager_layout_address_country_editText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:imeOptions="flagNoExtractUi"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_district_editText"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/manager_layout_address_district_editText"
+            app:layout_constraintTop_toTopOf="@+id/textView13" />
 
-    <TextView
-        android:id="@+id/manager_layout_address_tv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Address"
-        app:layout_constraintEnd_toEndOf="@+id/checkBox_store"
-        app:layout_constraintStart_toStartOf="@+id/checkBox_store"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox_store" />
+        <EditText
+            android:id="@+id/manager_layout_address_post_code_editText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:imeOptions="flagNoExtractUi"
+            android:inputType="number"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_state_editText"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/manager_layout_address_state_editText"
+            app:layout_constraintTop_toTopOf="@+id/textView12" />
+
+        <TextView
+            android:id="@+id/manager_layout_address_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Address"
+            app:layout_constraintEnd_toEndOf="@+id/checkBox_store"
+            app:layout_constraintStart_toStartOf="@+id/checkBox_store"
+            app:layout_constraintTop_toBottomOf="@+id/checkBox_store" />
 
         <CheckBox
             android:id="@+id/checkBox_park"
@@ -255,36 +306,36 @@
             app:layout_constraintStart_toStartOf="@+id/checkBox_school"
             app:layout_constraintTop_toBottomOf="@id/checkBox_school"></CheckBox>
 
-    <CheckBox
-        android:id="@+id/checkBox_station"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Station"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/manager_layout_nbr_of_room_editText"
-        app:layout_constraintStart_toStartOf="@+id/manager_layout_nbr_of_room_editText"
-        app:layout_constraintTop_toTopOf="@+id/checkBox_school"></CheckBox>
+        <CheckBox
+            android:id="@+id/checkBox_station"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Station"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/manager_layout_nbr_of_room_editText"
+            app:layout_constraintStart_toStartOf="@+id/manager_layout_nbr_of_room_editText"
+            app:layout_constraintTop_toTopOf="@+id/checkBox_school"></CheckBox>
 
-    <CheckBox
-        android:id="@+id/checkBox_school"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="School"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/manager_layout_facilities_tv"
-        app:layout_constraintStart_toStartOf="@+id/manager_layout_facilities_tv"
-        app:layout_constraintTop_toBottomOf="@+id/manager_layout_facilities_tv"></CheckBox>
+        <CheckBox
+            android:id="@+id/checkBox_school"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="School"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/manager_layout_facilities_tv"
+            app:layout_constraintStart_toStartOf="@+id/manager_layout_facilities_tv"
+            app:layout_constraintTop_toBottomOf="@+id/manager_layout_facilities_tv"></CheckBox>
 
-    <TextView
-        android:id="@+id/manager_layout_facilities_tv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Facilities :"
-        app:layout_constraintEnd_toEndOf="@+id/manager_layout_surface_editText"
-        app:layout_constraintStart_toStartOf="@+id/manager_layout_surface_editText"
-        app:layout_constraintTop_toBottomOf="@id/manager_layout_surface_editText"></TextView>
+        <TextView
+            android:id="@+id/manager_layout_facilities_tv"
+            android:layout_marginTop="5dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Facilities :"
+            app:layout_constraintEnd_toEndOf="@+id/manager_layout_surface_editText"
+            app:layout_constraintStart_toStartOf="@+id/manager_layout_surface_editText"
+            app:layout_constraintTop_toBottomOf="@+id/entry_date_selector_btn"></TextView>
 
         <TextView
             android:id="@+id/textView13"
@@ -358,7 +409,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
-            android:background="@color/secondaryColor"
+            android:backgroundTint="@color/secondaryColor"
             android:padding="8dp"
             android:text="Add property"
             android:textColor="@color/primaryDarkColor"

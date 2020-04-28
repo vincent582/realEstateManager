@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.Database.DAO;
 
+import android.database.Cursor;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -30,4 +32,7 @@ public interface PropertyDAO {
 
     @Transaction @Query("SELECT * FROM property")
     LiveData<List<FullProperty>> getFullProperties();
+
+    @Query("SELECT * FROM property")
+    Cursor getPropertiesWithCursor();
 }

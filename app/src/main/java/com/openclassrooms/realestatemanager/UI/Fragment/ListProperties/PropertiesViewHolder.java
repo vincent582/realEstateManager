@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,7 +32,9 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder implements Vie
     @BindView(R.id.item_property_district_text_view)
     TextView mPropertyDistrict;
     @BindView(R.id.item_list_property)
-    LinearLayout mItemView;
+    ConstraintLayout mItemView;
+    @BindView(R.id.sold_out_stamp_iv)
+    ImageView soldOutStamp;
 
     private final Context mContext;
     private FullProperty mProperty;
@@ -65,6 +68,11 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder implements Vie
         mPropertyType.setText(property.getProperty().getType());
         mPropertyPrice.setText("$"+ String.format("%,d", property.getProperty().getPrice()));
         mPropertyDistrict.setText(property.getAddress().getDistrict());
+        if (property.getProperty().getSold()){
+            soldOutStamp.setVisibility(View.VISIBLE);
+        }else{
+            soldOutStamp.setVisibility(View.GONE);
+        }
         mItemView.setOnClickListener(this);
         changeBackgroundColor(index);
     }
