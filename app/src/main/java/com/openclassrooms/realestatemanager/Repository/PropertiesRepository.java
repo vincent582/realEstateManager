@@ -38,7 +38,7 @@ public class PropertiesRepository {
      * @param property
      */
     public void updateProperty(Property property) {
-        mPropertyDAO.updateProerty(property);
+        mPropertyDAO.updateProperty(property);
     }
 
     /**
@@ -46,4 +46,10 @@ public class PropertiesRepository {
      * @return
      */
     public LiveData<List<FullProperty>> getFullProperties(){ return mPropertyDAO.getFullProperties(); }
+
+    public LiveData<List<FullProperty>> searchProperties(int surfaceMin, int surfaceMax, int priceMin,
+                                                         int priceMax , List<String> facilities, Long addedDateMin,
+                                                         Long addedDateMax, Long soldDateMin, Long soldDateMax){
+        return mPropertyDAO.searchPropertiesWithParameters(surfaceMin,surfaceMax,priceMin,priceMax,facilities,addedDateMin,addedDateMax,soldDateMin,soldDateMax);
+    }
 }

@@ -22,6 +22,7 @@ import com.openclassrooms.realestatemanager.UI.Fragment.ListProperties.ListPrope
 import com.openclassrooms.realestatemanager.UI.Fragment.LoanSimulator.LoanSimulatorFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.Map.MapFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.Profile.ProfileFragment;
+import com.openclassrooms.realestatemanager.UI.Fragment.Search.SearchFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -189,6 +190,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     }else{
                         Snackbar.make(mDetailsPropertyFragment.getView(),"You have to select an item to update it!",Snackbar.LENGTH_SHORT).show();
                     }
+                break;
+            case R.id.app_bar_search_item:
+                SearchFragment searchFragment = new SearchFragment();
+                this.startTransactionFragment(searchFragment);
+                showDetailsFrameLayout(false);
                 break;
             default:
                 return super.onOptionsItemSelected(item);

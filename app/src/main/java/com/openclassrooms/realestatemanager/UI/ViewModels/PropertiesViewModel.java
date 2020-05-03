@@ -48,4 +48,10 @@ public class PropertiesViewModel extends ViewModel {
     public void updateProperty(Property property) {
         mExecutor.execute(()-> mPropertiesRepository.updateProperty(property));
     }
+
+    public LiveData<List<FullProperty>> searchProperties(int surfaceMin, int surfaceMax, int priceMin,
+                                                         int priceMax , List<String> facilities, Long addedDateMin,
+                                                         Long addedDateMax, Long soldDateMin, Long soldDateMax){
+        return mPropertiesRepository.searchProperties(surfaceMin,surfaceMax,priceMin,priceMax,facilities,addedDateMin,addedDateMax,soldDateMin,soldDateMax);
+    }
 }

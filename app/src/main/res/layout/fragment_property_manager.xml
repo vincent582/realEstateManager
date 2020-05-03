@@ -203,7 +203,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="Sold Date"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/manager_layout_address_country_editText"
             app:layout_constraintStart_toStartOf="@+id/manager_layout_address_country_editText"
             app:layout_constraintTop_toBottomOf="@+id/manager_layout_address_country_editText"></Button>
