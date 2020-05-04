@@ -22,13 +22,13 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.openclassrooms.realestatemanager.Model.FullProperty;
 import com.openclassrooms.realestatemanager.Model.Picture;
+import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.PropertyManager.PicturesRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.UI.Fragment.PropertyManager.PicturesViewHolder;
-import com.openclassrooms.realestatemanager.Utils.DialogShowImage;
+import com.openclassrooms.realestatemanager.Utils.Dialog.DialogShowImage;
 import com.openclassrooms.realestatemanager.Utils.StorageUtils;
 import com.openclassrooms.realestatemanager.Utils.Utils;
 
@@ -78,7 +78,7 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
     private GoogleMap mGoogleMap;
     private Integer mPropertyId;
     private PicturesRecyclerViewAdapter mAdapter;
-    private FullProperty property;
+    private Property property;
 
     //CONSTRUCTOR
     public DetailsPropertyFragment(){}
@@ -96,7 +96,6 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_details_property, container, false);
         ButterKnife.bind(this,view);
-
         configureViewModels(getContext());
         checkIfInstanceState(savedInstanceState);
         configureRecyclerView();
@@ -145,48 +144,48 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
     /**
      * On received property from viewModel
      * display information in the fragment.
-     * @param mFullProperty
+     * @param property
      */
-    private void updateProperty(FullProperty mFullProperty) {
-        property = mFullProperty;
-        if (mFullProperty != null){
-            mUserViewModel.getUserById(mFullProperty.getProperty().getUserId()).observe(this,user -> {
+    private void updateProperty(Property property) {
+        this.property = property;
+        if (property != null){
+            mUserViewModel.getUserById(property.getUserId()).observe(this,user -> {
                 if (user!=null) {
                     mAgentInCharge.setText(user.getName());
                 }
             });
             //Update pictures of this property in recyclerView
-            mAdapter.updateListPictures(mFullProperty.getPictureList());
+            mAdapter.updateListPictures(property.getPictureList());
             //setUp information
-            mDateOfEntry.setText(Utils.formatDate(mFullProperty.getProperty().getAddedDate()));
-            if (mFullProperty.getProperty().getSold()){
+            mDateOfEntry.setText(Utils.formatDate(property.getAddedDate()));
+            if (property.getSold()){
                 mPropertyStatus.setText("Sold Out");
                 mPropertyStatus.setTextColor(ContextCompat.getColor(getContext(),R.color.red));
                 mSoldDateLayout.setVisibility(View.VISIBLE);
-                mDateOfSold.setText(Utils.formatDate(mFullProperty.getProperty().getDateOfSale()));
+                mDateOfSold.setText(Utils.formatDate(property.getDateOfSale()));
             }else {
                 mPropertyStatus.setText("Available");
                 mSoldDateLayout.setVisibility(View.GONE);
                 mPropertyStatus.setTextColor(ContextCompat.getColor(getContext(),R.color.green));
             }
-            mPrice.setText("$"+ String.format("%,d", mFullProperty.getProperty().getPrice()));
-            mPropertyType.setText(mFullProperty.getProperty().getType());
-            mDescription.setText(mFullProperty.getProperty().getDescription());
-            mSurface.setText(String.valueOf(mFullProperty.getProperty().getSurface()));
-            mNbrOfRooms.setText(String.valueOf(mFullProperty.getProperty().getNbrOfRooms()));
-            mAddressStreet.setText(mFullProperty.getAddress().getStreet());
-            if (mFullProperty.getAddress().getComplement_street() != null) {
-                mAddressStreetComplement.setText(mFullProperty.getAddress().getComplement_street());
+            mPrice.setText("$"+ String.format("%,d", property.getPrice()));
+            mPropertyType.setText(property.getType());
+            mDescription.setText(property.getDescription());
+            mSurface.setText(String.valueOf(property.getSurface()));
+            mNbrOfRooms.setText(String.valueOf(property.getNbrOfRooms()));
+            mAddressStreet.setText(property.getAddress().getStreet());
+            if (property.getAddress().getComplement_street() != null) {
+                mAddressStreetComplement.setText(property.getAddress().getComplement_street());
             }else {
                 mAddressStreetComplement.setVisibility(View.GONE);
             }
-            mAddressDistrict.setText(mFullProperty.getAddress().getDistrict());
-            mAddressStateAndPostCode.setText(mFullProperty.getAddress().getState()+" "+ mFullProperty.getAddress().getPostCode());
-            mAddressCountry.setText(mFullProperty.getAddress().getCountry());
+            mAddressDistrict.setText(property.getAddress().getDistrict());
+            mAddressStateAndPostCode.setText(property.getAddress().getState()+" "+ property.getAddress().getPostCode());
+            mAddressCountry.setText(property.getAddress().getCountry());
             mMapView.getMapAsync(this);
         }
 
-        List<String> facilities = mFullProperty.getProperty().getFacilities();
+        List<String> facilities = property.getFacilities();
         showingListOfFacilities(facilities);
     }
 
@@ -237,7 +236,7 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         mGoogleMap.getUiSettings().setMapToolbarEnabled(false);
-        String formattedAddress = property.getAddress().getFormatedAddress();
+        String formattedAddress = property.getAddress().getFormattedAddress();
         LatLng position = Utils.getLocationFromAddress(getContext(), formattedAddress);
         if (position != null){
             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(position));

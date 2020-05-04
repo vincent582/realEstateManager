@@ -67,7 +67,7 @@ public class DetailsPropertyActivity extends BaseActivity {
     }
 
     /**
-     * Display Different menu on this activity if User logged
+     * Display Different menu on this activity
      * @param menu
      * @return
      */

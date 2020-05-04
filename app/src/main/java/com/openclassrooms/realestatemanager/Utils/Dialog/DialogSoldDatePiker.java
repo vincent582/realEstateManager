@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.Utils;
+package com.openclassrooms.realestatemanager.Utils.Dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -13,13 +13,13 @@ import androidx.fragment.app.DialogFragment;
 
 import com.openclassrooms.realestatemanager.R;
 
-public class DialogEntryDatePicker extends DialogFragment {
+public class DialogSoldDatePiker extends DialogFragment {
 
-    public interface DialogEntryDatePickerListener {
-        public void onDialogDatePikerValidateClick(DialogEntryDatePicker dialogEntryDatePickerFragment);
+    public interface DialogSoldDatePickerListener {
+        public void onDialogSoldDatePikerValidateClick(DialogSoldDatePiker dialogSoldDatePickerFragment);
     }
 
-    DialogEntryDatePickerListener mListener;
+    DialogSoldDatePickerListener mListener;
 
     @NonNull
     @Override
@@ -27,11 +27,11 @@ public class DialogEntryDatePicker extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         builder.setView(inflater.inflate(R.layout.dialog_date_picker, null))
-            .setMessage("Date of entry in marker")
+            .setMessage("Date of Sold")
             .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    mListener.onDialogDatePikerValidateClick(DialogEntryDatePicker.this);
+                    mListener.onDialogSoldDatePikerValidateClick(DialogSoldDatePiker.this);
                 }
             })
             .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -47,7 +47,7 @@ public class DialogEntryDatePicker extends DialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mListener = (DialogEntryDatePickerListener) getTargetFragment();
+            mListener = (DialogSoldDatePickerListener) getTargetFragment();
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString() + " must implement DialogDatePickerListener");
         }

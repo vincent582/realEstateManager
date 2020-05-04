@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.openclassrooms.realestatemanager.Model.FullProperty;
+import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 
 import java.util.List;
@@ -16,12 +16,12 @@ import java.util.List;
 public class PropertiesRecyclerViewAdapter extends RecyclerView.Adapter<PropertiesViewHolder> {
 
     private final Context mContext;
-    private List<FullProperty> mListProperties;
+    private List<Property> mListProperties;
     private PropertiesViewHolder.OnPropertyListener mPropertyListener;
     private int index = 0;
 
     //CONSTRUCTOR
-    public PropertiesRecyclerViewAdapter(List<FullProperty> listProperties, PropertiesViewHolder.OnPropertyListener propertyListener, Context context) {
+    public PropertiesRecyclerViewAdapter(List<Property> listProperties, PropertiesViewHolder.OnPropertyListener propertyListener, Context context) {
         this.mListProperties = listProperties;
         this.mPropertyListener = propertyListener;
         this.mContext = context;
@@ -53,8 +53,8 @@ public class PropertiesRecyclerViewAdapter extends RecyclerView.Adapter<Properti
      * @param propertyId
      */
     public void updateBackgroundColor(int propertyId){
-        for (FullProperty property: mListProperties) {
-            if (property.getProperty().getId() == propertyId){
+        for (Property property: mListProperties) {
+            if (property.getId() == propertyId){
                 index = propertyId;
                 notifyDataSetChanged();
             }

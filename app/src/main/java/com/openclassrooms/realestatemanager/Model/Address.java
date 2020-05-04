@@ -1,20 +1,7 @@
 package com.openclassrooms.realestatemanager.Model;
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.ForeignKey;
-import androidx.room.Index;
-import androidx.room.PrimaryKey;
-
-@Entity(foreignKeys = @ForeignKey(entity = Property.class,
-        parentColumns = "id",
-        childColumns = "propertyId"))
 public class Address {
 
-    @PrimaryKey(autoGenerate = true)
-    private long id;
-    @ColumnInfo(name = "propertyId")
-    private int propertyId;
     private int number;
     private String street;
     private String complement_street;
@@ -23,8 +10,9 @@ public class Address {
     private int postCode;
     private String country;
 
-    public Address(int propertyId, int number, String street, String complement_street, String district, String state, int postCode, String country) {
-        this.propertyId = propertyId;
+    public Address(){}
+
+    public Address(int number, String street, String complement_street, String district, String state, int postCode, String country) {
         this.number = number;
         this.street = street;
         this.complement_street = complement_street;
@@ -90,28 +78,12 @@ public class Address {
         this.country = country;
     }
 
-    public String getFormatedAddress(){
-        String formatedAddress = number + ", " +street+", ";
+    public String getFormattedAddress(){
+        String formattedAddress = number + ", " +street+", ";
         if (complement_street!= null){
-            formatedAddress += complement_street+", ";
+            formattedAddress += complement_street+", ";
         }
-        formatedAddress += district+", "+state+", "+postCode+", "+country;
-        return formatedAddress;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public int getPropertyId() {
-        return propertyId;
-    }
-
-    public void setPropertyId(int propertyId) {
-        this.propertyId = propertyId;
+        formattedAddress += district+", "+state+", "+postCode+", "+country;
+        return formattedAddress;
     }
 }

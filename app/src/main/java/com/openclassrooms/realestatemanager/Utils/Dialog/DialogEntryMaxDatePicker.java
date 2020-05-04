@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.Utils;
+package com.openclassrooms.realestatemanager.Utils.Dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.openclassrooms.realestatemanager.Model.FullProperty;
+import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity;
 import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
@@ -62,7 +62,7 @@ public class ListPropertiesFragment extends BaseFragment implements PropertiesVi
         ButterKnife.bind(this,view);
         configureViewModels(getContext());
         //get all property from viewModel
-        mPropertiesViewModel.getFullProperties().observe(getViewLifecycleOwner(),this::configureRecyclerView);
+        mPropertiesViewModel.getAllProperties().observe(getViewLifecycleOwner(),this::configureRecyclerView);
         return view;
     }
 
@@ -70,7 +70,7 @@ public class ListPropertiesFragment extends BaseFragment implements PropertiesVi
      * On received list from viewModel, pass it to recyclerView
      * @param properties
      */
-    private void configureRecyclerView(List<FullProperty> properties) {
+    private void configureRecyclerView(List<Property> properties) {
         mAdapter = new PropertiesRecyclerViewAdapter(properties,this,getContext());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

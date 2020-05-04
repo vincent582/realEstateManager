@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,9 +11,12 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.openclassrooms.realestatemanager.Model.FullProperty;
+import com.openclassrooms.realestatemanager.Model.Picture;
+import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.Utils.StorageUtils;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,7 +39,7 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder implements Vie
     ImageView soldOutStamp;
 
     private final Context mContext;
-    private FullProperty mProperty;
+    private Property mProperty;
 
     private OnPropertyListener mOnPropertyListener;
 
@@ -58,17 +60,18 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder implements Vie
      * @param property
      * @param index
      */
-    public void updateView(FullProperty property, int index) {
+    public void updateView(Property property, int index) {
         this.mProperty = property;
+
         //get first image of property image list if not empty
         if (!mProperty.getPictureList().isEmpty()) {
             Bitmap bitmap = StorageUtils.getBitmapFromStorage(mContext.getFilesDir(), mContext, property.getPictureList().get(0).getFile(), FOLDERNAME);
             mPictureImageView.setImageBitmap(bitmap);
         }
-        mPropertyType.setText(property.getProperty().getType());
-        mPropertyPrice.setText("$"+ String.format("%,d", property.getProperty().getPrice()));
+        mPropertyType.setText(property.getType());
+        mPropertyPrice.setText("$"+ String.format("%,d", property.getPrice()));
         mPropertyDistrict.setText(property.getAddress().getDistrict());
-        if (property.getProperty().getSold()){
+        if (property.getSold()){
             soldOutStamp.setVisibility(View.VISIBLE);
         }else{
             soldOutStamp.setVisibility(View.GONE);
@@ -78,7 +81,7 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder implements Vie
     }
 
     private void changeBackgroundColor(int index) {
-        if(index == mProperty.getProperty().getId()){
+        if(index == mProperty.getId()){
             mItemView.setBackgroundResource(R.color.primaryLightColor);
             mPropertyPrice.setTextColor(ContextCompat.getColor(mContext,R.color.secondaryLightColor));
             mPropertyType.setTextColor(ContextCompat.getColor(mContext,R.color.primaryTextColor));
@@ -93,6 +96,6 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder implements Vie
 
     @Override
     public void onClick(View v) {
-        mOnPropertyListener.onPropertyClick(mProperty.getProperty().getId());
+        mOnPropertyListener.onPropertyClick(mProperty.getId());
     }
 }

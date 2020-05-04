@@ -14,14 +14,14 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.openclassrooms.realestatemanager.Model.FullProperty;
+import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
-import com.openclassrooms.realestatemanager.Utils.DateConverter;
-import com.openclassrooms.realestatemanager.Utils.DialogEntryDatePicker;
-import com.openclassrooms.realestatemanager.Utils.DialogEntryMaxDatePicker;
-import com.openclassrooms.realestatemanager.Utils.DialogSoldDatePiker;
-import com.openclassrooms.realestatemanager.Utils.DialogSoldMaxDatePicker;
+import com.openclassrooms.realestatemanager.Utils.Converter.DateConverter;
+import com.openclassrooms.realestatemanager.Utils.Dialog.DialogEntryDatePicker;
+import com.openclassrooms.realestatemanager.Utils.Dialog.DialogEntryMaxDatePicker;
+import com.openclassrooms.realestatemanager.Utils.Dialog.DialogSoldDatePiker;
+import com.openclassrooms.realestatemanager.Utils.Dialog.DialogSoldMaxDatePicker;
 import com.openclassrooms.realestatemanager.Utils.Utils;
 
 import java.util.ArrayList;
@@ -91,7 +91,7 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
             ,DateConverter.fromDate(maxDateOfEntry),DateConverter.fromDate(minDateOfSale),DateConverter.fromDate(maxDateOfSale)).observe(this,this::getSearchedProperties);
     }
 
-    private void getSearchedProperties(List<FullProperty> fullProperties) {
+    private void getSearchedProperties(List<Property> fullProperties) {
         Log.e("TAG", "getSearchedProperties: "+ fullProperties );
     }
 

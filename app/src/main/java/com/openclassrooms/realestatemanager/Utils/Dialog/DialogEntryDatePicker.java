@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.Utils;
+package com.openclassrooms.realestatemanager.Utils.Dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -13,13 +13,13 @@ import androidx.fragment.app.DialogFragment;
 
 import com.openclassrooms.realestatemanager.R;
 
-public class DialogSoldMaxDatePicker extends DialogFragment {
+public class DialogEntryDatePicker extends DialogFragment {
 
-    public interface DialogSoldMaxDatePickerListener {
-        public void onDialogSoldMaxDatePikerValidateClick(DialogSoldMaxDatePicker dialogSoldMaxDatePickerFragment);
+    public interface DialogEntryDatePickerListener {
+        public void onDialogDatePikerValidateClick(DialogEntryDatePicker dialogEntryDatePickerFragment);
     }
 
-    DialogSoldMaxDatePickerListener mListener;
+    DialogEntryDatePickerListener mListener;
 
     @NonNull
     @Override
@@ -31,7 +31,7 @@ public class DialogSoldMaxDatePicker extends DialogFragment {
             .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    mListener.onDialogSoldMaxDatePikerValidateClick(DialogSoldMaxDatePicker.this);
+                    mListener.onDialogDatePikerValidateClick(DialogEntryDatePicker.this);
                 }
             })
             .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -47,9 +47,9 @@ public class DialogSoldMaxDatePicker extends DialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mListener = (DialogSoldMaxDatePickerListener) getTargetFragment();
+            mListener = (DialogEntryDatePickerListener) getTargetFragment();
         } catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString() + " must implement DialogSoldMaxDatePickerListener");
+            throw new ClassCastException(getActivity().toString() + " must implement DialogDatePickerListener");
         }
     }
 }

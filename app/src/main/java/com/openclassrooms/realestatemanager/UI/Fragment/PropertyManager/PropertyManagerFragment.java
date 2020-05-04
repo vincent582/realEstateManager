@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,15 +30,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.Dummy.Dummy;
 import com.openclassrooms.realestatemanager.Model.Address;
-import com.openclassrooms.realestatemanager.Model.FullProperty;
 import com.openclassrooms.realestatemanager.Model.Picture;
 import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
-import com.openclassrooms.realestatemanager.Utils.DialogDeleteImage;
-import com.openclassrooms.realestatemanager.Utils.DialogEntryDatePicker;
-import com.openclassrooms.realestatemanager.Utils.DialogImagePreview;
-import com.openclassrooms.realestatemanager.Utils.DialogSoldDatePiker;
+import com.openclassrooms.realestatemanager.Utils.Dialog.DialogDeleteImage;
+import com.openclassrooms.realestatemanager.Utils.Dialog.DialogEntryDatePicker;
+import com.openclassrooms.realestatemanager.Utils.Dialog.DialogImagePreview;
+import com.openclassrooms.realestatemanager.Utils.Dialog.DialogSoldDatePiker;
 import com.openclassrooms.realestatemanager.Utils.NotificationService;
 import com.openclassrooms.realestatemanager.Utils.StorageUtils;
 import com.openclassrooms.realestatemanager.Utils.Utils;
@@ -62,6 +59,8 @@ import static android.app.Activity.RESULT_OK;
 import static com.openclassrooms.realestatemanager.UI.Activities.BaseActivity.PREFERENCES_NAME;
 import static com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity.PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER;
 import static com.openclassrooms.realestatemanager.UI.Fragment.Profile.ProfileFragment.CURRENT_USER_ID;
+
+//TODO check the update method.
 
 /**
  * A simple {@link Fragment} subclass.
@@ -97,7 +96,7 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
 
     //If PropertyId get FullProperty
     private Integer mPropertyId;
-    private FullProperty mFullProperty;
+    private Property mProperty;
 
     //Values of editText
     private String mType;
@@ -116,7 +115,7 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
     public static final String FOLDERNAME = "RealEstateManager_images";
     private static final String PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
     //For permission
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_IMAGE_CAPTURE = 100;
     private static final int RC_IMAGE_PERMS = 200;
     private static final int RC_CHOOSE_PHOTO = 300;
     //For data
@@ -124,7 +123,6 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
     private Bitmap bitmap;
     private List<Picture> mListPictures = new ArrayList<>();
     private Picture pictureToDelete;
-    private List<Picture> mListPicturesToDelete = new ArrayList<>();
     private List<String> mListFacilities = new ArrayList<>();
     private long userId;
     private Boolean mIsSold = false;
@@ -150,29 +148,6 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         setAddPropertyButtonOnclickListener();
         onSelectedSoldCheckbox();
         return view;
-    }
-
-    private void onSelectedSoldCheckbox() {
-        mCheckboxIsSold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    mSoldDateSelector.setVisibility(View.VISIBLE);
-                }else {
-                    mSoldDateSelector.setVisibility(View.GONE);
-                }
-            }
-        });
-    }
-
-    @OnClick(R.id.entry_date_selector_btn)
-    public void showDialogDatePicker(){
-        showDatePikerDialog();
-    }
-
-    @OnClick(R.id.sold_date_selector_btn)
-    public void showDialogSoldDatePicker(){
-        showSoldDatePikerDialog();
     }
 
     private void getCurrentUser() {
@@ -202,21 +177,22 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
 
     /**
      * Populate all Edit text with value of Property
-     * @param fullProperty
+     * @param property
      */
-    private void populateEditItemWithPropertyValues(FullProperty fullProperty) {
-        this.mFullProperty = fullProperty;
-        Log.e("TAG", "populateEditItemWithPropertyValues: " +mFullProperty.getProperty().getAddedDate());
+    private void populateEditItemWithPropertyValues(Property property) {
+        this.mProperty = property;
 
-        mListPictures = fullProperty.getPictureList();
+        //populate adapter with pictures
+        mListPictures = property.getPictureList();
         mAdapter.updateListPictures(mListPictures);
 
-        mPropertyTypeSpinner.setSelection(Dummy.propertyType.indexOf(fullProperty.getProperty().getType()));
-        mPropertyPrice.setText(String.valueOf(fullProperty.getProperty().getPrice()));
-        mPropertyDescription.setText(fullProperty.getProperty().getDescription());
-        mPropertySurface.setText(String.valueOf(fullProperty.getProperty().getSurface()));
-        mPropertyNbrOfRooms.setText(String.valueOf(fullProperty.getProperty().getNbrOfRooms()));
-        List<String> facilities = mFullProperty.getProperty().getFacilities();
+        mPropertyTypeSpinner.setSelection(Dummy.propertyType.indexOf(property.getType()));
+        mPropertyPrice.setText(String.valueOf(property.getPrice()));
+        mPropertyDescription.setText(property.getDescription());
+        mPropertySurface.setText(String.valueOf(property.getSurface()));
+        mPropertyNbrOfRooms.setText(String.valueOf(property.getNbrOfRooms()));
+
+        List<String> facilities = mProperty.getFacilities();
         if (facilities != null){
             for (String facility: facilities) {
                 switch (facility){
@@ -236,22 +212,22 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
             }
         }
 
-        mPropertyAddressStreetNumber.setText(String.valueOf(mFullProperty.getAddress().getNumber()));
-        mPropertyAddressStreet.setText(mFullProperty.getAddress().getStreet());
-        mPropertyAddressDistrict.setText(mFullProperty.getAddress().getDistrict());
-        mPropertyAddressState.setText(mFullProperty.getAddress().getState());
-        mPropertyAddressPostCode.setText(String.valueOf(mFullProperty.getAddress().getPostCode()));
-        mPropertyAddressCountry.setText(mFullProperty.getAddress().getCountry());
+        mPropertyAddressStreetNumber.setText(String.valueOf(mProperty.getAddress().getNumber()));
+        mPropertyAddressStreet.setText(mProperty.getAddress().getStreet());
+        mPropertyAddressDistrict.setText(mProperty.getAddress().getDistrict());
+        mPropertyAddressState.setText(mProperty.getAddress().getState());
+        mPropertyAddressPostCode.setText(String.valueOf(mProperty.getAddress().getPostCode()));
+        mPropertyAddressCountry.setText(mProperty.getAddress().getCountry());
 
-        if (mFullProperty.getProperty().getAddedDate() != null){
-            dateOfEntry = mFullProperty.getProperty().getAddedDate();
-            mEntryDateTv.setText(Utils.formatDate(mFullProperty.getProperty().getAddedDate()));
+        if (mProperty.getAddedDate() != null){
+            dateOfEntry = mProperty.getAddedDate();
+            mEntryDateTv.setText(Utils.formatDate(mProperty.getAddedDate()));
         }
 
-        if (mFullProperty.getProperty().getSold()){
+        if (mProperty.getSold()){
             mCheckboxIsSold.setChecked(true);
-            dateOfSale = mFullProperty.getProperty().getDateOfSale();
-            mSoldDateSelector.setText(Utils.formatDate(mFullProperty.getProperty().getDateOfSale()));
+            dateOfSale = mProperty.getDateOfSale();
+            mSoldDateSelector.setText(Utils.formatDate(mProperty.getDateOfSale()));
             mSoldDateSelector.setVisibility(View.VISIBLE);
         }else {
             mSoldDateSelector.setVisibility(View.GONE);
@@ -371,6 +347,29 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
         StorageUtils.setBitmapInStorage(getActivity().getFilesDir(),getContext(),imageName,FOLDERNAME,bitmap);
     }
 
+    private void onSelectedSoldCheckbox() {
+        mCheckboxIsSold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    mSoldDateSelector.setVisibility(View.VISIBLE);
+                }else {
+                    mSoldDateSelector.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    @OnClick(R.id.entry_date_selector_btn)
+    public void showDialogDatePicker(){
+        showDatePikerDialog();
+    }
+
+    @OnClick(R.id.sold_date_selector_btn)
+    public void showDialogSoldDatePicker(){
+        showSoldDatePikerDialog();
+    }
+
     /**
      * Manage click on add/update property
      */
@@ -379,9 +378,8 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
             @Override
             public void onClick(View v) {
                 if (checkValuesOfInput()){
-                    if (mFullProperty != null){
+                    if (mProperty != null){
                         setValuesOfPropertyAndUpdate();
-                        setValuesOfAddressAndUpdate();
                     }else {
                         createNewPropertyAndAddress();
                     }
@@ -397,67 +395,67 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
     private Boolean checkValuesOfInput() {
         Boolean values = true;
         if (mListPictures.isEmpty()){
-            Snackbar.make(getView(),"Vous devez ajouter au moins une image",Snackbar.LENGTH_LONG).show();
+            Snackbar.make(getView(),"You must add at least one image.",Snackbar.LENGTH_LONG).show();
             values = false;
         }
         if (!mPropertyPrice.getText().toString().isEmpty()){
             mPrice = Integer.valueOf(mPropertyPrice.getText().toString());
         }else{
-            mPropertyPrice.setError("Vous devez renseigner le prix du bien");
+            mPropertyPrice.setError("You must add a price.");
             values = false;
         }
         if (!mPropertyDescription.getText().toString().isEmpty()){
             mDescription = mPropertyDescription.getText().toString();
         }else{
-            mPropertyDescription.setError("Vous devez renseigner une description");
+            mPropertyDescription.setError("You must add a description.");
             values = false;
         }
         if (!mPropertySurface.getText().toString().isEmpty()){
             mSurface = Integer.valueOf(mPropertySurface.getText().toString());
         }else{
-            mPropertyDescription.setError("Vous devez renseigner une description");
+            mPropertySurface.setError("You must add a surface.");
             values = false;
         }
         if (!mPropertyNbrOfRooms.getText().toString().isEmpty()){
             mNbrOfRoom = Integer.valueOf(mPropertyNbrOfRooms.getText().toString());
         }else{
-            mPropertyDescription.setError("Vous devez renseigner une description");
+            mPropertyNbrOfRooms.setError("You must add a number of rooms.");
             values = false;
         }
         if (!mPropertyAddressStreetNumber.getText().toString().isEmpty()){
             mAddressStreetNbr = Integer.valueOf(mPropertyAddressStreetNumber.getText().toString());
         }else{
-            mPropertyAddressStreetNumber.setError("Vous devez renseigner le numero de rue");
+            mPropertyAddressStreetNumber.setError("You must add a number of street.");
             values = false;
         }
         if (!mPropertyAddressStreet.getText().toString().isEmpty()){
             mAddressStreet = mPropertyAddressStreet.getText().toString();
         }else{
-            mPropertyAddressStreet.setError("Vous devez renseigner la rue");
+            mPropertyAddressStreet.setError("You must add a street.");
             values = false;
         }
         if (!mPropertyAddressDistrict.getText().toString().isEmpty()){
             mAddressDistrict = mPropertyAddressDistrict.getText().toString();
         }else{
-            mPropertyAddressDistrict.setError("Vous devez renseigner le quartier");
+            mPropertyAddressDistrict.setError("You must add a district.");
             values = false;
         }
         if (!mPropertyAddressState.getText().toString().isEmpty()){
             mAddressState = mPropertyAddressState.getText().toString();
         }else{
-            mPropertyAddressState.setError("Vous devez renseigner l'état");
+            mPropertyAddressState.setError("You must add a State.");
             values = false;
         }
         if (!mPropertyAddressPostCode.getText().toString().isEmpty()){
             mAddressPostCode = Integer.valueOf(mPropertyAddressPostCode.getText().toString());
         }else{
-            mPropertyAddressPostCode.setError("Vous devez renseigner le CodePostal");
+            mPropertyAddressPostCode.setError("You must add a postcode.");
             values = false;
         }
         if (!mPropertyAddressCountry.getText().toString().isEmpty()){
             mAddressCountry = mPropertyAddressCountry.getText().toString();
         }else{
-            mPropertyAddressCountry.setError("Vous devez renseigner le pays");
+            mPropertyAddressCountry.setError("You must add a country.");
             values = false;
         }
 
@@ -498,83 +496,41 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
      */
     private void setValuesOfPropertyAndUpdate() {
         Property property = new Property();
-        property.setId(mFullProperty.mProperty.getId());
+        property.setId(mProperty.getId());
         property.setType(mType);
         property.setPrice(mPrice);
         property.setSurface(mSurface);
         property.setNbrOfRooms(mNbrOfRoom);
         property.setDescription(mDescription);
         property.setFacilities(mListFacilities);
-
         property.setSold(mIsSold);
         property.setAddedDate(dateOfEntry);
         property.setDateOfSale(dateOfSale);
         property.setUserId(userId);
-
-        mPropertiesViewModel.updateProperty(property);
-        createPicturesForProperty(mFullProperty.getProperty().getId());
-    }
-
-    /**
-     * get Address and update Address Entity in RoomDatabase
-     */
-    private void setValuesOfAddressAndUpdate() {
-        mAddressViewModel.getAddressOfProperty(mFullProperty.getProperty().getId()).observe(this,this::updateAddress);
-    }
-
-    private void updateAddress(Address address) {
+        property.setPictureList(mListPictures);
+        //for address
+        Address address = new Address();
         address.setNumber(mAddressStreetNbr);
         address.setStreet(mAddressStreet);
         address.setDistrict(mAddressDistrict);
         address.setState(mAddressState);
         address.setPostCode(mAddressPostCode);
         address.setCountry(mAddressCountry);
-        mAddressViewModel.updateAddress(address);
+        property.setAddress(address);
 
-        deletePictureInDatabase();
+        mPropertiesViewModel.updateProperty(property);
         showConfirmationMessage("updated");
         getActivity().finish();
-    }
-
-    /**
-     * On save delete in database all the picture the user choose to delete
-     */
-    private void deletePictureInDatabase() {
-        if (!mListPicturesToDelete.isEmpty()) {
-            for (Picture pictureToDelete : mListPicturesToDelete) {
-                mPictureViewModel.deletePicture(pictureToDelete);
-            }
-        }
     }
 
     /**
      * Create new Property and address related
      */
     private void createNewPropertyAndAddress() {
-        Property property = new Property(mType, mPrice, mSurface, mNbrOfRoom, mDescription, mIsSold, mListFacilities, dateOfEntry, dateOfSale, userId);
-        mPropertiesViewModel.createProperty(property).observe(getViewLifecycleOwner(),this::createAddress);
-    }
-
-    private void createAddress(Integer idProperty) {
-        Address address = new Address(idProperty, mAddressStreetNbr, mAddressStreet, null, mAddressDistrict,
-                mAddressState, mAddressPostCode, mAddressCountry);
-        mAddressViewModel.createAddress(address);
-
-        createPicturesForProperty(idProperty);
-    }
-
-    /**
-     * Create Pictures in database with propertyId relation
-     * @param idProperty
-     */
-    private void createPicturesForProperty(Integer idProperty) {
-        for (Picture picture: mListPictures) {
-            picture.setPropertyId(idProperty);
-            mPictureViewModel.createPicture(picture);
-        }
-        mPropertiesViewModel.getPropertyById(idProperty).observe(this, fullProperty -> {
-            mFullProperty = fullProperty;
-        });
+        Address address = new Address(mAddressStreetNbr, mAddressStreet, null, mAddressDistrict,
+            mAddressState, mAddressPostCode, mAddressCountry);
+        mProperty = new Property(mType, mPrice, mSurface, mNbrOfRoom, mDescription, mIsSold, mListFacilities, dateOfEntry, dateOfSale, address, mListPictures, userId);
+        mPropertiesViewModel.createProperty(mProperty);
         PropertyManagerFragment.this.showConfirmationMessage("added");
         getActivity().finish();
     }
@@ -600,7 +556,6 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
     @Override
     public void onDialogDeleteClick(DialogDeleteImage dialogDeleteImage) {
         mListPictures.remove(pictureToDelete);
-        mListPicturesToDelete.add(pictureToDelete);
         mAdapter.updateListPictures(mListPictures);
     }
 
@@ -609,10 +564,10 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
      * @param message
      */
     private void showConfirmationMessage(String message){
-        String messageText = "The property "+ mFullProperty.getProperty().getType()
-            +" on the number "+ mFullProperty.getAddress().getNumber()
-            +" of the street \"" + mFullProperty.getAddress().getStreet()
-            +"\" in the district of \""+ mFullProperty.getAddress().getDistrict()
+        String messageText = "The property "+ mProperty.getType()
+            +" on the number "+ mProperty.getAddress().getNumber()
+            +" of the street \"" + mProperty.getAddress().getStreet()
+            +"\" in the district of \""+ mProperty.getAddress().getDistrict()
             +"\" was successfully "+message+"!";
         NotificationService notificationService = new NotificationService(getContext());
         notificationService.sendNotification(1,messageText);

@@ -3,7 +3,6 @@ package com.openclassrooms.realestatemanager.Repository;
 import androidx.lifecycle.LiveData;
 
 import com.openclassrooms.realestatemanager.Database.DAO.PropertyDAO;
-import com.openclassrooms.realestatemanager.Model.FullProperty;
 import com.openclassrooms.realestatemanager.Model.Property;
 
 import java.util.List;
@@ -18,20 +17,23 @@ public class PropertiesRepository {
     }
 
     /**
+     * Get list of all of properties
+     * @return
+     */
+    public LiveData<List<Property>> getAllProperties(){ return mPropertyDAO.getAllProperty(); }
+
+    /**
      * Get Property by is id
      * @param id
      * @return LiveData FullProperty
      */
-    public LiveData<FullProperty> getPropertyById(int id){ return mPropertyDAO.getPropertyById(id); }
+    public LiveData<Property> getPropertyById(int id){ return mPropertyDAO.getPropertyById(id); }
 
     /**
      * Add property to the database
      * @param property
-     * @return
      */
-    public long createProperty(Property property) {
-        return mPropertyDAO.insertProperty(property);
-    }
+    public void createProperty(Property property) { mPropertyDAO.insertProperty(property); }
 
     /**
      * Update the property with new info in database
@@ -41,13 +43,7 @@ public class PropertiesRepository {
         mPropertyDAO.updateProperty(property);
     }
 
-    /**
-     * Get list of all of properties
-     * @return
-     */
-    public LiveData<List<FullProperty>> getFullProperties(){ return mPropertyDAO.getFullProperties(); }
-
-    public LiveData<List<FullProperty>> searchProperties(int surfaceMin, int surfaceMax, int priceMin,
+    public LiveData<List<Property>> searchProperties(int surfaceMin, int surfaceMax, int priceMin,
                                                          int priceMax , List<String> facilities, Long addedDateMin,
                                                          Long addedDateMax, Long soldDateMin, Long soldDateMax){
         return mPropertyDAO.searchPropertiesWithParameters(surfaceMin,surfaceMax,priceMin,priceMax,facilities,addedDateMin,addedDateMax,soldDateMin,soldDateMax);

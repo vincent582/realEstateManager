@@ -22,7 +22,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.openclassrooms.realestatemanager.Model.FullProperty;
+import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity;
 import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
@@ -47,7 +47,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
     private FusedLocationProviderClient fusedLocationClient;
     private Location mCurrentUserLocation;
     private GoogleMap mMap;
-    private List<FullProperty> mListProperties;
+    private List<Property> mListProperties;
 
     //CONSTRUCTOR
     public MapFragment(){}
@@ -56,7 +56,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_map, container, false);
         configureViewModels(getActivity());
-        mPropertiesViewModel.getFullProperties().observe(getActivity(),this::getAllProperties);
+        mPropertiesViewModel.getAllProperties().observe(getActivity(),this::getAllProperties);
         checkPermission();
         return mView;
     }
@@ -65,7 +65,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
      * get list of all properties
      * @param fullProperties
      */
-    private void getAllProperties(List<FullProperty> fullProperties) {
+    private void getAllProperties(List<Property> fullProperties) {
         mListProperties = fullProperties;
     }
 
@@ -133,11 +133,11 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
      */
     private void putMarkersOnMap() {
         if (!mListProperties.isEmpty()){
-            for (FullProperty property: mListProperties) {
-                LatLng latLng = Utils.getLocationFromAddress(getContext(), property.getAddress().getFormatedAddress());
+            for (Property property: mListProperties) {
+                LatLng latLng = Utils.getLocationFromAddress(getContext(), property.getAddress().getFormattedAddress());
                 if (latLng != null) {
                     Marker marker = mMap.addMarker(new MarkerOptions().position(latLng));
-                    marker.setTag(property.getAddress().getPropertyId());
+                    marker.setTag(property.getId());
                 }
             }
         }

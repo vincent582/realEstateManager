@@ -2,17 +2,16 @@ package com.openclassrooms.realestatemanager.Model;
 
 import android.content.ContentValues;
 
-import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-import com.openclassrooms.realestatemanager.Utils.DateConverter;
-import com.openclassrooms.realestatemanager.Utils.ListConverterToGson;
-import com.openclassrooms.realestatemanager.Utils.Utils;
+import com.openclassrooms.realestatemanager.Utils.Converter.AddressConverter;
+import com.openclassrooms.realestatemanager.Utils.Converter.DateConverter;
+import com.openclassrooms.realestatemanager.Utils.Converter.ListConverterToGson;
+import com.openclassrooms.realestatemanager.Utils.Converter.ListPictureConverterToGson;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -33,9 +32,14 @@ public class Property {
     private Date addedDate;
     @TypeConverters(DateConverter.class)
     private Date dateOfSale;
+
+    @TypeConverters(AddressConverter.class)
+    private Address mAddress;
+    @TypeConverters(ListPictureConverterToGson.class)
+    private List<Picture> mPictureList;
     private long userId;
 
-    public Property(String type, int price, int surface, int nbrOfRooms, String description, Boolean sold, List<String> facilities, Date addedDate, Date dateOfSale, long userId) {
+    public Property(String type, int price, int surface, int nbrOfRooms, String description, Boolean sold, List<String> facilities, Date addedDate, Date dateOfSale, Address address, List<Picture> pictureList, long userId) {
         this.type = type;
         this.price = price;
         this.surface = surface;
@@ -45,6 +49,8 @@ public class Property {
         this.facilities = facilities;
         this.addedDate = addedDate;
         this.dateOfSale = dateOfSale;
+        this.mAddress = address;
+        mPictureList = pictureList;
         this.userId = userId;
     }
 
@@ -156,5 +162,21 @@ public class Property {
         if (values.containsKey("dateOfSale")) property.setDateOfSale(DateConverter.toDate(values.getAsLong("dateOfSale")));
         if (values.containsKey("userId")) property.setUserId(values.getAsLong("userId"));
         return property;
+    }
+
+    public Address getAddress() {
+        return mAddress;
+    }
+
+    public void setAddress(Address address) {
+        mAddress = address;
+    }
+
+    public List<Picture> getPictureList() {
+        return mPictureList;
+    }
+
+    public void setPictureList(List<Picture> pictureList) {
+        mPictureList = pictureList;
     }
 }

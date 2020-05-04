@@ -32,7 +32,7 @@ public class PropertyContentProviderTest {
     @Test
     public void getProperties(){
         final Cursor cursor = mContentResolver.query(PropertyProvider.URI_PROPERTY,null,null,null,null);
-        assertEquals(1,cursor.getCount());
+        assertEquals(2,cursor.getCount());
         if (cursor.moveToFirst()){ // data?
             System.out.println("AddedDate :" + cursor.getString(cursor.getColumnIndex("addedDate")));
             System.out.println("Id :" + cursor.getString(cursor.getColumnIndex("id")));
