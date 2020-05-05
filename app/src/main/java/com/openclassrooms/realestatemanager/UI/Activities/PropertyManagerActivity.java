@@ -65,4 +65,10 @@ public class PropertyManagerActivity extends AppCompatActivity {
                     .commit();
         }
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
 }

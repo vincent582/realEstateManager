@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.Repository;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.openclassrooms.realestatemanager.Database.DAO.PropertyDAO;
 import com.openclassrooms.realestatemanager.Model.Property;
@@ -43,9 +44,10 @@ public class PropertiesRepository {
         mPropertyDAO.updateProperty(property);
     }
 
-    public LiveData<List<Property>> searchProperties(int surfaceMin, int surfaceMax, int priceMin,
-                                                         int priceMax , List<String> facilities, Long addedDateMin,
-                                                         Long addedDateMax, Long soldDateMin, Long soldDateMax){
-        return mPropertyDAO.searchPropertiesWithParameters(surfaceMin,surfaceMax,priceMin,priceMax,facilities,addedDateMin,addedDateMax,soldDateMin,soldDateMax);
+    public LiveData<List<Property>> searchProperties(Integer surfaceMin, Integer surfaceMax, Integer priceMin,
+                                                     Integer priceMax, Integer nbrRoomMin, Integer nbrRoomMax, List<String> listFacilities){
+        //, Long addedDateMin, Long addedDateMax, Long soldDateMin, Long soldDateMax){
+        return mPropertyDAO.searchPropertiesWithParameters(surfaceMin,surfaceMax,priceMin,priceMax,nbrRoomMin,nbrRoomMax,listFacilities);
+            //,addedDateMin,addedDateMax,soldDateMin,soldDateMax);
     }
 }

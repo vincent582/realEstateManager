@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.UI.ViewModels;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.Model.Property;
@@ -14,13 +15,22 @@ public class PropertiesViewModel extends ViewModel {
     private PropertiesRepository mPropertiesRepository;
     private Executor mExecutor;
 
+    private LiveData<List<Property>> propertiesList;
+
     public PropertiesViewModel(PropertiesRepository propertiesRepository, Executor executor) {
         mPropertiesRepository = propertiesRepository;
         mExecutor = executor;
     }
 
     public LiveData<List<Property>> getAllProperties(){
-        return mPropertiesRepository.getAllProperties();
+        if (propertiesList == null) {
+            propertiesList = mPropertiesRepository.getAllProperties();
+        }
+        return propertiesList;
+    }
+
+    public void refreshProperties(){
+        propertiesList = mPropertiesRepository.getAllProperties();
     }
 
     public LiveData<Property> getPropertyById(int id) { return mPropertiesRepository.getPropertyById(id); }
@@ -33,9 +43,10 @@ public class PropertiesViewModel extends ViewModel {
         mExecutor.execute(()-> mPropertiesRepository.updateProperty(property));
     }
 
-    public LiveData<List<Property>> searchProperties(int surfaceMin, int surfaceMax, int priceMin,
-                                                         int priceMax , List<String> facilities, Long addedDateMin,
-                                                         Long addedDateMax, Long soldDateMin, Long soldDateMax){
-        return mPropertiesRepository.searchProperties(surfaceMin,surfaceMax,priceMin,priceMax,facilities,addedDateMin,addedDateMax,soldDateMin,soldDateMax);
+    public LiveData<List<Property>> searchProperties(Integer surfaceMin, Integer surfaceMax, Integer priceMin,
+                                                     Integer priceMax, Integer nbrRoomMin, Integer nbrRoomMax, List<String> listFacilities){
+                                                     //List<String> facilities, Long addedDateMin, Long addedDateMax, Long soldDateMin, Long soldDateMax){
+        return mPropertiesRepository.searchProperties(surfaceMin,surfaceMax,priceMin,priceMax,nbrRoomMin,nbrRoomMax,listFacilities);
+            //,facilities,addedDateMin,addedDateMax,soldDateMin,soldDateMax);
     }
 }

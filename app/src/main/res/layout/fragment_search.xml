@@ -213,8 +213,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Entry date between :"
-        app:layout_constraintBottom_toTopOf="@+id/and_entry_date"
+        android:text="Entry on the market from :"
+        app:layout_constraintBottom_toTopOf="@+id/search_property_entry_date_min_values_et"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/checkBox_station" />
@@ -223,90 +223,42 @@
         android:id="@+id/search_property_entry_date_min_values_et"
         android:layout_width="150dp"
         android:layout_height="51dp"
-        android:text="Select min date"
         android:backgroundTint="@color/secondaryColor"
-        app:layout_constraintBottom_toBottomOf="@+id/and_entry_date"
-        app:layout_constraintEnd_toStartOf="@+id/and_entry_date"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/and_entry_date"></Button>
-
-    <TextView
-        android:id="@+id/and_entry_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="&amp;"
-        android:textSize="30dp"
-        app:layout_constraintBottom_toTopOf="@id/search_property_sold_date_tv"
-        app:layout_constraintEnd_toStartOf="@id/search_property_entry_date_max_values_et"
-        app:layout_constraintStart_toEndOf="@id/search_property_entry_date_min_values_et"
-        app:layout_constraintTop_toBottomOf="@+id/search_property_entry_date_tv"></TextView>
-
-    <Button
-        android:id="@+id/search_property_entry_date_max_values_et"
-        android:layout_width="150dp"
-        android:layout_height="51dp"
-        android:text="Select max date"
-        android:backgroundTint="@color/secondaryColor"
-        app:layout_constraintStart_toEndOf="@+id/and_entry_date"
-        app:layout_constraintBottom_toBottomOf="@+id/and_entry_date"
+        android:text="Select date"
+        app:layout_constraintBottom_toTopOf="@+id/search_property_sold_date_tv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/and_entry_date"></Button>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_property_entry_date_tv"></Button>
+
 
     <TextView
         android:id="@+id/search_property_sold_date_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sold date between :"
+        android:text="Sold from :"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/and_entry_date"
-        app:layout_constraintBottom_toTopOf="@+id/and_sold_date"
+        app:layout_constraintTop_toBottomOf="@+id/search_property_entry_date_min_values_et"
+        app:layout_constraintBottom_toTopOf="@+id/search_property_sold_date_min_values_et"
         />
 
     <Button
         android:id="@+id/search_property_sold_date_min_values_et"
         android:layout_width="150dp"
         android:layout_height="51dp"
-        android:text="Select min date"
         android:backgroundTint="@color/secondaryColor"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/and_sold_date"
-        app:layout_constraintBottom_toBottomOf="@+id/and_sold_date"
-        app:layout_constraintEnd_toStartOf="@+id/and_sold_date"
-        ></Button>
-
-    <TextView
-        android:id="@+id/and_sold_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="&amp;"
-        android:textSize="30dp"
-        app:layout_constraintBottom_toTopOf="@id/search_property_district_tv"
-        app:layout_constraintEnd_toStartOf="@+id/search_property_sold_date_max_values_et"
-        app:layout_constraintStart_toEndOf="@+id/search_property_sold_date_min_values_et"
-        app:layout_constraintTop_toBottomOf="@id/search_property_sold_date_tv"></TextView>
-
-    <Button
-        android:id="@+id/search_property_sold_date_max_values_et"
-        android:layout_width="150dp"
-        android:layout_height="51dp"
-        android:text="Select max date"
-        android:backgroundTint="@color/secondaryColor"
-        app:layout_constraintStart_toEndOf="@id/and_sold_date"
+        android:text="Select date"
+        app:layout_constraintBottom_toTopOf="@+id/search_property_district_tv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/and_sold_date"
-        app:layout_constraintBottom_toBottomOf="@id/and_sold_date"></Button>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_property_sold_date_tv"></Button>
 
     <TextView
         android:id="@+id/search_property_district_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="District :"
-        app:layout_constraintTop_toBottomOf="@id/and_sold_date"
+        app:layout_constraintTop_toBottomOf="@id/search_property_sold_date_min_values_et"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/search_property_district_sp" />

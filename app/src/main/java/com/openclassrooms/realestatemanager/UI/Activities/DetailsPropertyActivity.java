@@ -97,4 +97,10 @@ public class DetailsPropertyActivity extends BaseActivity {
         }
         return true;
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
 }

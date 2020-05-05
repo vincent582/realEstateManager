@@ -30,6 +30,8 @@ import static com.openclassrooms.realestatemanager.UI.Activities.DetailsProperty
  */
 public class ListPropertiesFragment extends BaseFragment implements PropertiesViewHolder.OnPropertyListener {
 
+    private List<Property> mPropertyList;
+
     @BindView(R.id.list_properties_recycler_view) RecyclerView mRecyclerView;
 
     //Interface
@@ -44,6 +46,10 @@ public class ListPropertiesFragment extends BaseFragment implements PropertiesVi
 
     //CONSTRUCTOR
     public ListPropertiesFragment(){}
+
+    public ListPropertiesFragment(List<Property> propertyList) {
+        mPropertyList = propertyList;
+    }
 
     /**
      * Constructor with parameters
@@ -61,9 +67,18 @@ public class ListPropertiesFragment extends BaseFragment implements PropertiesVi
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         ButterKnife.bind(this,view);
         configureViewModels(getContext());
-        //get all property from viewModel
-        mPropertiesViewModel.getAllProperties().observe(getViewLifecycleOwner(),this::configureRecyclerView);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mPropertyList == null) {
+            //get all property from viewModel
+            mPropertiesViewModel.getAllProperties().observe(getViewLifecycleOwner(), this::configureRecyclerView);
+        }else {
+            configureRecyclerView(mPropertyList);
+        }
     }
 
     /**

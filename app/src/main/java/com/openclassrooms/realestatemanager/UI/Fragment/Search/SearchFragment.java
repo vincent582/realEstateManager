@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.UI.Fragment.Search;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,11 +18,9 @@ import android.widget.Spinner;
 import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
-import com.openclassrooms.realestatemanager.Utils.Converter.DateConverter;
+import com.openclassrooms.realestatemanager.UI.Fragment.ListProperties.ListPropertiesFragment;
 import com.openclassrooms.realestatemanager.Utils.Dialog.DialogEntryDatePicker;
-import com.openclassrooms.realestatemanager.Utils.Dialog.DialogEntryMaxDatePicker;
 import com.openclassrooms.realestatemanager.Utils.Dialog.DialogSoldDatePiker;
-import com.openclassrooms.realestatemanager.Utils.Dialog.DialogSoldMaxDatePicker;
 import com.openclassrooms.realestatemanager.Utils.Utils;
 
 import java.util.ArrayList;
@@ -37,8 +36,7 @@ import butterknife.OnClick;
  * A simple {@link Fragment} subclass.
  */
 public class SearchFragment extends BaseFragment implements DialogEntryDatePicker.DialogEntryDatePickerListener,
-    DialogSoldDatePiker.DialogSoldDatePickerListener, DialogEntryMaxDatePicker.DialogEntryMaxDatePickerListener,
-    DialogSoldMaxDatePicker.DialogSoldMaxDatePickerListener {
+    DialogSoldDatePiker.DialogSoldDatePickerListener{
 
     @BindView(R.id.search_property_price_min_values_et) EditText mPriceMin;
     @BindView(R.id.search_property_price_max_values_et) EditText mPriceMax;
@@ -48,9 +46,7 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
     @BindView(R.id.search_property_surface_max_values_et) EditText mSurfaceMax;
 
     @BindView(R.id.search_property_entry_date_min_values_et) Button mEntryDateMinButton;
-    @BindView(R.id.search_property_entry_date_max_values_et) Button mEntryDateMaxButton;
     @BindView(R.id.search_property_sold_date_min_values_et) Button mSoldDateMinButton;
-    @BindView(R.id.search_property_sold_date_max_values_et) Button mSoldDateMaxButton;
 
     @BindView(R.id.checkBox_park) CheckBox mCheckboxPark;
     @BindView(R.id.checkBox_school) CheckBox mCheckboxSchool;
@@ -58,17 +54,17 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
     @BindView(R.id.checkBox_store) CheckBox mCheckboxStore;
     @BindView(R.id.search_property_district_sp) Spinner mDistrictSpinner;
 
-    private Integer surfaceMin;
-    private Integer surfaceMax;
+    private Integer surfaceMin = 0;
+    private Integer surfaceMax = null;
     private List<String> mListFacilities = new ArrayList<>();
+    private Integer priceMin = 0;
+    private Integer priceMax = null;
+    private Integer nbrRoomMin = 0;
+    private Integer nbrRoomMax = null;
     private Date minDateOfEntry;
     private Date minDateOfSale;
-    private Integer priceMin;
-    private Integer priceMax;
-    private Integer nbrRoomMin;
-    private Integer nbrRoomMax;
-    private Date maxDateOfEntry;
-    private Date maxDateOfSale;
+
+    private List<Property> mPropertyList;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -81,18 +77,89 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.bind(this,view);
         configureViewModels(getContext());
+        mPropertiesViewModel.getAllProperties().observe(getViewLifecycleOwner(),propertyList ->{ mPropertyList = propertyList; });
         return view;
     }
 
     @OnClick(R.id.search_property_action_btn)
     public void searchProperties(){
         getSearchValues();
-        mPropertiesViewModel.searchProperties(surfaceMin,surfaceMax,priceMin,priceMax,mListFacilities, DateConverter.fromDate(minDateOfEntry)
-            ,DateConverter.fromDate(maxDateOfEntry),DateConverter.fromDate(minDateOfSale),DateConverter.fromDate(maxDateOfSale)).observe(this,this::getSearchedProperties);
+        checkPropertiesValues();
     }
 
-    private void getSearchedProperties(List<Property> fullProperties) {
-        Log.e("TAG", "getSearchedProperties: "+ fullProperties );
+    private void checkPropertiesValues() {
+        List<Property> propertyList = new ArrayList<>();
+        if (mPropertyList != null) {
+            for (Property property : mPropertyList) {
+                if (isBetweenPriceMinAndMax(property) && isBetweenSurfaceMinAndMax(property) &&
+                    isBetweenNbrOfRoomMinAndMax(property) && isAfterMinDateOfEntry(property) &&
+                isAfterMinDateOfSold(property) && isContainsFacilities(property)){
+                    propertyList.add(property);
+                }
+            }
+        }
+        getSearchedProperties(propertyList);
+    }
+
+    public boolean isBetweenPriceMinAndMax(Property property){
+        if (property.getPrice() >= priceMin && priceMax == null ||
+            property.getPrice() >= priceMin && property.getPrice() <= priceMax) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isBetweenSurfaceMinAndMax(Property property){
+        if (property.getSurface() >= surfaceMin && surfaceMax == null ||
+            property.getSurface() >= surfaceMin && property.getSurface() <= surfaceMax){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isBetweenNbrOfRoomMinAndMax(Property property){
+        if (property.getNbrOfRooms() >= nbrRoomMin && nbrRoomMax == null ||
+            property.getNbrOfRooms() >= nbrRoomMin && property.getNbrOfRooms() <= nbrRoomMax) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isAfterMinDateOfEntry(Property property){
+        if (minDateOfEntry == null || property.getAddedDate().after(minDateOfEntry)){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isAfterMinDateOfSold(Property property){
+        if (minDateOfSale == null || property.getDateOfSale() != null && property.getDateOfSale().after(minDateOfSale)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isContainsFacilities(Property property){
+        boolean b = true;
+        if (!mListFacilities.isEmpty()) {
+            for (String facility : mListFacilities) {
+                if (property.getFacilities().contains(facility)){
+                    b = true;
+                }else {
+                    b = false;
+                }
+            }
+        } else {
+            b = true;
+        }
+        return b;
+    }
+
+    private void getSearchedProperties(List<Property> propertyList) {
+        FragmentManager fragmentManager =  getParentFragmentManager();
+        fragmentManager.beginTransaction()
+            .replace(R.id.activity_main_host_frame_layout,new ListPropertiesFragment(propertyList))
+            .commit();
     }
 
     @OnClick(R.id.search_property_entry_date_min_values_et)
@@ -102,13 +169,6 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
         dialog.show(getParentFragmentManager(),"DialogDatePickerFragment");
     }
 
-    @OnClick(R.id.search_property_entry_date_max_values_et)
-    public void openDialogGetAddedDateMax(){
-        DialogEntryMaxDatePicker dialog = new DialogEntryMaxDatePicker();
-        dialog.setTargetFragment(this,2);
-        dialog.show(getParentFragmentManager(),"DialogEntryMaxDatePickerFragment");
-    }
-
     @OnClick(R.id.search_property_sold_date_min_values_et)
     public void openDialogGetSoldDateMin(){
         DialogSoldDatePiker dialog = new DialogSoldDatePiker();
@@ -116,20 +176,25 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
         dialog.show(getParentFragmentManager(),"DialogDatePickerFragment");
     }
 
-    @OnClick(R.id.search_property_sold_date_max_values_et)
-    public void openDialogGetSoldDateMax(){
-        DialogSoldMaxDatePicker dialog = new DialogSoldMaxDatePicker();
-        dialog.setTargetFragment(this,2);
-        dialog.show(getParentFragmentManager(),"DialogDatePickerFragment");
-    }
-
     private void getSearchValues() {
-        priceMin = Integer.valueOf(mPriceMin.getText().toString());
-        priceMax = Integer.valueOf(mPriceMax.getText().toString());
-        nbrRoomMin = Integer.valueOf(mNbrRoomMin.getText().toString());
-        nbrRoomMax = Integer.valueOf(mNbrRoomMax.getText().toString());
-        surfaceMin = Integer.valueOf(mSurfaceMin.getText().toString());
-        surfaceMax = Integer.valueOf(mSurfaceMax.getText().toString());
+        if (!isEmptyEditText(mPriceMin)){
+            priceMin = Integer.parseInt(mPriceMin.getText().toString());
+        }
+        if (!isEmptyEditText(mPriceMax)){
+            priceMax = Integer.parseInt(mPriceMax.getText().toString());
+        }
+        if (!isEmptyEditText(mSurfaceMin)){
+            surfaceMin = Integer.parseInt(mSurfaceMin.getText().toString());
+        }
+        if (!isEmptyEditText(mSurfaceMax)){
+            surfaceMax = Integer.parseInt(mSurfaceMax.getText().toString());
+        }
+        if (!isEmptyEditText(mNbrRoomMin)){
+            nbrRoomMin = Integer.parseInt(mNbrRoomMin.getText().toString());
+        }
+        if (!isEmptyEditText(mNbrRoomMax)){
+            nbrRoomMax = Integer.parseInt(mNbrRoomMax.getText().toString());
+        }
 
         if (mCheckboxPark.isChecked()){
             mListFacilities.add("Park");
@@ -143,6 +208,12 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
         if (mCheckboxStore.isChecked()){
             mListFacilities.add("Store");
         }
+    }
+
+    private boolean isEmptyEditText(EditText etText) {
+        if (etText.getText().toString().trim().length() > 0)
+            return false;
+        return true;
     }
 
     @Override
@@ -171,33 +242,5 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
         calendar.set(year, month, day);
         minDateOfSale = calendar.getTime();
         mSoldDateMinButton.setText(Utils.formatDate(minDateOfSale));
-    }
-
-    @Override
-    public void onDialogEntryMaxDatePikerValidateClick(DialogEntryMaxDatePicker dialog) {
-        DatePicker datePicker = dialog.getDialog().findViewById(R.id.entry_date_dp);
-
-        int day = datePicker.getDayOfMonth();
-        int month = datePicker.getMonth();
-        int year =  datePicker.getYear();
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day);
-        maxDateOfEntry = calendar.getTime();
-        mEntryDateMaxButton.setText(Utils.formatDate(maxDateOfEntry));
-    }
-
-    @Override
-    public void onDialogSoldMaxDatePikerValidateClick(DialogSoldMaxDatePicker dialog) {
-        DatePicker datePicker = dialog.getDialog().findViewById(R.id.entry_date_dp);
-
-        int day = datePicker.getDayOfMonth();
-        int month = datePicker.getMonth();
-        int year =  datePicker.getYear();
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day);
-        maxDateOfSale = calendar.getTime();
-        mSoldDateMaxButton.setText(Utils.formatDate(maxDateOfSale));
     }
 }
