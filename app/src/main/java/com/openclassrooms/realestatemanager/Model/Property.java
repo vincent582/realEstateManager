@@ -57,6 +57,24 @@ public class Property {
     @Ignore
     public Property(){}
 
+    //For Test
+    @Ignore
+    public Property(int id, String type, int price, int surface, int nbrOfRooms, String description, Boolean sold, List<String> facilities, Date addedDate, Date dateOfSale, Address address, List<Picture> pictureList, long userId) {
+        this.id = id;
+        this.type = type;
+        this.price = price;
+        this.surface = surface;
+        this.nbrOfRooms = nbrOfRooms;
+        this.description = description;
+        this.sold = sold;
+        this.facilities = facilities;
+        this.addedDate = addedDate;
+        this.dateOfSale = dateOfSale;
+        mAddress = address;
+        mPictureList = pictureList;
+        this.userId = userId;
+    }
+
     public int getId() {
         return id;
     }

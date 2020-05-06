@@ -9,12 +9,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.openclassrooms.realestatemanager.Dummy.Dummy;
 import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
@@ -63,6 +66,7 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
     private Integer nbrRoomMax = null;
     private Date minDateOfEntry;
     private Date minDateOfSale;
+    private String district = null;
 
     private List<Property> mPropertyList;
 
@@ -77,8 +81,32 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.bind(this,view);
         configureViewModels(getContext());
-        mPropertiesViewModel.getAllProperties().observe(getViewLifecycleOwner(),propertyList ->{ mPropertyList = propertyList; });
+        mPropertiesViewModel.getAllProperties().observe(getViewLifecycleOwner(),propertyList ->{
+            mPropertyList = propertyList;
+            configurePropertyDistrictSpinner();
+        });
         return view;
+    }
+
+    private void configurePropertyDistrictSpinner() {
+        List<String> listDistrict = new ArrayList<>();
+        listDistrict.add("None");
+        for (Property property: mPropertyList) {
+            if (!listDistrict.contains(property.getAddress().getDistrict())){
+                listDistrict.add(property.getAddress().getDistrict());
+            }
+        }
+        mDistrictSpinner.setAdapter(new ArrayAdapter<String>(getContext(),R.layout.support_simple_spinner_dropdown_item, listDistrict));
+        mDistrictSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                district = (String) mDistrictSpinner.getSelectedItem();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                district = null;
+            }
+        });
     }
 
     @OnClick(R.id.search_property_action_btn)
@@ -93,7 +121,7 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
             for (Property property : mPropertyList) {
                 if (isBetweenPriceMinAndMax(property) && isBetweenSurfaceMinAndMax(property) &&
                     isBetweenNbrOfRoomMinAndMax(property) && isAfterMinDateOfEntry(property) &&
-                isAfterMinDateOfSold(property) && isContainsFacilities(property)){
+                isAfterMinDateOfSold(property) && isInDistrict(property) && isContainsFacilities(property)){
                     propertyList.add(property);
                 }
             }
@@ -134,6 +162,13 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
 
     public boolean isAfterMinDateOfSold(Property property){
         if (minDateOfSale == null || property.getDateOfSale() != null && property.getDateOfSale().after(minDateOfSale)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isInDistrict(Property property){
+        if (property.getAddress().getDistrict().equals(district) || district.equals("None")) {
             return true;
         }
         return false;
