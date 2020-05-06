@@ -35,7 +35,6 @@ public class PropertyProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        //TODO ?????
         return "vnd.android.cursor.property/"+AUTHORITY+"."+TABLE_NAME;
     }
 

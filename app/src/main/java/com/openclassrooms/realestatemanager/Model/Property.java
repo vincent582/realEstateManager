@@ -50,7 +50,7 @@ public class Property {
         this.addedDate = addedDate;
         this.dateOfSale = dateOfSale;
         this.mAddress = address;
-        mPictureList = pictureList;
+        this.mPictureList = pictureList;
         this.userId = userId;
     }
 
@@ -175,6 +175,14 @@ public class Property {
         if (values.containsKey("facilities")){
             List<String> facilities = ListConverterToGson.stringToFacilitiesList(values.getAsString("facilities"));
             property.setFacilities(facilities);
+        }
+        if (values.containsKey("mAddress")) {
+            Address address = AddressConverter.stringToAddress(values.getAsString("mAddress"));
+            property.setAddress(address);
+        }
+        if (values.containsKey("mPictureList")) {
+            List<Picture> pictureList = ListPictureConverterToGson.stringToPictureList(values.getAsString("mPictureList"));
+            property.setPictureList(pictureList);
         }
         if (values.containsKey("addedDate")) property.setAddedDate(DateConverter.toDate(values.getAsLong("addedDate")));
         if (values.containsKey("dateOfSale")) property.setDateOfSale(DateConverter.toDate(values.getAsLong("dateOfSale")));
