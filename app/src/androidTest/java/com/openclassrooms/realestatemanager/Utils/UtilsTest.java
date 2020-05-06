@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.Utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 
 import androidx.test.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
@@ -12,6 +13,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import static com.openclassrooms.realestatemanager.Utils.Utils.isInternetAvailable;
 import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
@@ -25,14 +32,20 @@ public class UtilsTest {
     }
 
     @Test
-    public void isInternetAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) appContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = null;
-        if(connectivityManager != null){
-            activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+    public void checkIfInternetAvailable() {
+        int responseCode = 0;
+        if (isInternetAvailable(appContext)){
+            try{
+                URL url = new URL("http://www.google.com");
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setConnectTimeout(300);
+                urlConnection.connect();
+                responseCode = urlConnection.getResponseCode();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
-        Boolean isActiveNetwork = activeNetworkInfo.isConnected();
-        assertEquals(isActiveNetwork,Utils.isInternetAvailable(appContext));
+        assertTrue(responseCode == 200);
     }
 
 }
