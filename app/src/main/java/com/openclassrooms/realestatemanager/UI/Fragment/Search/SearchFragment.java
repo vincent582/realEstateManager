@@ -193,7 +193,7 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
     private void getSearchedProperties(List<Property> propertyList) {
         FragmentManager fragmentManager =  getParentFragmentManager();
         fragmentManager.beginTransaction()
-            .replace(R.id.activity_main_host_frame_layout,new ListPropertiesFragment(propertyList))
+            .replace(R.id.activity_main_host_frame_layout,new ListPropertiesFragment(propertyList,true))
             .commit();
     }
 

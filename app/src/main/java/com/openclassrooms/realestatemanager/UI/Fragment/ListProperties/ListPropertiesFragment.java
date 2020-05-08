@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity;
@@ -22,6 +24,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity.PROPERTY_ID_EXTRA;
 
@@ -30,9 +33,12 @@ import static com.openclassrooms.realestatemanager.UI.Activities.DetailsProperty
  */
 public class ListPropertiesFragment extends BaseFragment implements PropertiesViewHolder.OnPropertyListener {
 
+    private boolean mFilterOn;
     private List<Property> mPropertyList;
 
     @BindView(R.id.list_properties_recycler_view) RecyclerView mRecyclerView;
+    @BindView(R.id.no_property_found_ll) LinearLayout mLayoutNoPropertyFound;
+    @BindView(R.id.revert_search_fab) FloatingActionButton mRevertButton;
 
     //Interface
     public interface sendPropertyIdToMainActivityOnClickListener{
@@ -47,8 +53,15 @@ public class ListPropertiesFragment extends BaseFragment implements PropertiesVi
     //CONSTRUCTOR
     public ListPropertiesFragment(){}
 
-    public ListPropertiesFragment(List<Property> propertyList) {
+    /**
+     * Constructor with parameter for search
+     * Called from SerachFragment
+     * @param propertyList
+     * @param filterOn
+     */
+    public ListPropertiesFragment(List<Property> propertyList, boolean filterOn) {
         mPropertyList = propertyList;
+        mFilterOn = filterOn;
     }
 
     /**
@@ -73,12 +86,24 @@ public class ListPropertiesFragment extends BaseFragment implements PropertiesVi
     @Override
     public void onResume() {
         super.onResume();
-        if (mPropertyList == null) {
+        if (mFilterOn){
+            mRevertButton.setVisibility(View.VISIBLE);
+        }else {
+            mRevertButton.setVisibility(View.GONE);
+        }
+        if (mPropertyList == null || !mFilterOn) {
             //get all property from viewModel
             mPropertiesViewModel.getAllProperties().observe(getViewLifecycleOwner(), this::configureRecyclerView);
         }else {
+            checkIfPropertyListIsEmptyAndUpdateView(mPropertyList);
             configureRecyclerView(mPropertyList);
         }
+    }
+
+    @OnClick(R.id.revert_search_fab)
+    public void refreshView(){
+        mFilterOn = false;
+        onResume();
     }
 
     /**
@@ -86,10 +111,25 @@ public class ListPropertiesFragment extends BaseFragment implements PropertiesVi
      * @param properties
      */
     private void configureRecyclerView(List<Property> properties) {
+        checkIfPropertyListIsEmptyAndUpdateView(properties);
         mAdapter = new PropertiesRecyclerViewAdapter(properties,this,getContext());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+    }
+
+    /**
+     * Check if a list is empty and update view by showing/hiding layout
+     * @param propertyList
+     */
+    public void checkIfPropertyListIsEmptyAndUpdateView(List<Property> propertyList){
+        if (propertyList == null || propertyList.isEmpty()){
+            mLayoutNoPropertyFound.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+        }else {
+            mLayoutNoPropertyFound.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
