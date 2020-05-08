@@ -22,15 +22,9 @@
     <dimen name="image_preview_margin">16dp</dimen>
     <dimen name="image_preview_edit_text_description_margin">16dp</dimen>
 
-    <dimen name="image_preview_width_landscape">550dp</dimen>
-    <dimen name="image_preview_height_landscape">300dp</dimen>
-
     //DIALOG IMAGE SHOW
     <dimen name="image_show_width">380dp</dimen>
     <dimen name="image_show_height">600dp</dimen>
-
-    <dimen name="image_show_width_landscape">600dp</dimen>
-    <dimen name="image_show_height_landscape">350dp</dimen>
 
     //ITEM LIST FRAGMENT RECYCLERVIEW
     <dimen name="item_property_text_padding_left">20dp</dimen>
@@ -56,7 +50,6 @@
     <dimen name="details_view_icons_margin_right">5dp</dimen>
     <dimen name="details_map_view_size">120dp</dimen>
     <dimen name="text_picture_description_size">12sp</dimen>
-    <dimen name="item_text_view_size">10dp</dimen>
 
     //FRAGMENT LIST
     <dimen name="margin_fab_revert_list_view">8dp</dimen>

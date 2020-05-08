@@ -18,7 +18,6 @@
         android:textColor="@color/primaryTextColor"
         android:textSize="@dimen/details_view_text_section_size"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/linear_Layout_price"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></TextView>
@@ -27,7 +26,7 @@
         android:id="@+id/linear_Layout_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/search_margin_between_linear_layout"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/linear_layout_nbr_of_room"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,6 +45,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
+            android:ems="10"
+            android:maxEms="10"
             android:hint="Min"
             android:inputType="number"></EditText>
 
@@ -55,6 +56,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
+            android:ems="10"
+            android:maxEms="10"
             android:hint="Max"
             android:inputType="number"></EditText>
     </LinearLayout>
@@ -65,7 +68,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/search_margin_between_linear_layout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/linear_Layout_surface"
@@ -81,6 +84,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_margin="5dp"
+            android:ems="10"
+            android:maxEms="10"
             android:hint="Min"
             android:inputType="number"></EditText>
         <EditText
@@ -89,6 +94,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_margin="5dp"
+            android:ems="10"
+            android:maxEms="10"
             android:hint="Max"
             android:inputType="number"></EditText>
     </LinearLayout>
@@ -99,7 +106,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/search_margin_between_linear_layout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/search_property_facilities_tv"
@@ -116,6 +123,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_margin="5dp"
+            android:ems="10"
+            android:maxEms="10"
             android:hint="Min"
             android:inputType="number"></EditText>
 
@@ -125,6 +134,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_margin="5dp"
+            android:ems="10"
+            android:maxEms="10"
             android:hint="Max"
             android:inputType="number"></EditText>
     </LinearLayout>
@@ -134,7 +145,7 @@
         android:id="@+id/search_property_facilities_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/search_margin_between_linear_layout"
         android:text="With facilities :"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -147,7 +158,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/search_margin_between_linear_layout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/linear_Layout_entry_date"
@@ -187,7 +198,7 @@
         android:id="@+id/linear_Layout_entry_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/search_margin_between_linear_layout"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -214,7 +225,7 @@
         android:id="@+id/linear_Layout_sold_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/search_margin_between_linear_layout"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -241,7 +252,7 @@
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/search_margin_between_linear_layout"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -267,11 +278,15 @@
         android:id="@+id/search_property_action_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="@dimen/search_margin_between_linear_layout"
+        android:layout_marginBottom="8dp"
         android:src="@drawable/ic_search_white_24dp"
         android:tint="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"></com.google.android.material.floatingactionbutton.FloatingActionButton>
+        app:layout_constraintHorizontal_bias="0.954"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintVertical_bias="1.0"></com.google.android.material.floatingactionbutton.FloatingActionButton>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

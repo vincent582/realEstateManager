@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/dialog_picture_iv"
-        android:layout_width="@dimen/image_preview_width"
-        android:layout_height="@dimen/image_preview_height"
+        android:layout_width="@dimen/image_preview_width_landscape"
+        android:layout_height="@dimen/image_preview_height_landscape"
         android:layout_margin="@dimen/image_preview_margin"
         app:layout_constraintBottom_toTopOf="@+id/dialog_picture_description_et"
         app:layout_constraintEnd_toEndOf="parent"

@@ -14,4 +14,8 @@
         <item name="colorControlNormal">@color/primaryTextColor</item>
     </style>
 
+    <style name="navViewStyle">
+        <item name="android:textSize">@dimen/nav_view_item_text_size</item>
+    </style>
+
 </resources>

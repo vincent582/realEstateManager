@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="No Property found !"
-            android:textSize="20dp"></TextView>
+            android:textSize="@dimen/no_property_found_text_size"></TextView>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -25,14 +25,14 @@
         android:layout_height="match_parent"
         tools:context=".UI.Fragment.ListProperties.ListPropertiesFragment"
         tools:listitem="@layout/item_list_property"
-        android:visibility="gone">
+        android:visibility="visible">
     </androidx.recyclerview.widget.RecyclerView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/revert_search_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="@dimen/margin_fab_revert_list_view"
         android:layout_marginBottom="8dp"
         android:src="@android:drawable/ic_menu_revert"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -22,10 +22,6 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:id="@+id/activity_main_drawer_settings"
-                    android:icon="@drawable/ic_settings_black_24dp"
-                    android:title="Settings" />
-                <item
                     android:id="@+id/activity_main_drawer_profile"
                     android:icon="@drawable/ic_account_box_black_24dp"
                     android:title="Profile" />

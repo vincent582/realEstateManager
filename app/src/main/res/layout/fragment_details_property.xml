@@ -29,7 +29,7 @@
             android:fontFamily="sans-serif"
             android:text="No property selected"
             android:textColor="@color/primaryDarkColor"
-            android:textSize="18sp"></TextView>
+            android:textSize="@dimen/no_property_selected_text_size"></TextView>
     </LinearLayout>
 
     <ScrollView
@@ -62,9 +62,7 @@
                 android:id="@+id/recycler_view_pictures"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="1dp"
+                android:layout_margin="@dimen/recycler_view_picture_margin"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toTopOf="@+id/details_title_description_text_view"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -90,8 +88,6 @@
                 android:id="@+id/details_description_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
                 android:padding="@dimen/details_view_padding_text_section"
                 android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam interdum augue eu commodo faucibus. Aliquam mattis dolor et quam tincidunt, sed cursus lorem placerat. Phasellus pellentesque felis sed velit sagittis, at convallis leo auctor. Aliquam erat volutpat. Etiam pellentesque est lacus, ac facilisis elit vestibulum nec. Etiam vel convallis eros. Morbi eget porttitor nibh, in tempor justo. Nunc et lacus justo. In nulla nisi, faucibus non diam non, placerat euismod elit. Vivamus pellentesque tortor augue, et pulvinar augue volutpat vel. Vivamus eu orci quis magna semper ullamcorper vitae at sapien. Aliquam sit amet ultrices turpis."
                 android:textColor="@color/primaryDarkColor"
@@ -132,18 +128,18 @@
                     android:id="@+id/linear_Layout_surface"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="@dimen/linear_layout_info_margin_start"
                     android:orientation="horizontal"
-                    android:padding="10dp"
+                    android:padding="@dimen/linear_layout_info_padding"
                     app:layout_constraintBottom_toTopOf="@id/linear_Layout_price"
                     app:layout_constraintEnd_toStartOf="@id/linear_layout_nbr_of_room"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
-                        android:layout_width="26dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
+                        android:layout_width="@dimen/details_view_icons_size"
+                        android:layout_height="@dimen/details_view_icons_size"
+                        android:layout_marginRight="@dimen/details_view_icons_margin_right"
                         android:src="@drawable/ic_surface"
                         android:tint="@color/secondaryColor" />
 
@@ -155,6 +151,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textSize="@dimen/item_text_view_size"
                             android:text="Surface"
                             android:textColor="@color/primaryDarkColor"
                             android:textStyle="bold" />
@@ -163,7 +160,7 @@
                             android:id="@+id/details_surface_value_text_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
+                            android:layout_marginStart="@dimen/linear_layout_info_values_margin_start"
                             android:text="750 sq m" />
 
                     </LinearLayout>
@@ -174,16 +171,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="10dp"
+                    android:padding="@dimen/linear_layout_info_padding"
                     app:layout_constraintBottom_toTopOf="@id/linear_Layout_agent_in_charge"
                     app:layout_constraintEnd_toEndOf="@+id/linear_Layout_surface"
                     app:layout_constraintStart_toStartOf="@+id/linear_Layout_surface"
                     app:layout_constraintTop_toBottomOf="@id/linear_Layout_surface">
 
                     <ImageView
-                        android:layout_width="26dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
+                        android:layout_width="@dimen/details_view_icons_size"
+                        android:layout_height="@dimen/details_view_icons_size"
+                        android:layout_marginRight="@dimen/details_view_icons_margin_right"
                         android:src="@drawable/ic_attach_money_black_24dp"
                         android:tint="@color/secondaryColor" />
 
@@ -196,6 +193,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Price"
+                            android:textSize="@dimen/item_text_view_size"
                             android:textColor="@color/primaryDarkColor"
                             android:textStyle="bold" />
 
@@ -203,7 +201,7 @@
                             android:id="@+id/details_price_value_text_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
+                            android:layout_marginStart="@dimen/linear_layout_info_values_margin_start"
                             android:text="1,000,000$" />
                     </LinearLayout>
                 </LinearLayout>
@@ -213,16 +211,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="10dp"
+                    android:padding="@dimen/linear_layout_info_padding"
                     app:layout_constraintBottom_toTopOf="@id/linear_Layout_property_status"
                     app:layout_constraintEnd_toEndOf="@+id/linear_Layout_price"
                     app:layout_constraintStart_toStartOf="@+id/linear_Layout_price"
                     app:layout_constraintTop_toBottomOf="@id/linear_Layout_price">
 
                     <ImageView
-                        android:layout_width="26dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
+                        android:layout_width="@dimen/details_view_icons_size"
+                        android:layout_height="@dimen/details_view_icons_size"
+                        android:layout_marginRight="@dimen/details_view_icons_margin_right"
                         android:src="@drawable/ic_account_box_black_24dp"
                         android:tint="@color/secondaryColor" />
 
@@ -235,6 +233,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Agent in charge"
+                            android:textSize="@dimen/item_text_view_size"
                             android:textColor="@color/primaryDarkColor"
                             android:textStyle="bold" />
 
@@ -242,7 +241,7 @@
                             android:id="@+id/details_agent_in_charge_value_text_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
+                            android:layout_marginStart="@dimen/linear_layout_info_values_margin_start"
                             android:text="" />
                     </LinearLayout>
                 </LinearLayout>
@@ -252,16 +251,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="10dp"
+                    android:padding="@dimen/linear_layout_info_padding"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/linear_Layout_agent_in_charge"
                     app:layout_constraintStart_toStartOf="@+id/linear_Layout_agent_in_charge"
                     app:layout_constraintTop_toBottomOf="@id/linear_Layout_agent_in_charge">
 
                     <ImageView
-                        android:layout_width="26dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
+                        android:layout_width="@dimen/details_view_icons_size"
+                        android:layout_height="@dimen/details_view_icons_size"
+                        android:layout_marginRight="@dimen/details_view_icons_margin_right"
                         android:src="@drawable/ic_status"
                         android:tint="@color/secondaryColor" />
 
@@ -274,6 +273,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Property status"
+                            android:textSize="@dimen/item_text_view_size"
                             android:textColor="@color/primaryDarkColor"
                             android:textStyle="bold" />
 
@@ -281,7 +281,7 @@
                             android:id="@+id/details_property_status_value_text_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
+                            android:layout_marginStart="@dimen/linear_layout_info_values_margin_start"
                             android:textColor="@android:color/holo_green_dark"
                             android:text="Available"/>
                     </LinearLayout>
@@ -292,16 +292,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="10dp"
+                    android:padding="@dimen/linear_layout_info_padding"
                     app:layout_constraintBottom_toBottomOf="@+id/linear_Layout_price"
                     app:layout_constraintEnd_toEndOf="@+id/linear_layout_nbr_of_room"
                     app:layout_constraintStart_toStartOf="@+id/linear_layout_nbr_of_room"
                     app:layout_constraintTop_toTopOf="@+id/linear_Layout_price">
 
                     <ImageView
-                        android:layout_width="26dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
+                        android:layout_width="@dimen/details_view_icons_size"
+                        android:layout_height="@dimen/details_view_icons_size"
+                        android:layout_marginRight="@dimen/details_view_icons_margin_right"
                         android:src="@drawable/ic_date_range_black_24dp"
                         android:tint="@color/secondaryColor" />
 
@@ -314,6 +314,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Entry Date"
+                            android:textSize="@dimen/item_text_view_size"
                             android:textColor="@color/primaryDarkColor"
                             android:textStyle="bold" />
 
@@ -321,7 +322,7 @@
                             android:id="@+id/details_entry_date_value_text_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
+                            android:layout_marginStart="@dimen/linear_layout_info_values_margin_start"
                             android:text="12/12/2001" />
                     </LinearLayout>
                 </LinearLayout>
@@ -331,16 +332,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="10dp"
+                    android:padding="@dimen/linear_layout_info_padding"
                     app:layout_constraintBottom_toBottomOf="@+id/linear_Layout_agent_in_charge"
                     app:layout_constraintEnd_toEndOf="@+id/linear_Layout_entry_date"
                     app:layout_constraintStart_toStartOf="@+id/linear_Layout_entry_date"
                     app:layout_constraintTop_toTopOf="@+id/linear_Layout_agent_in_charge">
 
                     <ImageView
-                        android:layout_width="26dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
+                        android:layout_width="@dimen/details_view_icons_size"
+                        android:layout_height="@dimen/details_view_icons_size"
+                        android:layout_marginRight="@dimen/details_view_icons_margin_right"
                         android:src="@drawable/ic_location_city_black_24dp"
                         android:tint="@color/secondaryColor" />
 
@@ -353,6 +354,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Property type"
+                            android:textSize="@dimen/item_text_view_size"
                             android:textColor="@color/primaryDarkColor"
                             android:textStyle="bold" />
 
@@ -360,7 +362,7 @@
                             android:id="@+id/details_property_type_value_text_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
+                            android:layout_marginStart="@dimen/linear_layout_info_values_margin_start"
                             android:text="House" />
                     </LinearLayout>
                 </LinearLayout>
@@ -370,7 +372,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="10dp"
+                    android:padding="@dimen/linear_layout_info_padding"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/linear_Layout_property_status"
                     app:layout_constraintEnd_toEndOf="@+id/linear_Layout_property_type"
@@ -378,9 +380,9 @@
                     app:layout_constraintTop_toBottomOf="@+id/linear_Layout_agent_in_charge">
 
                     <ImageView
-                        android:layout_width="26dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
+                        android:layout_width="@dimen/details_view_icons_size"
+                        android:layout_height="@dimen/details_view_icons_size"
+                        android:layout_marginRight="@dimen/details_view_icons_margin_right"
                         android:src="@drawable/ic_date_range_black_24dp"
                         android:tint="@color/secondaryColor" />
 
@@ -400,7 +402,7 @@
                             android:id="@+id/details_sold_date_value_text_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
+                            android:layout_marginStart="@dimen/linear_layout_info_values_margin_start"
                             android:text="12/12/2001" />
                     </LinearLayout>
                 </LinearLayout>
@@ -409,18 +411,18 @@
                     android:id="@+id/linear_layout_nbr_of_room"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="@dimen/linear_layout_info_margin_end"
                     android:orientation="horizontal"
-                    android:padding="10dp"
+                    android:padding="@dimen/linear_layout_info_padding"
                     app:layout_constraintBottom_toBottomOf="@+id/linear_Layout_surface"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/linear_Layout_surface"
                     app:layout_constraintTop_toTopOf="@+id/linear_Layout_surface">
 
                     <ImageView
-                        android:layout_width="26dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
+                        android:layout_width="@dimen/details_view_icons_size"
+                        android:layout_height="@dimen/details_view_icons_size"
+                        android:layout_marginRight="@dimen/details_view_icons_margin_right"
                         android:src="@drawable/ic_home"
                         android:tint="@color/secondaryColor" />
 
@@ -433,6 +435,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Number of rooms"
+                            android:textSize="@dimen/item_text_view_size"
                             android:textColor="@color/primaryDarkColor"
                             android:textStyle="bold" />
 
@@ -440,7 +443,7 @@
                             android:id="@+id/details_nbr_of_rooms_value_text_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
+                            android:layout_marginStart="@dimen/linear_layout_info_values_margin_start"
                             android:text="8" />
 
                     </LinearLayout>
@@ -473,15 +476,15 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:orientation="horizontal"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintEnd_toStartOf="@+id/linear_layout_school"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/facilities_info_tv">
 
                 <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_width="@dimen/details_view_icons_size"
+                    android:layout_height="@dimen/details_view_icons_size"
+                    android:layout_marginRight="@dimen/details_view_icons_margin_right"
                     android:src="@drawable/ic_terrain_park"
                     android:tint="@color/secondaryColor" />
 
@@ -507,9 +510,9 @@
                 app:layout_constraintTop_toBottomOf="@id/facilities_info_tv">
 
                 <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_width="@dimen/details_view_icons_size"
+                    android:layout_height="@dimen/details_view_icons_size"
+                    android:layout_marginRight="@dimen/details_view_icons_margin_right"
                     android:src="@drawable/ic_school_black_24dp"
                     android:tint="@color/secondaryColor" />
 
@@ -535,9 +538,9 @@
                 app:layout_constraintTop_toBottomOf="@id/facilities_info_tv">
 
                 <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_width="@dimen/details_view_icons_size"
+                    android:layout_height="@dimen/details_view_icons_size"
+                    android:layout_marginRight="@dimen/details_view_icons_margin_right"
                     android:src="@drawable/ic_store"
                     android:tint="@color/secondaryColor" />
 
@@ -564,9 +567,9 @@
                 app:layout_constraintTop_toBottomOf="@id/facilities_info_tv">
 
                 <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_width="@dimen/details_view_icons_size"
+                    android:layout_height="@dimen/details_view_icons_size"
+                    android:layout_marginRight="@dimen/details_view_icons_margin_right"
                     android:src="@drawable/ic_subway"
                     android:tint="@color/secondaryColor" />
 
@@ -608,9 +611,9 @@
                         android:padding="5dp">
 
                         <ImageView
-                            android:layout_width="26dp"
-                            android:layout_height="26dp"
-                            android:layout_marginRight="5dp"
+                            android:layout_width="@dimen/details_view_icons_size"
+                            android:layout_height="@dimen/details_view_icons_size"
+                            android:layout_marginRight="@dimen/details_view_icons_margin_right"
                             android:src="@drawable/ic_place_location"
                             android:tint="@color/secondaryColor" />
 
@@ -624,6 +627,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Location"
+                                android:textSize="@dimen/item_text_view_size"
                                 android:textColor="@color/primaryDarkColor"
                                 android:textStyle="bold" />
 
@@ -675,11 +679,11 @@
                     <com.google.android.gms.maps.MapView
                         android:id="@+id/mapView"
                         android:name="com.google.android.gms.maps.MapFragment"
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
+                        android:layout_width="@dimen/details_map_view_size"
+                        android:layout_height="@dimen/details_map_view_size"
                         android:layout_gravity="center|center_horizontal"
                         android:layout_marginTop="10dp"
-                        app:cameraZoom="17"
+                        app:cameraZoom="16"
                         app:liteMode="true"
                         app:mapType="normal" />
 

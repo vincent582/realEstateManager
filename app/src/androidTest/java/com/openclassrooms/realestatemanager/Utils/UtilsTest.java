@@ -18,7 +18,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static com.openclassrooms.realestatemanager.Utils.Utils.isInternetAvailable;
 import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
@@ -34,7 +33,7 @@ public class UtilsTest {
     @Test
     public void checkIfInternetAvailable() {
         int responseCode = 0;
-        if (isInternetAvailable(appContext)){
+        if (Utils.isInternetAvailable(appContext)){
             try{
                 URL url = new URL("http://www.google.com");
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();

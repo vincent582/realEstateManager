@@ -32,7 +32,6 @@ public class Property {
     private Date addedDate;
     @TypeConverters(DateConverter.class)
     private Date dateOfSale;
-
     @TypeConverters(AddressConverter.class)
     private Address mAddress;
     @TypeConverters(ListPictureConverterToGson.class)
@@ -155,6 +154,22 @@ public class Property {
         this.facilities = facilities;
     }
 
+    public Address getAddress() {
+        return mAddress;
+    }
+
+    public void setAddress(Address address) {
+        mAddress = address;
+    }
+
+    public List<Picture> getPictureList() {
+        return mPictureList;
+    }
+
+    public void setPictureList(List<Picture> pictureList) {
+        mPictureList = pictureList;
+    }
+
     public long getUserId() {
         return userId;
     }
@@ -188,21 +203,5 @@ public class Property {
         if (values.containsKey("dateOfSale")) property.setDateOfSale(DateConverter.toDate(values.getAsLong("dateOfSale")));
         if (values.containsKey("userId")) property.setUserId(values.getAsLong("userId"));
         return property;
-    }
-
-    public Address getAddress() {
-        return mAddress;
-    }
-
-    public void setAddress(Address address) {
-        mAddress = address;
-    }
-
-    public List<Picture> getPictureList() {
-        return mPictureList;
-    }
-
-    public void setPictureList(List<Picture> pictureList) {
-        mPictureList = pictureList;
     }
 }

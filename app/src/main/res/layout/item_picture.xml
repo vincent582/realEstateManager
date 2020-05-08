@@ -27,7 +27,7 @@
         android:padding="10dp"
         android:text="TextView"
         android:textColor="@android:color/white"
-        android:textSize="12sp"
+        android:textSize="@dimen/text_picture_description_size"
         app:layout_constraintBottom_toBottomOf="@+id/property_picture_item"
         app:layout_constraintEnd_toEndOf="@+id/property_picture_item"
         app:layout_constraintStart_toStartOf="@+id/property_picture_item" />

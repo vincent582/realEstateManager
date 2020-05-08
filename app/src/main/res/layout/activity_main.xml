@@ -38,6 +38,7 @@
         app:itemIconSize="@dimen/nav_view_menu_icon_size"
         app:itemTextColor="@color/primaryColor"
         app:itemIconTint="@color/secondaryColor"
+        android:theme="@style/navViewStyle"
         app:menu="@menu/activity_main_menu_drawer" />
 
 

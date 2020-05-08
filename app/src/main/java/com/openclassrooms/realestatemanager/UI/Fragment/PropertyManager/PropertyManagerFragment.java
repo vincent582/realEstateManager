@@ -84,10 +84,8 @@ public class PropertyManagerFragment extends BaseFragment implements DialogImage
     @BindView(R.id.manager_layout_address_post_code_editText) EditText mPropertyAddressPostCode;
     @BindView(R.id.manager_layout_address_country_editText) EditText mPropertyAddressCountry;
     @BindView(R.id.manager_layout_btn_add_property) Button mAddPropertyButton;
-
     @BindView(R.id.sold_date_selector_btn) Button mSoldDateSelector;
     @BindView(R.id.entry_date_text_view) TextView mEntryDateTv;
-
     @BindView(R.id.checkBox_park) CheckBox mCheckboxPark;
     @BindView(R.id.checkBox_school) CheckBox mCheckboxSchool;
     @BindView(R.id.checkBox_station) CheckBox mCheckboxStation;

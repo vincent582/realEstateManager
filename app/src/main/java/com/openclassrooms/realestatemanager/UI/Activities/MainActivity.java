@@ -91,10 +91,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             mListPropertiesFragment = (ListPropertiesFragment) fragmentInFrame;
             mListPropertiesFragment.updateTwoPanesAndListenerToFragment(twoPanes,this);
             showDetailsFrameLayout(true);
-        }else if (fragmentInFrame instanceof MapFragment){
-            MapFragment mapFragment = (MapFragment) fragmentInFrame;
-            showDetailsFrameLayout(false);
-        }else if (fragmentInFrame instanceof ProfileFragment || fragmentInFrame instanceof LoanSimulatorFragment){
+        }else if (fragmentInFrame instanceof ProfileFragment || fragmentInFrame instanceof LoanSimulatorFragment
+        || fragmentInFrame instanceof MapFragment || fragmentInFrame instanceof SearchFragment){
             showDetailsFrameLayout(false);
         }
     }

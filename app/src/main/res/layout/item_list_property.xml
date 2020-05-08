@@ -61,8 +61,8 @@
 
     <ImageView
         android:id="@+id/sold_out_stamp_iv"
-        android:layout_width="104dp"
-        android:layout_height="102dp"
+        android:layout_width="@dimen/item_property_sold_out_image_size"
+        android:layout_height="@dimen/item_property_sold_out_image_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.713"
