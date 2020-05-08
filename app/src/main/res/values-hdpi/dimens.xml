@@ -8,7 +8,7 @@
     <dimen name="margin_edit_text_authentication_activity">2dp</dimen>
 
     //MAIN ACTIVITY
-    <dimen name="nav_header_height">150dp</dimen>
+    <dimen name="nav_header_height">170dp</dimen>
     <dimen name="nav_view_menu_icon_size">18dp</dimen>
     <dimen name="navigation_view_logo_size">80dp</dimen>
     <dimen name="navigation_view_logo_margin">6dp</dimen>

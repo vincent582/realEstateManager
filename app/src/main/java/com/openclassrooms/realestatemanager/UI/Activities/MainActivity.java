@@ -186,7 +186,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     if (mPropertyId != null){
                         startPropertyManagerActivity();
                     }else{
-                        Snackbar.make(getCurrentFocus(),"You have to select an item to update it!",Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(android.R.id.content),"You have to select an item to update it!",Snackbar.LENGTH_SHORT).show();
                     }
                 break;
             case R.id.app_bar_search_item:
