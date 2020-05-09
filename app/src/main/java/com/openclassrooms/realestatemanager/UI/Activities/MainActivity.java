@@ -13,9 +13,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.UI.Fragment.DetailsProperty.DetailsPropertyFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.ListProperties.ListPropertiesFragment;
@@ -24,12 +26,15 @@ import com.openclassrooms.realestatemanager.UI.Fragment.Map.MapFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.Profile.ProfileFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.Search.SearchFragment;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.openclassrooms.realestatemanager.UI.Activities.DetailsPropertyActivity.PROPERTY_ID_EXTRA_FOR_PROPERTY_MANAGER;
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, ListPropertiesFragment.sendPropertyIdToMainActivityOnClickListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, ListPropertiesFragment.sendPropertyIdToMainActivityOnClickListener,
+    SearchFragment.GetPropertiesListFromSearchListeners {
 
     @BindView(R.id.activity_main_toolbar) Toolbar mToolbar;
     @BindView(R.id.activity_main_drawer_layout) DrawerLayout mDrawerLayout;
@@ -38,6 +43,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private ListPropertiesFragment mListPropertiesFragment;
     private DetailsPropertyFragment mDetailsPropertyFragment;
+    private SearchFragment mSearchFragment;
     private Integer mPropertyId;
 
     @Override
@@ -92,7 +98,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             mListPropertiesFragment.updateTwoPanesAndListenerToFragment(twoPanes,this);
             showDetailsFrameLayout(true);
         }else if (fragmentInFrame instanceof ProfileFragment || fragmentInFrame instanceof LoanSimulatorFragment
-        || fragmentInFrame instanceof MapFragment || fragmentInFrame instanceof SearchFragment){
+        || fragmentInFrame instanceof MapFragment){
+            showDetailsFrameLayout(false);
+        }else if (fragmentInFrame instanceof SearchFragment){
+            mSearchFragment = (SearchFragment) fragmentInFrame;
+            mSearchFragment.updateListener(this);
             showDetailsFrameLayout(false);
         }
     }
@@ -190,7 +200,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     }
                 break;
             case R.id.app_bar_search_item:
-                SearchFragment searchFragment = new SearchFragment();
+                SearchFragment searchFragment = new SearchFragment(this);
                 this.startTransactionFragment(searchFragment);
                 showDetailsFrameLayout(false);
                 break;
@@ -252,5 +262,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 detailsLayout.setVisibility(View.GONE);
             }
         }
+    }
+
+    @Override
+    public void getPropertiesListFromSearch(List<Property> propertyList) {
+        mListPropertiesFragment = new ListPropertiesFragment(propertyList,true,twoPanes,this);
+        this.startTransactionFragment(mListPropertiesFragment);
+        showDetailsFrameLayout(true);
     }
 }

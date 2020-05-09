@@ -33,9 +33,6 @@ import static com.openclassrooms.realestatemanager.UI.Activities.DetailsProperty
  */
 public class ListPropertiesFragment extends BaseFragment implements PropertiesViewHolder.OnPropertyListener {
 
-    private boolean mFilterOn;
-    private List<Property> mPropertyList;
-
     @BindView(R.id.list_properties_recycler_view) RecyclerView mRecyclerView;
     @BindView(R.id.no_property_found_ll) LinearLayout mLayoutNoPropertyFound;
     @BindView(R.id.revert_search_fab) FloatingActionButton mRevertButton;
@@ -49,6 +46,8 @@ public class ListPropertiesFragment extends BaseFragment implements PropertiesVi
 
     private PropertiesRecyclerViewAdapter mAdapter;
     private boolean twoPanes;
+    private boolean mFilterOn;
+    private List<Property> mPropertyList;
 
     //CONSTRUCTOR
     public ListPropertiesFragment(){}
@@ -59,9 +58,11 @@ public class ListPropertiesFragment extends BaseFragment implements PropertiesVi
      * @param propertyList
      * @param filterOn
      */
-    public ListPropertiesFragment(List<Property> propertyList, boolean filterOn) {
-        mPropertyList = propertyList;
-        mFilterOn = filterOn;
+    public ListPropertiesFragment(List<Property> propertyList, boolean filterOn, boolean twoPanes, sendPropertyIdToMainActivityOnClickListener listener) {
+        this.mPropertyList = propertyList;
+        this.mFilterOn = filterOn;
+        this.twoPanes = twoPanes;
+        this.mListener = listener;
     }
 
     /**

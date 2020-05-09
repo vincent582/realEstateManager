@@ -252,12 +252,12 @@ public class DetailsPropertyFragment extends BaseFragment implements OnMapReadyC
      */
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
         if (mPropertyId != null) {
             Bundle bundle = new Bundle();
             bundle.putLong(BUNDLE_INSTANCE_STATE,mPropertyId);
             outState.putBundle(INSTANCE_STATE, bundle);
         }
+        super.onSaveInstanceState(outState);
     }
 
     /**

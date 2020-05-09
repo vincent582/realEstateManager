@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.UI.Fragment.Search;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -20,12 +21,14 @@ import android.widget.Spinner;
 import com.openclassrooms.realestatemanager.Dummy.Dummy;
 import com.openclassrooms.realestatemanager.Model.Property;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.UI.Activities.MainActivity;
 import com.openclassrooms.realestatemanager.UI.Fragment.BaseFragment;
 import com.openclassrooms.realestatemanager.UI.Fragment.ListProperties.ListPropertiesFragment;
 import com.openclassrooms.realestatemanager.Utils.Dialog.DialogEntryDatePicker;
 import com.openclassrooms.realestatemanager.Utils.Dialog.DialogSoldDatePiker;
 import com.openclassrooms.realestatemanager.Utils.Utils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -42,6 +45,14 @@ import static com.openclassrooms.realestatemanager.Utils.SearchUtils.checkIfProp
  */
 public class SearchFragment extends BaseFragment implements DialogEntryDatePicker.DialogEntryDatePickerListener,
     DialogSoldDatePiker.DialogSoldDatePickerListener{
+
+    private static final String LISTENER = "LISTENER";
+
+    public interface GetPropertiesListFromSearchListeners extends Serializable {
+        void getPropertiesListFromSearch(List<Property> propertyList);
+    }
+
+    private GetPropertiesListFromSearchListeners mListeners;
 
     @BindView(R.id.search_property_price_min_values_et) EditText mPriceMin;
     @BindView(R.id.search_property_price_max_values_et) EditText mPriceMax;
@@ -72,8 +83,10 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
 
     private List<Property> mPropertyList;
 
-    public SearchFragment() {
-        // Required empty public constructor
+    public SearchFragment(){};
+
+    public SearchFragment(GetPropertiesListFromSearchListeners listeners) {
+        mListeners = listeners;
     }
 
     @Override
@@ -127,16 +140,9 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
                 }
             }
         }
-        getSearchedProperties(propertyList);
+        mListeners.getPropertiesListFromSearch(propertyList);
     }
 
-
-    private void getSearchedProperties(List<Property> propertyList) {
-        FragmentManager fragmentManager =  getParentFragmentManager();
-        fragmentManager.beginTransaction()
-            .replace(R.id.activity_main_host_frame_layout,new ListPropertiesFragment(propertyList,true))
-            .commit();
-    }
 
     @OnClick(R.id.search_property_entry_date_min_values_et)
     public void openDialogGetAddedDateMin(){
@@ -218,5 +224,9 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
         calendar.set(year, month, day);
         minDateOfSale = calendar.getTime();
         mSoldDateMinButton.setText(Utils.formatDate(minDateOfSale));
+    }
+
+    public void updateListener(GetPropertiesListFromSearchListeners listeners) {
+        mListeners = listeners;
     }
 }
