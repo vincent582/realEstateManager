@@ -35,6 +35,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.openclassrooms.realestatemanager.Utils.SearchUtils.checkIfPropertyHasSearchParameter;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -119,9 +121,8 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
         List<Property> propertyList = new ArrayList<>();
         if (mPropertyList != null) {
             for (Property property : mPropertyList) {
-                if (isBetweenPriceMinAndMax(property) && isBetweenSurfaceMinAndMax(property) &&
-                    isBetweenNbrOfRoomMinAndMax(property) && isAfterMinDateOfEntry(property) &&
-                isAfterMinDateOfSold(property) && isInDistrict(property) && isContainsFacilities(property)){
+                if (checkIfPropertyHasSearchParameter(property,priceMin,priceMax,surfaceMin,surfaceMax,nbrRoomMin,nbrRoomMax,
+                    minDateOfEntry,minDateOfSale,mListFacilities,district)){
                     propertyList.add(property);
                 }
             }
@@ -129,66 +130,6 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
         getSearchedProperties(propertyList);
     }
 
-    public boolean isBetweenPriceMinAndMax(Property property){
-        if (property.getPrice() >= priceMin && priceMax == null ||
-            property.getPrice() >= priceMin && property.getPrice() <= priceMax) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isBetweenSurfaceMinAndMax(Property property){
-        if (property.getSurface() >= surfaceMin && surfaceMax == null ||
-            property.getSurface() >= surfaceMin && property.getSurface() <= surfaceMax){
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isBetweenNbrOfRoomMinAndMax(Property property){
-        if (property.getNbrOfRooms() >= nbrRoomMin && nbrRoomMax == null ||
-            property.getNbrOfRooms() >= nbrRoomMin && property.getNbrOfRooms() <= nbrRoomMax) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isAfterMinDateOfEntry(Property property){
-        if (minDateOfEntry == null || property.getAddedDate().after(minDateOfEntry)){
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isAfterMinDateOfSold(Property property){
-        if (minDateOfSale == null || property.getDateOfSale() != null && property.getDateOfSale().after(minDateOfSale)) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isInDistrict(Property property){
-        if (property.getAddress().getDistrict().equals(district) || district.equals("None")) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isContainsFacilities(Property property){
-        boolean b = true;
-        if (!mListFacilities.isEmpty()) {
-            for (String facility : mListFacilities) {
-                if (property.getFacilities().contains(facility)){
-                    b = true;
-                }else {
-                    b = false;
-                }
-            }
-        } else {
-            b = true;
-        }
-        return b;
-    }
 
     private void getSearchedProperties(List<Property> propertyList) {
         FragmentManager fragmentManager =  getParentFragmentManager();
