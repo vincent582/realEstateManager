@@ -46,9 +46,7 @@ import static com.openclassrooms.realestatemanager.Utils.SearchUtils.checkIfProp
 public class SearchFragment extends BaseFragment implements DialogEntryDatePicker.DialogEntryDatePickerListener,
     DialogSoldDatePiker.DialogSoldDatePickerListener{
 
-    private static final String LISTENER = "LISTENER";
-
-    public interface GetPropertiesListFromSearchListeners extends Serializable {
+    public interface GetPropertiesListFromSearchListeners{
         void getPropertiesListFromSearch(List<Property> propertyList);
     }
 
@@ -143,7 +141,6 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
         mListeners.getPropertiesListFromSearch(propertyList);
     }
 
-
     @OnClick(R.id.search_property_entry_date_min_values_et)
     public void openDialogGetAddedDateMin(){
         DialogEntryDatePicker dialog = new DialogEntryDatePicker();
@@ -159,37 +156,16 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
     }
 
     private void getSearchValues() {
-        if (!isEmptyEditText(mPriceMin)){
-            priceMin = Integer.parseInt(mPriceMin.getText().toString());
-        }
-        if (!isEmptyEditText(mPriceMax)){
-            priceMax = Integer.parseInt(mPriceMax.getText().toString());
-        }
-        if (!isEmptyEditText(mSurfaceMin)){
-            surfaceMin = Integer.parseInt(mSurfaceMin.getText().toString());
-        }
-        if (!isEmptyEditText(mSurfaceMax)){
-            surfaceMax = Integer.parseInt(mSurfaceMax.getText().toString());
-        }
-        if (!isEmptyEditText(mNbrRoomMin)){
-            nbrRoomMin = Integer.parseInt(mNbrRoomMin.getText().toString());
-        }
-        if (!isEmptyEditText(mNbrRoomMax)){
-            nbrRoomMax = Integer.parseInt(mNbrRoomMax.getText().toString());
-        }
-
-        if (mCheckboxPark.isChecked()){
-            mListFacilities.add("Park");
-        }
-        if (mCheckboxSchool.isChecked()){
-            mListFacilities.add("School");
-        }
-        if (mCheckboxStation.isChecked()){
-            mListFacilities.add("Station");
-        }
-        if (mCheckboxStore.isChecked()){
-            mListFacilities.add("Store");
-        }
+        if (!isEmptyEditText(mPriceMin)){ priceMin = Integer.parseInt(mPriceMin.getText().toString()); }
+        if (!isEmptyEditText(mPriceMax)){ priceMax = Integer.parseInt(mPriceMax.getText().toString()); }
+        if (!isEmptyEditText(mSurfaceMin)){ surfaceMin = Integer.parseInt(mSurfaceMin.getText().toString()); }
+        if (!isEmptyEditText(mSurfaceMax)){ surfaceMax = Integer.parseInt(mSurfaceMax.getText().toString()); }
+        if (!isEmptyEditText(mNbrRoomMin)){ nbrRoomMin = Integer.parseInt(mNbrRoomMin.getText().toString()); }
+        if (!isEmptyEditText(mNbrRoomMax)){ nbrRoomMax = Integer.parseInt(mNbrRoomMax.getText().toString()); }
+        if (mCheckboxPark.isChecked()){ mListFacilities.add("Park"); }
+        if (mCheckboxSchool.isChecked()){ mListFacilities.add("School"); }
+        if (mCheckboxStation.isChecked()){ mListFacilities.add("Station"); }
+        if (mCheckboxStore.isChecked()){ mListFacilities.add("Store"); }
     }
 
     private boolean isEmptyEditText(EditText etText) {
@@ -201,11 +177,9 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
     @Override
     public void onDialogDatePikerValidateClick(DialogEntryDatePicker dialog) {
         DatePicker datePicker = dialog.getDialog().findViewById(R.id.entry_date_dp);
-
         int day = datePicker.getDayOfMonth();
         int month = datePicker.getMonth();
         int year =  datePicker.getYear();
-
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day);
         minDateOfEntry = calendar.getTime();
@@ -215,11 +189,9 @@ public class SearchFragment extends BaseFragment implements DialogEntryDatePicke
     @Override
     public void onDialogSoldDatePikerValidateClick(DialogSoldDatePiker dialog) {
         DatePicker datePicker = dialog.getDialog().findViewById(R.id.entry_date_dp);
-
         int day = datePicker.getDayOfMonth();
         int month = datePicker.getMonth();
         int year =  datePicker.getYear();
-
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day);
         minDateOfSale = calendar.getTime();

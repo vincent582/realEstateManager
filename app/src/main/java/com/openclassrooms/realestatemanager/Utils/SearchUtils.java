@@ -9,7 +9,7 @@ public class SearchUtils {
 
     public static boolean checkIfPropertyHasSearchParameter(Property property, Integer priceMin, Integer priceMax, Integer surfaceMin,
                                                             Integer surfaceMax, Integer nbrRoomMin, Integer nbrRoomMax, Date dateMinEntry,
-                                                            Date dateMinSold, List<String> facilitiesList, String district) {
+                                                            Date dateMinSold, List<String> facilitiesList, String district){
         if (isBetweenPriceMinAndMax(property,priceMin,priceMax) && isBetweenSurfaceMinAndMax(property,surfaceMin,surfaceMax) &&
             isBetweenNbrOfRoomMinAndMax(property,nbrRoomMin,nbrRoomMax) && isAfterMinDateOfEntry(property,dateMinEntry) &&
             isAfterMinDateOfSold(property,dateMinSold) && isInDistrict(property,district) && isContainsFacilities(property,facilitiesList)){
